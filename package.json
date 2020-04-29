@@ -6,9 +6,11 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "core-js": "^3.6.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "regenerator-runtime": "^0.13.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,7 +23,10 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
+      "> 1%",
+      "ios >= 9",
+      "android >= 5",
+      "chrome >= 36",
       "not dead",
       "not op_mini all"
     ],
