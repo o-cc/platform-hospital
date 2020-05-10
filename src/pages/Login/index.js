@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Paper,
   Tabs,
@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Phone from './Child/phoneInfo';
+import TabPanel from './Child/TabPanel';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -48,9 +48,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
   const classes = useStyles();
+  const [tabIdx, setTabIdx] = useState(0);
 
+  const login = () => {
+    props.history && props.history.push('/');
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -61,17 +65,19 @@ export default function SignIn() {
         </Typography>
         <Paper className={classes.root}>
           <Tabs
-            value={0}
-            onChange={() => {}}
+            value={tabIdx}
+            onChange={(e, val) => {
+              setTabIdx(val);
+            }}
             indicatorColor="primary"
             textColor="primary"
             centered
           >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
+            <Tab label="手机登录" />
+            <Tab label="账号密码登录" />
           </Tabs>
         </Paper>
-        <Phone />
+        <TabPanel tabIdx={tabIdx} classes={classes} login={login} />
       </div>
       <Box mt={8}>
         <Copyright />

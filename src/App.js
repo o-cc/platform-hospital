@@ -2,12 +2,13 @@ import React from 'react';
 import './App.css';
 import { HashRouter as Router, Route, withRouter } from 'react-router-dom';
 import Login from 'pages/Login';
-// import Test from 'test/index';
+import Home from 'pages/Home';
 
 const Root = withRouter(props => {
   return (
     <>
-      <Route path="/" component={Login}></Route>
+      <Route path="/login" component={Login}></Route>
+      <Route path="/" component={Home}></Route>
     </>
   );
 });
