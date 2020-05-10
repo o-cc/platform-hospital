@@ -5,9 +5,10 @@ import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
+import Drawer from '../Drawer';
 import SearchIcon from '@material-ui/icons/Search';
 import { vw } from 'utils';
+
 const useStyles = makeStyles(theme => ({
   root: {
     padding: '2px 4px',
@@ -16,7 +17,8 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     top: 0,
     left: 0,
-    right: 0
+    right: 0,
+    boxShadow: 'none'
   },
   input: {
     marginLeft: theme.spacing(2),
@@ -77,7 +79,7 @@ export default function CustomizedInputBase(props) {
         注册或登录
       </Button> */}
       <IconButton className={classes.iconButton} aria-label="menu">
-        <MenuIcon />
+        <Drawer {...props} />
       </IconButton>
     </Paper>
   );
