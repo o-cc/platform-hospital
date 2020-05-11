@@ -19,7 +19,8 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 0,
     boxShadow: 'none',
-    backgroundImage: 'linear-gradient(0deg,#f1503b,#c82519 50%)'
+    backgroundImage: 'linear-gradient(0deg,#f1503b,#c82519 50%)',
+    zIndex: 9999
   },
   input: {
     marginLeft: theme.spacing(2),
