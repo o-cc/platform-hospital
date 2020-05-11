@@ -18,22 +18,24 @@ const useStyles = makeStyles(theme => ({
     top: 0,
     left: 0,
     right: 0,
-    boxShadow: 'none'
+    boxShadow: 'none',
+    backgroundImage: 'linear-gradient(0deg,#f1503b,#c82519 50%)'
   },
   input: {
     marginLeft: theme.spacing(2),
     flex: 1,
-    border: '1px solid #ebebeb',
-    background: 'hsla(0,0%,92.2%,.72)',
+    border: '1px solid #ddd',
+    background: '#fff',
     color: '#1a1a1a',
     borderRadius: '16px',
     padding: '0 16px',
     textAlign: 'center',
-    fontSize: vw(18)
+    fontSize: vw(22.5)
   },
   iconButton: {
     padding: 10,
-    fontSize: vw(18)
+    fontSize: vw(18),
+    color: 'white'
   },
   divider: {
     height: 28,
@@ -44,7 +46,8 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 0,
-    margin: 0
+    margin: 0,
+    color: 'white'
   }
 }));
 
