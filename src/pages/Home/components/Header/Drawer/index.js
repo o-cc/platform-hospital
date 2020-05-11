@@ -83,8 +83,12 @@ export default function SwipeableTemporaryDrawer(props) {
   const anchor = 'left';
   return (
     <>
-      <IconButton className={classes.iconButton} aria-label="menu">
-        <MenuIcon onClick={toggleDrawer(anchor, true)} />
+      <IconButton
+        className={classes.iconButton}
+        onClick={toggleDrawer(anchor, true)}
+        aria-label="menu"
+      >
+        <MenuIcon />
       </IconButton>
       <SwipeableDrawer
         anchor={anchor}
