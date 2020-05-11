@@ -1,5 +1,5 @@
 import React from 'react';
-import Lists from './../../Lists';
+import Lists from 'pages/Home/components/Lists';
 const recommendLists = [
   {
     text:
