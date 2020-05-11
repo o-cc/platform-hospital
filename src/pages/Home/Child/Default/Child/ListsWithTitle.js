@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, styled } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { Grid, Divider, Link } from '@material-ui/core';
 import { vw } from '@/utils';
@@ -35,10 +35,6 @@ const useStyles = makeStyles(theme => ({
   imgItem: {
     height: theme.spacing(18)
   },
-  img: {
-    height: '100%',
-    padding: 0
-  },
   gridWrap: {
     paddingBottom: theme.spacing(2),
     paddingTop: theme.spacing(2),
@@ -51,6 +47,16 @@ const useStyles = makeStyles(theme => ({
     fontSize: vw(25)
   }
 }));
+
+const Img = styled(({ bg, ...other }) => <Paper {...other} />)({
+  height: '100%',
+  padding: 0,
+  background: bg => {
+    return bg.bg === 'red'
+      ? 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
+      : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)';
+  }
+});
 
 export default function SimplePaper({ listItem }) {
   const classes = useStyles();
@@ -76,9 +82,7 @@ export default function SimplePaper({ listItem }) {
               </Grid>
 
               <Grid item xs className={classes.imgItem}>
-                <Paper className={`${classes.gridItem} ${classes.img}`}>
-                  {item.img}
-                </Paper>
+                <Img bg={idx % 2 === 0 && 'red'}></Img>
               </Grid>
             </Grid>
             <Divider />

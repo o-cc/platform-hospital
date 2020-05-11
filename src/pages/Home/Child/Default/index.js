@@ -57,9 +57,9 @@ export default () => {
     <div className={classes.root}>
       <Swiper {...params}>
         <MyDiv>Slide1</MyDiv>
-        <MyDiv>Slide2</MyDiv>
+        <MyDiv color="red">Slide2</MyDiv>
         <MyDiv>Slide3</MyDiv>
-        <MyDiv>Slide4</MyDiv>
+        <MyDiv color="red">Slide4</MyDiv>
       </Swiper>
 
       {/* 热门推荐 */}
