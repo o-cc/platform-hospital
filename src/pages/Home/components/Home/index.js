@@ -3,19 +3,27 @@ import Swiper from 'react-id-swiper';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import 'swiper/css/swiper.css';
 import Recommend from './Child/Recommend';
-
+import ListsWithTitle from './Child/ListsWithTitle';
+import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import { homeTestData } from 'pages/Home/helper';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    // height: vw(390),
     marginTop: theme.spacing(7),
-    // overflow: 'hidden'
     '& .swiper-button-next, & .swiper-button-prev': {
       color: '#fff'
     },
     '& .swiper-pagination-bullet-active': {
       background: '#fff'
     }
+  },
+  footer: {
+    padding: theme.spacing(2),
+    marginTop: 'auto',
+    backgroundColor: '#606060',
+    color: '#fff'
   }
 }));
 
@@ -52,18 +60,6 @@ export default () => {
       delay: 3000,
       disableOnInteraction: false
     }
-    // navigation: {
-    //   nextEl: '.swiper-button-next',
-    //   prevEl: '.swiper-button-prev'
-    // }
-    // getSwiper: obj => {
-    // console.log('xx', obj);
-    // },
-    // on: {
-    //   slideChange: () => {
-    // console.log('change');
-    //   }
-    // }
   };
 
   return (
@@ -75,7 +71,28 @@ export default () => {
         <MyDiv>Slide4</MyDiv>
       </Swiper>
 
+      {/* 热门推荐 */}
       <Recommend />
+
+      {/* 信息面板 */}
+      {homeTestData.map((item, idx) => (
+        <ListsWithTitle listItem={item} key={idx} />
+      ))}
+
+      {/* footer */}
+      <footer className={classes.footer}>
+        <Container maxWidth="sm">
+          {/* <Typography variant="body1"></Typography> */}
+          <Typography variant="body2" align="center">
+            {'Copyright © '}
+            <Link color="inherit" href="https://material-ui.com/">
+              Company Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+          </Typography>
+        </Container>
+      </footer>
     </div>
   );
 };
