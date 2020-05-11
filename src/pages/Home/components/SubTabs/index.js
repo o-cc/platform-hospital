@@ -5,8 +5,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import AppCont from 'container';
-// import { useParams } from 'react-router-dom';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,14 +46,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(6)
   },
   tabs: {
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    borderBottom: '1px solid #ddd'
   }
 }));
 
-export default function ScrollableTabsButtonAuto() {
-  const appCont = AppCont.useContainer();
-  const { menuLists } = appCont.state;
-
+export default function ScrollableTabsButtonAuto(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -63,6 +59,7 @@ export default function ScrollableTabsButtonAuto() {
     setValue(newValue);
   };
 
+  const { lists } = props;
   return (
     <div className={classes.root}>
       <Tabs
@@ -77,22 +74,20 @@ export default function ScrollableTabsButtonAuto() {
         }}
         aria-label="scrollable auto tabs"
       >
-        {/* {menuLists.map(() => (
-        ))} */}
-        <Tab label="I" {...a11yProps(0)} />
-
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
+        {lists.map((sub, idx) => (
+          <Tab key={idx} label={sub.text} {...a11yProps(idx)} />
+        ))}
       </Tabs>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        iTEm
-      </TabPanel>
+
+      {lists.map((sub, idx) => (
+        <TabPanel value={value} index={idx} key={idx}>
+          {sub.text}
+        </TabPanel>
+      ))}
     </div>
   );
 }
+
+ScrollableTabsButtonAuto.defaultProps = {
+  lists: []
+};
