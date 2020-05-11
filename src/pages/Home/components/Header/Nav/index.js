@@ -81,9 +81,7 @@ export default function CustomizedInputBase(props) {
       >
         注册或登录
       </Button> */}
-      <IconButton className={classes.iconButton} aria-label="menu">
-        <Drawer {...props} />
-      </IconButton>
+      <Drawer {...props} />
     </Paper>
   );
 }

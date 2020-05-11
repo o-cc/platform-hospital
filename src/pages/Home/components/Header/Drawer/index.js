@@ -8,15 +8,23 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { isIOS } from 'utils';
 import AppCont from 'container';
+import { vw } from 'utils';
+
 const useStyles = makeStyles({
   list: {
     width: 250
   },
   fullList: {
     width: 'auto'
+  },
+  iconButton: {
+    padding: 10,
+    fontSize: vw(18),
+    color: 'white'
   }
 });
 
@@ -75,8 +83,9 @@ export default function SwipeableTemporaryDrawer(props) {
   const anchor = 'left';
   return (
     <>
-      <MenuIcon onClick={toggleDrawer(anchor, true)} />
-
+      <IconButton className={classes.iconButton} aria-label="menu">
+        <MenuIcon onClick={toggleDrawer(anchor, true)} />
+      </IconButton>
       <SwipeableDrawer
         anchor={anchor}
         open={state[anchor]}
