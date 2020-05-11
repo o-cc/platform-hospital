@@ -4,9 +4,6 @@ import { makeStyles, styled } from '@material-ui/core/styles';
 import 'swiper/css/swiper.css';
 import Recommend from './Child/Recommend';
 import ListsWithTitle from './Child/ListsWithTitle';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import { homeTestData } from 'pages/Home/helper';
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,12 +15,6 @@ const useStyles = makeStyles(theme => ({
     '& .swiper-pagination-bullet-active': {
       background: '#fff'
     }
-  },
-  footer: {
-    padding: theme.spacing(2),
-    marginTop: 'auto',
-    backgroundColor: '#606060',
-    color: '#fff'
   }
 }));
 
@@ -78,21 +69,6 @@ export default () => {
       {homeTestData.map((item, idx) => (
         <ListsWithTitle listItem={item} key={idx} />
       ))}
-
-      {/* footer */}
-      <footer className={classes.footer}>
-        <Container maxWidth="sm">
-          {/* <Typography variant="body1"></Typography> */}
-          <Typography variant="body2" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-              Company Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
-        </Container>
-      </footer>
     </div>
   );
 };
