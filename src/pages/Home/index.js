@@ -1,7 +1,7 @@
 import React from 'react';
 import Nav from './components/Header/Nav';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import Home from './Child/Default';
+import Default from './Child/Default';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -25,16 +25,18 @@ export default props => {
       <Nav {...props}></Nav>
       <Switch>
         <Route exact path={path}>
-          <Home />
+          <Default />
         </Route>
         <Route path={`${path}:menuType`}>
           <Other />
+        </Route>
+        <Route path={`${path}column:id`}>
+          <h2>column</h2>
         </Route>
       </Switch>
       {/* footer */}
       <footer className={classes.footer}>
         <Container maxWidth="sm">
-          {/* <Typography variant="body1"></Typography> */}
           <Typography variant="body2" align="center">
             {'Copyright © '}
             <Link color="inherit" href="https://material-ui.com/">
