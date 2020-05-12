@@ -15,6 +15,8 @@ function Other() {
       }
     }
 
+    console.log('ddd');
+
     return {};
   }, [menuLists, menuType]);
 

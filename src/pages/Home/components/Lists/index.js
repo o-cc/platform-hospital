@@ -26,7 +26,7 @@ export default withRouter(function ListDividers(props) {
           <ListItem
             button
             onClick={() => {
-              history.push('/column');
+              history.push('/detail/' + item.id);
             }}
           >
             <ListItemText primary={item.text} />

@@ -2,11 +2,13 @@ import React from 'react';
 import Nav from './components/Header/Nav';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Default from './Child/Default';
+import Detail from './Child/Detail';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Other from './Child/Others';
+
 const useStyles = makeStyles(theme => ({
   footer: {
     padding: theme.spacing(2),
@@ -27,11 +29,11 @@ export default props => {
         <Route exact path={path}>
           <Default />
         </Route>
-        <Route path={`${path}:menuType`}>
+        <Route exact path={`${path}:menuType`}>
           <Other />
         </Route>
-        <Route path={`${path}column:id`}>
-          <h2>column</h2>
+        <Route exact path={`${path}detail/:id`}>
+          <Detail />
         </Route>
       </Switch>
       {/* footer */}
@@ -39,7 +41,7 @@ export default props => {
         <Container maxWidth="sm">
           <Typography variant="body2" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
+            <Link color="inherit" href="#">
               Company Website
             </Link>{' '}
             {new Date().getFullYear()}
