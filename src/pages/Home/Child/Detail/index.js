@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Grid, Button, Divider } from '@material-ui/core';
+import { Grid, Button, Divider, IconButton } from '@material-ui/core';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/Home/components/Comment';
 import { vw } from '@/utils';
 import { test_html } from 'configs/test_detail_html';
-
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(8),
@@ -31,6 +31,10 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     color: 'red'
+  },
+  back: {
+    alignSelf: 'flex-start',
+    marginLeft: theme.spacing(3)
   }
 }));
 
@@ -55,6 +59,11 @@ export default () => {
         direction="column"
         alignItems="center"
       >
+        <Grid item xs={11} className={classes.back}>
+          <IconButton style={{ padding: 0 }}>
+            <ArrowBackIosIcon />
+          </IconButton>
+        </Grid>
         <Grid item xs={11}>
           微软改进Windows 10 v2004细节：整体游戏性能加强 支持光线追踪1.1
         </Grid>

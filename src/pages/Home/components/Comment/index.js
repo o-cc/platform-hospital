@@ -1,73 +1,68 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid, Avatar } from '@material-ui/core';
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+import { Grid } from '@material-ui/core';
+import CommentDetail from './Child/CommentDetail';
 import { vw } from '@/utils';
-import { format } from 'date-fns';
+import ListItem from './Child/AvatarWrap';
+import { comment_list } from 'configs/test_data.js';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(6),
-    fontSize: vw(25),
-    lineHeight: vw(35)
-  },
-  avatar: {
-    display: 'flex',
-    alignItems: 'center',
+const useStyles = makeStyles(theme => {
+  return {
+    root: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(6),
+      fontSize: vw(25),
+      lineHeight: vw(35)
+    },
+    avatar: {
+      display: 'flex',
+      alignItems: 'center',
 
-    '& span': {
-      paddingLeft: theme.spacing(2),
-      color: '#07468b'
+      '& span': {
+        paddingLeft: theme.spacing(2),
+        color: '#07468b'
+      }
+    },
+    comment: {
+      margin: `${vw(15)} auto ${vw(10)}`,
+      whiteSpace: 'pre-wrap'
+    },
+    prompt: {
+      display: 'flex',
+      justifyContent: 'left',
+      alignItems: 'center',
+      fontSize: vw(20),
+      margin: `0 auto ${vw(30)}`
+    },
+    colorRed: {
+      color: 'red'
+    },
+    flex: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    reply: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: `${vw(2)} ${vw(15)}`,
+      background: 'rgba(0,0,0, 0.1)',
+      borderRadius: vw(20),
+      color: '#333',
+      marginLeft: vw(7.5)
+    },
+    paper: {
+      width: '100vw',
+      height: '100vh'
     }
-  },
-  comment: {
-    margin: `${vw(15)} auto ${vw(10)}`,
-    whiteSpace: 'pre-wrap'
-  },
-  prompt: {
-    fontSize: vw(20),
-    margin: `0 auto ${vw(30)}`
-  },
-  colorRed: {
-    color: 'red'
-  },
-  likeWrap: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-  // commentWrap: {
-  //   marginBottom: theme.spacing(2)
-  // }
-}));
-
-const comment_list = [
-  {
-    id: 0,
-    avatar: '',
-    user_name: '清蒸罗非鱼',
-    is_like: false,
-    like_num: 0,
-    comment_info:
-      '作为今年最重要的Windows10更新，v2004还是很受用户关注的，当然它也是值得升级的',
-    date: format(new Date(), 'MM-dd HH:mm')
-  },
-  {
-    id: 1,
-    avatar: '',
-    user_name: '清蒸罗非鱼',
-    is_like: false,
-    like_num: 0,
-    comment_info:
-      '作为今年最重要的Windows10更新，v2004还是很受用户关注的，当然它也是值得升级的',
-    date: format(new Date(), 'MM-dd HH:mm')
-  }
-];
+  };
+});
 
 export default () => {
   const classes = useStyles();
   const [commentList, setCommentList] = useState(comment_list);
+  const [showReply, setShowReply] = useState(false);
   const favorite = (list, idx) => {
     setCommentList(lists => {
       lists = lists.map(item => {
@@ -87,6 +82,10 @@ export default () => {
       return [...lists];
     });
   };
+
+  const reply = () => {
+    setShowReply(sta => !sta);
+  };
   return (
     <Grid
       container
@@ -95,34 +94,16 @@ export default () => {
       className={classes.root}
     >
       {commentList.map((list, idx) => (
-        <Grid item xs={11} key={list.id} className={classes.commentWrap}>
-          <Grid container justify="space-between" alignItems="center">
-            <div className={classes.avatar}>
-              <Avatar
-                alt="avatar"
-                src={list.avatar || require('assets/imgs/test_avatar.jpg')}
-              />
-              <span>{list.user_name}</span>
-            </div>
-            <div className={classes.likeWrap}>
-              <FavoriteBorderOutlinedIcon
-                fontSize="small"
-                className={list.is_like ? classes.colorRed : ''}
-                onClick={() => favorite(list, idx)}
-              />
-              <span>{list.like_num}</span>
-            </div>
-          </Grid>
-          <Grid item className={classes.comment} xs={11}>
-            {list.comment_info}
-          </Grid>
-
-          <Grid item xs={11} className={classes.prompt}>
-            {list.date}
-          </Grid>
-        </Grid>
+        <ListItem
+          key={list.id}
+          list={list}
+          idx={idx}
+          favorite={favorite}
+          reply={reply}
+        />
       ))}
 
+      <CommentDetail open={showReply} onClose={() => setShowReply(false)} />
       <Grid item>没有更多了</Grid>
     </Grid>
   );

@@ -14,9 +14,6 @@ function Other() {
         return menuLists[i];
       }
     }
-
-    console.log('ddd');
-
     return {};
   }, [menuLists, menuType]);
 
