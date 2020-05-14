@@ -6,6 +6,7 @@ import Comment from 'pages/Home/components/Comment';
 import { vw } from '@/utils';
 import { test_html } from 'configs/test_detail_html';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(8),
@@ -34,7 +35,8 @@ const useStyles = makeStyles(theme => ({
   },
   back: {
     alignSelf: 'flex-start',
-    marginLeft: theme.spacing(3)
+    marginLeft: theme.spacing(3),
+    width: '100%'
   }
 }));
 
@@ -46,7 +48,7 @@ const Img = styled(({ src, ...other }) => (
   marginTop: vw(38)
 });
 
-export default () => {
+function Detail(props) {
   const classes = useStyles();
   const [like, setLike] = useState(false);
   return (
@@ -59,10 +61,11 @@ export default () => {
         direction="column"
         alignItems="center"
       >
-        <Grid item xs={11} className={classes.back}>
-          <IconButton style={{ padding: 0 }}>
+        <Grid item xs={11} className={classes.back} style={{ padding: 0 }}>
+          <IconButton onClick={() => props.history.go && props.history.go(-1)}>
             <ArrowBackIosIcon />
           </IconButton>
+          <Divider />
         </Grid>
         <Grid item xs={11}>
           微软改进Windows 10 v2004细节：整体游戏性能加强 支持光线追踪1.1
@@ -100,4 +103,6 @@ export default () => {
       <Comment />
     </>
   );
-};
+}
+
+export default withRouter(Detail);
