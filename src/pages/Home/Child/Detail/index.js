@@ -7,12 +7,14 @@ import { vw } from '@/utils';
 import { test_html } from 'configs/test_detail_html';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { withRouter } from 'react-router-dom';
+import InputComment from 'pages/Home/components/InputComment';
 const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(8),
     fontFamily: 'Microsoft Yahei',
     fontSize: vw(30),
     color: '#000000',
+    lineHeight: '25px',
     paddingBottom: theme.spacing(6)
   },
   date: {
@@ -26,8 +28,7 @@ const useStyles = makeStyles(theme => ({
     color: '#333',
     fontSize: theme.spacing(2),
     fontFamily: 'arial',
-    paddingBottom: theme.spacing(1),
-    lineHeight: '25px'
+    paddingBottom: theme.spacing(1)
     // letterSpacing: theme.spacing(0.15)
   },
   button: {
@@ -101,6 +102,7 @@ function Detail(props) {
       </Grid>
       <Divider />
       <Comment />
+      <InputComment />
     </>
   );
 }

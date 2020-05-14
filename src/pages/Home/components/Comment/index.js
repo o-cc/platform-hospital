@@ -100,6 +100,9 @@ export default () => {
           idx={idx}
           favorite={favorite}
           reply={reply}
+          onClick={() => {
+            console.log(1222);
+          }}
         />
       ))}
 

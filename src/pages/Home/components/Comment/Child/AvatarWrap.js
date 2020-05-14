@@ -54,7 +54,17 @@ const useStyles = makeStyles(theme => {
 export default function List({ list, idx = 0, ...props }) {
   const classes = useStyles();
   return (
-    <Grid item xs={11} key={list.id} className={classes.commentWrap}>
+    <Grid
+      item
+      xs={11}
+      key={list.id}
+      className={classes.commentWrap}
+      onClick={e => {
+        //判断是否是有二级评论
+        if (list.reply > 0) props.reply();
+        props.clickListItem && props.clickListItem(list);
+      }}
+    >
       <Grid container justify="space-between" alignItems="center">
         <div className={classes.avatar}>
           <Avatar
@@ -79,9 +89,7 @@ export default function List({ list, idx = 0, ...props }) {
       <Grid item xs={11} className={classes.prompt}>
         {list.date}
         {(props.reply || list.reply) && (
-          <div className={classes.reply} onClick={props.reply}>
-            {list.reply}回复
-          </div>
+          <div className={classes.reply}>{list.reply}回复</div>
         )}
       </Grid>
     </Grid>
