@@ -141,6 +141,11 @@ export default function TransitionsModal(props) {
               holder={holder}
               comType={inputState}
               key={inputCommentKey}
+              isDetail={true}
+              onClickOutside={() => {
+                //恢复到对详情的的回复
+                setHolder('回复' + comment_list_detail[0].user_name + '的评论');
+              }}
             />
           </Paper>
         </Slide>

@@ -111,7 +111,7 @@ export default () => {
 
         <Grid item>没有更多了</Grid>
       </Grid>
-      {/* 屏幕详情 */}
+      {/* 评论详情 */}
       <CommentDetail open={showReply} onClose={() => setShowReply(false)} />
     </>
   );

@@ -51,9 +51,22 @@ const useStyles = makeStyles(theme => ({
   color_white: { color: '#fff' }
 }));
 
-function In({ classes, changeComp, release, value, onChange, holder }) {
+function In({
+  classes,
+  changeComp,
+  release,
+  value,
+  onChange,
+  holder,
+  onClickOutside
+}) {
   return (
-    <ClickOutside onClickOutside={() => changeComp('Default')}>
+    <ClickOutside
+      onClickOutside={() => {
+        changeComp('Default');
+        onClickOutside && onClickOutside();
+      }}
+    >
       <Grid
         container
         alignItems="flex-end"
@@ -88,11 +101,11 @@ function In({ classes, changeComp, release, value, onChange, holder }) {
   );
 }
 
-function Default({ classes, changeComp }) {
+function Default({ classes, changeComp, isDetail = false }) {
   const [like, setLike] = useState(false);
   return (
     <Grid container justify="space-between" className={classes.root}>
-      <Grid item xs={8}>
+      <Grid item xs={!isDetail ? 8 : 12}>
         <Grid
           item
           xs={12}
@@ -107,34 +120,38 @@ function Default({ classes, changeComp }) {
           <div>写评论....</div>
         </Grid>
       </Grid>
-      <Grid item>
-        <Badge
-          //点击跑到评论这里
-          // onClick={() => {}}
-          badgeContent={20}
-          max={999}
-          color="secondary"
-          children={<ChatBubbleOutlineIcon fontSize="small" />}
-        />
-      </Grid>
-      <Grid item style={{ marginRight: 20 }}>
-        {like ? (
-          <StarRoundedIcon
-            color="secondary"
-            onClick={() => setLike(like => !like)}
-          />
-        ) : (
-          <StarBorderRoundedIcon
-            color="action"
-            onClick={() => setLike(like => !like)}
-          />
-        )}
-      </Grid>
+      {!isDetail && (
+        <>
+          <Grid item>
+            <Badge
+              //点击跑到评论这里
+              // onClick={() => {}}
+              badgeContent={20}
+              max={999}
+              color="secondary"
+              children={<ChatBubbleOutlineIcon fontSize="small" />}
+            />
+          </Grid>
+          <Grid item style={{ marginRight: 20 }}>
+            {like ? (
+              <StarRoundedIcon
+                color="secondary"
+                onClick={() => setLike(like => !like)}
+              />
+            ) : (
+              <StarBorderRoundedIcon
+                color="action"
+                onClick={() => setLike(like => !like)}
+              />
+            )}
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }
 
-export default ({ comType = 'Default', onRelease = () => {}, holder }) => {
+export default ({ comType = 'Default', onRelease = () => {}, ...props }) => {
   const classes = useStyles();
   const [com, setCom] = useState('Default');
 
@@ -145,7 +162,8 @@ export default ({ comType = 'Default', onRelease = () => {}, holder }) => {
     classes,
     changeComp: type => {
       setCom(type);
-    }
+    },
+    ...props
   };
   let { value, onChange } = useInput();
 
@@ -155,7 +173,6 @@ export default ({ comType = 'Default', onRelease = () => {}, holder }) => {
         <Default {...defaultProps} />
       ) : (
         <In
-          holder={holder}
           {...defaultProps}
           value={value}
           onChange={onChange}
