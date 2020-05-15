@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -50,7 +50,17 @@ export default function TransitionsModal(props) {
   const classes = useStyles();
   const [inputState, setInputState] = useState('In');
   const [inputCommentKey, setInputCommentKey] = useState(0);
+  const [holder, setHolder] = useState();
+  function updateInputCompKey() {
+    setInputCommentKey(sta => {
+      if (sta > 100) return 0;
+      return sta + 1;
+    });
+  }
 
+  useEffect(() => {
+    setHolder('回复' + comment_list_detail[0].user_name + '的评论');
+  }, []);
   return (
     <div>
       <Modal
@@ -97,10 +107,11 @@ export default function TransitionsModal(props) {
               </Grid>
               <ListItem
                 list={comment_list_detail[0]}
-                clickListItem={list => {
-                  // console.log('clickItem');
+                onClick={list => {
+                  console.log('author list: ', list);
+                  setHolder('回复' + list.user_name + '的评论');
                   setInputState('In');
-                  setInputCommentKey(sta => sta + 1);
+                  updateInputCompKey();
                 }}
               />
             </Grid>
@@ -116,16 +127,21 @@ export default function TransitionsModal(props) {
                 <ListItem
                   key={list.id}
                   list={list}
-                  clickListItem={list => {
-                    console.log(list);
+                  onClick={list => {
+                    console.log('consumer list: ', list);
+                    setHolder('回复' + list.user_name + '的评论');
                     setInputState('In');
-                    setInputCommentKey(sta => sta + 1);
+                    updateInputCompKey();
                   }}
                 />
               ))}
             </Grid>
             {/* 这个setKey的操作太骚了 */}
-            <InputComment comType={inputState} key={inputCommentKey} />
+            <InputComment
+              holder={holder}
+              comType={inputState}
+              key={inputCommentKey}
+            />
           </Paper>
         </Slide>
       </Modal>

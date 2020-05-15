@@ -7,7 +7,7 @@ export const comment_list = [
     user_name: '清蒸罗非鱼',
     is_like: false,
     like_num: 0,
-    reply: 2,
+    reply: 0,
     comment_info:
       '作为今年最重要的Windows10更新，v2004还是很受用户关注的，当然它也是值得升级的',
     date: format(new Date(), 'MM-dd HH:mm')

@@ -102,7 +102,12 @@ function Detail(props) {
       </Grid>
       <Divider />
       <Comment />
-      <InputComment />
+      {/* 评论文章 */}
+      <InputComment
+        onRelease={val => {
+          console.log('评论文章：', val);
+        }}
+      />
     </>
   );
 }

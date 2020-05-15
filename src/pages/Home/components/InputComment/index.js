@@ -6,6 +6,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import StarBorderRoundedIcon from '@material-ui/icons/StarBorderRounded';
 import StarRoundedIcon from '@material-ui/icons/StarRounded';
 import ClickOutside from '@/tools/ClickOutside';
+import useInput from '@/hooks/useInput';
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'fixed',
@@ -50,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   color_white: { color: '#fff' }
 }));
 
-function In({ classes, changeComp }) {
+function In({ classes, changeComp, release, value, onChange, holder }) {
   return (
     <ClickOutside onClickOutside={() => changeComp('Default')}>
       <Grid
@@ -66,8 +67,10 @@ function In({ classes, changeComp }) {
             disableUnderline
             multiline
             aria-label="maximum height"
-            placeholder="说点什么吧..."
+            placeholder={holder || '说点什么吧...'}
             fullWidth
+            value={value}
+            onChange={onChange}
           />
         </Grid>
         <Grid item xs={2}>
@@ -75,7 +78,7 @@ function In({ classes, changeComp }) {
             variant="text"
             color="primary"
             className={classes.push}
-            onClick={() => changeComp('Default')}
+            onClick={() => release()}
           >
             发布
           </Button>
@@ -131,7 +134,7 @@ function Default({ classes, changeComp }) {
   );
 }
 
-export default ({ comType = 'Default' }) => {
+export default ({ comType = 'Default', onRelease = () => {}, holder }) => {
   const classes = useStyles();
   const [com, setCom] = useState('Default');
 
@@ -141,18 +144,27 @@ export default ({ comType = 'Default' }) => {
   const defaultProps = {
     classes,
     changeComp: type => {
-      console.log(type);
-      // tRef.current = type;
       setCom(type);
     }
   };
+  let { value, onChange } = useInput();
 
   return (
     <>
       {com === 'Default' ? (
         <Default {...defaultProps} />
       ) : (
-        <In {...defaultProps} />
+        <In
+          holder={holder}
+          {...defaultProps}
+          value={value}
+          onChange={onChange}
+          release={() => {
+            setCom('Default');
+            onChange({ target: { value: '' } });
+            onRelease(value);
+          }}
+        />
       )}
     </>
   );

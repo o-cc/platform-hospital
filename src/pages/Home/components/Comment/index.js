@@ -63,7 +63,9 @@ export default () => {
   const classes = useStyles();
   const [commentList, setCommentList] = useState(comment_list);
   const [showReply, setShowReply] = useState(false);
-  const favorite = (list, idx) => {
+  //点赞
+  const favorite = (list, idx, e) => {
+    e.stopPropagation();
     setCommentList(lists => {
       lists = lists.map(item => {
         let like = item.is_like;
@@ -87,27 +89,30 @@ export default () => {
     setShowReply(sta => !sta);
   };
   return (
-    <Grid
-      container
-      justify="center"
-      alignItems="center"
-      className={classes.root}
-    >
-      {commentList.map((list, idx) => (
-        <ListItem
-          key={list.id}
-          list={list}
-          idx={idx}
-          favorite={favorite}
-          reply={reply}
-          onClick={() => {
-            console.log(1222);
-          }}
-        />
-      ))}
+    <>
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        className={classes.root}
+      >
+        {commentList.map((list, idx) => (
+          <ListItem
+            key={list.id}
+            list={list}
+            idx={idx}
+            favorite={favorite}
+            reply={reply}
+            onClick={list => {
+              console.log('111', list);
+            }}
+          />
+        ))}
 
+        <Grid item>没有更多了</Grid>
+      </Grid>
+      {/* 屏幕详情 */}
       <CommentDetail open={showReply} onClose={() => setShowReply(false)} />
-      <Grid item>没有更多了</Grid>
-    </Grid>
+    </>
   );
 };
