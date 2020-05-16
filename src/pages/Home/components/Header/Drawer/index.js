@@ -77,6 +77,17 @@ export default function SwipeableTemporaryDrawer(props) {
         ))}
       </List>
       <Divider />
+
+      <ListItem
+        button
+        key="login"
+        onClick={() => props.history.replace('/login')}
+      >
+        <ListItemIcon>
+          {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+        </ListItemIcon>
+        <ListItemText primary={'登录'} />
+      </ListItem>
     </div>
   );
 

@@ -17,7 +17,6 @@ import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/Home/components/InputComment';
 const useStyles = makeStyles(theme => ({
   root: {
-    marginTop: theme.spacing(6),
     fontFamily: 'Microsoft Yahei',
     fontSize: vw(30),
     color: '#000000',
@@ -44,8 +43,8 @@ const useStyles = makeStyles(theme => ({
   },
   back: {
     alignSelf: 'flex-start',
-    marginLeft: theme.spacing(3),
-    width: '100%'
+    width: '100%',
+    marginTop: theme.spacing(1)
   },
   author: {
     display: 'flex',
@@ -89,7 +88,7 @@ function Detail(props) {
         direction="column"
         alignItems="center"
       >
-        <Grid item xs={11} className={classes.back} style={{ padding: 0 }}>
+        <Grid item xs={12} className={classes.back}>
           <IconButton onClick={() => props.history.go && props.history.go(-1)}>
             <ArrowBackIosIcon />
           </IconButton>
@@ -102,7 +101,7 @@ function Detail(props) {
           item
           className={classes.date}
           style={{ paddingTop: 0, paddingBottom: 0 }}
-          onClick={() => props.history.push('/user/user_id=1')}
+          onClick={() => props.history.push('/user/1')}
         >
           <div className={classes.avatar}>
             <Avatar alt="avatar" src={require('assets/imgs/test_avatar.jpg')} />

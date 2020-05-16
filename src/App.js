@@ -4,12 +4,16 @@ import { HashRouter as Router, Route, withRouter } from 'react-router-dom';
 import Login from 'pages/Login';
 import Home from 'pages/Home';
 import AppCont from 'container';
+import Detail from 'pages/Detail';
+// import User from 'pages/User';
 
 const Root = withRouter(props => {
   return (
     <>
       <Route path="/login" component={Login}></Route>
-      <Route path="/" component={Home}></Route>
+      <Route exact path="/" component={Home}></Route>
+      <Route path="/detail/:id" component={Detail}></Route>
+      {/* <Route path="/user/:id" component={User}></Route> */}
     </>
   );
 });

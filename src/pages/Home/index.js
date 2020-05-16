@@ -2,7 +2,7 @@ import React from 'react';
 import Nav from './components/Header/Nav';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import Default from './Child/Default';
-import Detail from './Child/Detail';
+import Detail from '../Detail';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
