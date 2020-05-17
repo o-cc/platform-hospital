@@ -13,6 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { isIOS } from 'utils';
 import AppCont from 'container';
 import { vw } from 'utils';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles({
   list: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function SwipeableTemporaryDrawer(props) {
+export default withRouter(function SwipeableTemporaryDrawer(props) {
   const appCont = AppCont.useContainer();
   const { menuLists } = appCont.state;
 
@@ -52,8 +53,8 @@ export default function SwipeableTemporaryDrawer(props) {
   };
 
   const clickMenu = (item, index) => {
-    item.type = item.type === 'home' ? '' : item.type;
-    props.history && props.history.replace(`/${item.type}`);
+    let type = item.type === 'home' ? '/' : `/other/${item.type}`;
+    props.history && props.history.replace(type);
   };
 
   const list = anchor => (
@@ -113,4 +114,4 @@ export default function SwipeableTemporaryDrawer(props) {
       </SwipeableDrawer>
     </>
   );
-}
+});
