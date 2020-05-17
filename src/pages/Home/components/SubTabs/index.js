@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-
+import SwipeableViews from 'react-swipeable-views';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   // let { menuType } = useParams();
@@ -58,7 +58,10 @@ export default function ScrollableTabsButtonAuto(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  const theme = useTheme();
+  const handleChangeIndex = index => {
+    setValue(index);
+  };
   const { lists } = props;
   return (
     <div className={classes.root}>
@@ -78,12 +81,17 @@ export default function ScrollableTabsButtonAuto(props) {
           <Tab key={idx} label={sub.text} {...a11yProps(idx)} />
         ))}
       </Tabs>
-
-      {lists.map((sub, idx) => (
-        <TabPanel value={value} index={idx} key={idx}>
-          {sub.text}
-        </TabPanel>
-      ))}
+      <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={value}
+        onChangeIndex={handleChangeIndex}
+      >
+        {lists.map((sub, idx) => (
+          <TabPanel value={value} index={idx} key={idx}>
+            {sub.text}
+          </TabPanel>
+        ))}
+      </SwipeableViews>
     </div>
   );
 }

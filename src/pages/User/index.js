@@ -10,6 +10,8 @@ import {
 import { vw } from 'utils';
 import TopNav from 'pages/components/TopNav';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import Tabs from 'pages/components/Tabs';
+
 const useStyles = makeStyles(theme => ({
   back: {
     alignSelf: 'flex-start',
@@ -133,6 +135,7 @@ export default props => {
           </Grid>
         </Grid>
       </Paper>
+      <Tabs />
     </>
   );
 };
