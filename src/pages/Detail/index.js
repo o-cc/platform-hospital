@@ -15,6 +15,9 @@ import { test_html } from 'configs/test_detail_html';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/Home/components/InputComment';
+// import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
+
 const useStyles = makeStyles(theme => ({
   root: {
     fontFamily: 'Microsoft Yahei',
@@ -36,15 +39,15 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.spacing(2),
     fontFamily: 'arial',
     paddingBottom: theme.spacing(1)
-    // letterSpacing: theme.spacing(0.15)
   },
   button: {
     color: 'red'
   },
-  back: {
-    alignSelf: 'flex-start',
+  header: {
     width: '100%',
-    marginTop: theme.spacing(1)
+    lineHeight: vw(90),
+    fontSize: vw(35),
+    fontWeight: 'bold'
   },
   author: {
     display: 'flex',
@@ -88,10 +91,24 @@ function Detail(props) {
         direction="column"
         alignItems="center"
       >
-        <Grid item xs={12} className={classes.back}>
-          <IconButton onClick={() => props.history.go && props.history.go(-1)}>
-            <ArrowBackIosIcon />
-          </IconButton>
+        <Grid item xs={12} className={classes.header}>
+          <Grid container justify="space-between">
+            <Grid item>
+              <IconButton
+                onClick={() => props.history.go && props.history.go(-1)}
+              >
+                <ArrowBackIosIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>company name</Grid>
+            <Grid item>
+              <IconButton
+                onClick={() => props.history && props.history.push('/')}
+              >
+                <HomeOutlinedIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
           <Divider />
         </Grid>
         <Grid item xs={11}>
