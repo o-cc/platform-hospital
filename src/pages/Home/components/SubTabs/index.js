@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import SwipeableViews from 'react-swipeable-views';
+import ItemList from 'pages/components/ListItem';
+import { homeTestData } from '../../helper';
+import { vw } from '@/utils';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
   // let { menuType } = useParams();
@@ -18,8 +20,8 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
+        <Box style={{ padding: `0 ${vw(30)}`, overflowY: 'hidden' }} p={3}>
+          {children}
         </Box>
       )}
     </div>
@@ -88,7 +90,7 @@ export default function ScrollableTabsButtonAuto(props) {
       >
         {lists.map((sub, idx) => (
           <TabPanel value={value} index={idx} key={idx}>
-            {sub.text}
+            <ItemList list={homeTestData[0].list} />
           </TabPanel>
         ))}
       </SwipeableViews>

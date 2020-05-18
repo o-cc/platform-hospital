@@ -6,7 +6,7 @@ import Home from 'pages/Home';
 import AppCont from 'container';
 import Detail from 'pages/Detail';
 import User from 'pages/User';
-import Other from 'pages/Home/Child/Others';
+import Other from '@/pages/Others';
 import PageTemplate from './pages/components/PageTemplate';
 
 function OtherWrap() {
