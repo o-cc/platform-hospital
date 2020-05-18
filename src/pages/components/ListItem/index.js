@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import { Grid, Paper, makeStyles, styled, Divider } from '@material-ui/core';
-
+import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   imgItem: {
-    height: theme.spacing(18)
+    height: theme.spacing(18),
+    display: 'flex',
+    alignItems: 'center'
   },
   gridWrap: {
     paddingBottom: theme.spacing(2),
@@ -19,24 +21,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Img = styled(({ bg, ...other }) => <Paper {...other} />)({
-  height: '100%',
-  padding: 0,
-  background: bg => {
-    return bg.bg === 'red'
-      ? 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
-      : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)';
-  }
+const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
+  maxWidth: '100%',
+  height: 'auto'
+  // background: bg => {
+  //   return bg.bg === 'red'
+  //     ? 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
+  //     : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)';
+  // }
 });
 
-export default function ListItem({ list }) {
+export default withRouter(function ListItem({ list = [], ...props }) {
   const classes = useStyles();
 
   return (
     <>
       {list.map((item, idx) => (
         <Fragment key={idx}>
-          <Grid container spacing={3} className={classes.gridWrap}>
+          <Grid
+            container
+            spacing={3}
+            className={classes.gridWrap}
+            onClick={() => {
+              props.history && props.history.push('/detail/' + idx);
+            }}
+          >
             <Grid item xs={8}>
               <Paper elevation={0} className={classes.gridItem}>
                 {item.text}
@@ -44,8 +53,13 @@ export default function ListItem({ list }) {
               </Paper>
             </Grid>
 
-            <Grid item xs className={classes.imgItem}>
-              <Img bg={idx % 2 === 0 && 'red'}></Img>
+            <Grid
+              item
+              xs={4}
+              className={classes.imgItem}
+              style={{ paddingLeft: 0 }}
+            >
+              <Img bg={require('assets/imgs/test.jpg')}></Img>
             </Grid>
           </Grid>
           <Divider />
@@ -53,7 +67,4 @@ export default function ListItem({ list }) {
       ))}
     </>
   );
-}
-ListItem.defaultProps = {
-  list: []
-};
+});

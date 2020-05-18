@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Grid,
   makeStyles,
@@ -11,7 +11,6 @@ import { vw } from 'utils';
 import TopNav from 'pages/components/TopNav';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Tabs from 'pages/components/Tabs';
-
 const useStyles = makeStyles(theme => ({
   back: {
     alignSelf: 'flex-start',
@@ -48,14 +47,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Btn = styled(({ ...other }) => <Button size="small" {...other}></Button>)(
-  {
-    marginTop: vw(20),
-    color: '#fff',
-    width: '90%',
-    backgroundColor: '#f85a5b'
-  }
-);
+const Btn = styled(({ isAttention, ...other }) => (
+  <Button size="small" {...other} variant="outlined"></Button>
+))({
+  marginTop: vw(20),
+  color: props => (props.isAttention ? '#666' : '#fff'),
+  width: '90%'
+});
 
 const FlexColumn = styled(({ ...other }) => <div {...other}></div>)({
   display: 'flex',
@@ -66,6 +64,7 @@ const FlexColumn = styled(({ ...other }) => <div {...other}></div>)({
 });
 export default props => {
   const classes = useStyles();
+  const [isAttention, setAttention] = useState(false);
 
   return (
     <>
@@ -109,7 +108,15 @@ export default props => {
               </Grid>
             </FlexColumn>
             <Grid item style={{ textAlign: 'center' }}>
-              <Btn>关注</Btn>
+              <Btn
+                isAttention={isAttention}
+                style={{ background: isAttention ? '#fff' : '#f85a5b' }}
+                onClick={() => {
+                  setAttention(sta => !sta);
+                }}
+              >
+                {isAttention ? '已关注' : '关注'}
+              </Btn>
             </Grid>
           </Grid>
         </Grid>

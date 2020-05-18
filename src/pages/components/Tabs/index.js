@@ -5,10 +5,10 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import { Divider } from '@material-ui/core';
+import { Divider, Box } from '@material-ui/core';
 import ItemList from 'pages/components/ListItem';
 import { homeTestData } from 'pages/Home/helper';
+import { vw } from '@/utils';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -21,7 +21,11 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && (
+        <Box style={{ padding: `0 ${vw(30)}`, overflowY: 'hidden' }} p={3}>
+          {children}
+        </Box>
+      )}
     </div>
   );
 }
@@ -89,13 +93,12 @@ export default function FullWidthTabs({ listItem }) {
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
           <ItemList list={homeTestData[0].list} />
-          {/* <h5>ddd</h5> */}
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          Item Two
+          <ItemList list={homeTestData[0].list} />
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
-          Item Three
+          <ItemList list={homeTestData[0].list} />
         </TabPanel>
       </SwipeableViews>
     </div>

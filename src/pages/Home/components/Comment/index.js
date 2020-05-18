@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => {
   return {
     root: {
       marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(6),
+      marginBottom: vw(120),
       fontSize: vw(25),
       lineHeight: vw(35)
     },

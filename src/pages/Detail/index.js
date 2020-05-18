@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
   date: {
     alignSelf: 'center',
-    fontSize: vw(20),
+    fontSize: vw(25),
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
