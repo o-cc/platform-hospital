@@ -44,7 +44,7 @@ export default function MediaControlCard() {
       <Card className={classes.root}>
         <CardMedia
           className={classes.video}
-          src={require('assets/video/1.mp4')}
+          // src={require('assets/video/1.mp4')}
           title="Live from space album cover"
           component="video"
           controls="controls"
