@@ -7,6 +7,7 @@ import AppCont from 'container';
 import Detail from 'pages/Detail';
 import User from 'pages/User';
 import Other from '@/pages/Others';
+import VideoDetail from '@/pages/VideoDetail';
 import PageTemplate from './pages/components/PageTemplate';
 
 function OtherWrap() {
@@ -24,6 +25,7 @@ const Root = withRouter(props => {
       <Route path="/detail/:id" component={Detail}></Route>
       <Route path="/user/:id" component={User}></Route>
       <Route exact path={`/other/:menuType`} component={OtherWrap}></Route>
+      <Route exact path={`/video/detail/:id`} component={VideoDetail}></Route>
     </>
   );
 });
