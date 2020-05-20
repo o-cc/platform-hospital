@@ -29,6 +29,31 @@ const useStyles = makeStyles({
   }
 });
 
+function getRouterType(type) {
+  let res = '';
+  switch (type) {
+    case 'store':
+      res = '/store';
+      break;
+    case 'video':
+      res = '/other/video';
+      break;
+    case 'books':
+      res = '/other/books';
+      break;
+    case 'case':
+      res = '/other/case';
+      break;
+    case 'home':
+      res = '/';
+      break;
+    default:
+      res = '/';
+      break;
+  }
+  return res;
+}
+
 export default withRouter(function SwipeableTemporaryDrawer(props) {
   const appCont = AppCont.useContainer();
   const { menuLists } = appCont.state;
@@ -53,8 +78,7 @@ export default withRouter(function SwipeableTemporaryDrawer(props) {
   };
 
   const clickMenu = (item, index) => {
-    let type = item.type === 'home' ? '/' : `/other/${item.type}`;
-    props.history && props.history.replace(type);
+    props.history && props.history.replace(getRouterType(item.type));
   };
 
   const list = anchor => (

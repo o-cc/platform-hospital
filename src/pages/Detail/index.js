@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import {
-  Grid,
-  Button,
-  Divider,
-  IconButton,
-  Link,
-  Avatar
-} from '@material-ui/core';
+import { Grid, Button, Divider, Link, Avatar } from '@material-ui/core';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/Home/components/Comment';
 import { vw } from '@/utils';
 import { test_html } from 'configs/test_detail_html';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/Home/components/InputComment';
 // import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-
+import Back from 'pages/components/BackHeader';
 const useStyles = makeStyles(theme => ({
   root: {
     fontFamily: 'Microsoft Yahei',
@@ -43,12 +34,7 @@ const useStyles = makeStyles(theme => ({
   button: {
     color: 'red'
   },
-  header: {
-    width: '100%',
-    lineHeight: vw(90),
-    fontSize: vw(35),
-    fontWeight: 'bold'
-  },
+
   author: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -91,26 +77,7 @@ function Detail(props) {
         direction="column"
         alignItems="center"
       >
-        <Grid item xs={12} className={classes.header}>
-          <Grid container justify="space-between">
-            <Grid item>
-              <IconButton
-                onClick={() => props.history.go && props.history.go(-1)}
-              >
-                <ArrowBackIosIcon />
-              </IconButton>
-            </Grid>
-            <Grid item>company name</Grid>
-            <Grid item>
-              <IconButton
-                onClick={() => props.history && props.history.push('/')}
-              >
-                <HomeOutlinedIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-          <Divider />
-        </Grid>
+        <Back title="company name" />
         <Grid item xs={11}>
           微软改进Windows 10 v2004细节：整体游戏性能加强 支持光线追踪1.1
         </Grid>
