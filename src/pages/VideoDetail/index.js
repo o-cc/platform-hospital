@@ -65,7 +65,9 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     bottom: '0',
     left: 0,
-    background: '#fff'
+    right: 0,
+    background: '#fff',
+    padding: `${vw(7.5)} 0`
   },
   input: {
     '& .MuiOutlinedInput-input': {
@@ -111,6 +113,29 @@ const Text = styled(({ text, ...other }) => <p {...other}>{text}</p>)({
   }
 });
 
+const commentList = [
+  {
+    id: 0,
+    name: '100***333',
+    comment: '简直了还能这样子太强了吧李老师',
+    time: new Date().toDateString(),
+    img: require('assets/imgs/test_avatar.jpg')
+  },
+  {
+    id: 1,
+    name: '100***333',
+    comment: '太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗',
+    time: new Date().toDateString(),
+    img: require('assets/imgs/test_avatar.jpg')
+  },
+  {
+    id: 2,
+    name: '100***333',
+    comment: '太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗',
+    time: new Date().toDateString(),
+    img: require('assets/imgs/test_avatar.jpg')
+  }
+];
 export default function MediaControlCard() {
   const classes = useStyles();
   const [tabVal, setTabVal] = useState(0);
@@ -209,65 +234,45 @@ export default function MediaControlCard() {
               style={{ paddingBottom: '5vh' }}
             >
               <Text size="large" text="全部评论" />
-              <Paper elevation={0} className={classes.comment}>
-                <Grid
-                  container
-                  justify="space-around"
-                  alignItems="flex-start"
-                  style={{ padding: 10 }}
-                >
-                  <Grid item>
-                    <Avatar src={require('assets/imgs/test_avatar.jpg')} />
+              {commentList.map(item => (
+                <Paper elevation={0} key={item.id} className={classes.comment}>
+                  <Grid
+                    container
+                    justify="space-around"
+                    alignItems="flex-start"
+                    style={{ padding: 10 }}
+                  >
+                    <Grid item>
+                      <Avatar src={item.img} />
+                    </Grid>
+                    <Grid item xs={10}>
+                      <p
+                        className={classes.sizeSmall}
+                        style={{ marginTop: '0' }}
+                      >
+                        {item.name}
+                      </p>
+                      <p className={classes.sizeNormal}>{item.comment}</p>
+                      <p className={classes.sizeSmall}>{item.time}</p>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={10}>
-                    <p className={classes.sizeSmall} style={{ marginTop: '0' }}>
-                      100****2222
-                    </p>
-                    <p className={classes.sizeNormal}>
-                      太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗
-                    </p>
-                    <p className={classes.sizeSmall}>
-                      {new Date().toDateString()}
-                    </p>
-                  </Grid>
-                </Grid>
-              </Paper>
-              <Paper elevation={0} className={classes.comment}>
-                <Grid
-                  container
-                  justify="space-around"
-                  alignItems="flex-start"
-                  style={{ padding: 10 }}
-                >
-                  <Grid item>
-                    <Avatar src={require('assets/imgs/test_avatar.jpg')} />
-                  </Grid>
-                  <Grid item xs={10}>
-                    <p className={classes.sizeSmall} style={{ marginTop: '0' }}>
-                      100****2222
-                    </p>
-                    <p className={classes.sizeNormal}>
-                      太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗
-                    </p>
-                    <p className={classes.sizeSmall}>
-                      {new Date().toDateString()}
-                    </p>
-                  </Grid>
-                </Grid>
-              </Paper>
+                </Paper>
+              ))}
             </Paper>
-            <Grid container className={classes.inputWrap}>
-              <Grid item xs={10}>
-                <OutlinedInput
-                  fullWidth
-                  className={classes.input}
-                  placeholder="说点什么吧"
-                />
+            <Paper elevation={4} className={classes.inputWrap}>
+              <Grid container>
+                <Grid item xs={10}>
+                  <OutlinedInput
+                    fullWidth
+                    className={classes.input}
+                    placeholder="说点什么吧"
+                  />
+                </Grid>
+                <Grid item xs={2} className={classes.flexCenter}>
+                  <Button>评论</Button>
+                </Grid>
               </Grid>
-              <Grid item xs={2} className={classes.flexCenter}>
-                <Button>评论</Button>
-              </Grid>
-            </Grid>
+            </Paper>
           </TabPanel>
 
           <TabPanel value={tabVal} index={1} dir={theme.direction}>
