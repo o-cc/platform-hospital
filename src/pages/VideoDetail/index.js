@@ -7,12 +7,19 @@ import {
   Tabs,
   Tab,
   Grid,
-  Avatar
+  Avatar,
+  Button,
+  OutlinedInput
 } from '@material-ui/core';
 import { vw } from '@/utils';
 import SwipeableViews from 'react-swipeable-views';
 
 const useStyles = makeStyles(theme => ({
+  wrap: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
   root: {
     display: 'flex'
   },
@@ -24,12 +31,56 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(3)
   },
   tabWrap: {
-    flexGrow: 1
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column'
   },
   model: {
     padding: `${vw(15)} ${vw(22.5)}`,
     fontSize: vw(30),
     marginTop: theme.spacing(1)
+  },
+  introduce: {
+    padding: `${vw(22.5)} ${vw(22.5)} ${vw(35)}`,
+    fontSize: vw(25),
+    marginTop: theme.spacing(1),
+    lineHeight: 1.5,
+    '& p': {
+      margin: 4
+    }
+  },
+  sizeSmall: {
+    fontSize: vw(23),
+    color: '#666'
+  },
+  sizeNormal: {
+    lineHeight: vw(45)
+  },
+  comment: {
+    borderBottom: '1px solid #ccc',
+    marginBottom: 4
+  },
+  inputWrap: {
+    position: 'absolute',
+    bottom: '0',
+    left: 0,
+    background: '#fff'
+  },
+  input: {
+    '& .MuiOutlinedInput-input': {
+      padding: vw(22.5)
+    }
+  },
+  views: {
+    '& .react-swipeable-view-container': {
+      height: '100%'
+    }
+  },
+  flexCenter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 }));
 function TabPanel(props) {
@@ -41,7 +92,6 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
-      style={{ overflowY: 'hidden' }}
       {...other}
     >
       {value === index && children}
@@ -66,7 +116,7 @@ export default function MediaControlCard() {
   const [tabVal, setTabVal] = useState(0);
   const theme = useTheme();
   return (
-    <>
+    <div className={classes.wrap}>
       <Card className={classes.root}>
         <CardMedia
           className={classes.video}
@@ -94,11 +144,12 @@ export default function MediaControlCard() {
           <Tab label="聊天" />
           <Tab label="目录" />
         </Tabs>
-
         <SwipeableViews
           axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
           index={tabVal}
           onChangeIndex={idx => setTabVal(idx)}
+          style={{ flex: 1, height: '50vh' }}
+          className={classes.views}
         >
           <TabPanel
             value={tabVal}
@@ -108,9 +159,15 @@ export default function MediaControlCard() {
           >
             <Paper className={classes.model} elevation={0}>
               <Text size="large" text="课程名称xxx公开课"></Text>
-              <Text text="讲师：李老师 时间：2020/05/20"></Text>
-              <Text text="其他">其他</Text>
+              <Text text="讲师：李老 时间：2020/05/20"></Text>
+              <Text text="其他"></Text>
               <Text text="观看人次520次"></Text>
+            </Paper>
+            <Paper className={classes.introduce} elevation={0}>
+              <Text size="large" text="介绍" />
+              <p style={{ marginTop: 6 }}>讲课题目：《论持久战》剖析</p>
+              <p>{/* <Divider /> */}</p>
+              <p>15：35-16：00 农村包围城市斗争战略 李老</p>
             </Paper>
             <Paper className={classes.model} elevation={0}>
               <Text size="large" text="讲师介绍"></Text>
@@ -145,18 +202,127 @@ export default function MediaControlCard() {
                 </Grid>
               </Grid>
             </Paper>
-            <Paper className={classes.model} elevation={0}>
-              <Text size="large" text="评论"></Text>
+            {/* 全部评论 */}
+            <Paper
+              className={classes.model}
+              elevation={0}
+              style={{ paddingBottom: '5vh' }}
+            >
+              <Text size="large" text="全部评论" />
+              <Paper elevation={0} className={classes.comment}>
+                <Grid
+                  container
+                  justify="space-around"
+                  alignItems="flex-start"
+                  style={{ padding: 10 }}
+                >
+                  <Grid item>
+                    <Avatar src={require('assets/imgs/test_avatar.jpg')} />
+                  </Grid>
+                  <Grid item xs={10}>
+                    <p className={classes.sizeSmall} style={{ marginTop: '0' }}>
+                      100****2222
+                    </p>
+                    <p className={classes.sizeNormal}>
+                      太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗
+                    </p>
+                    <p className={classes.sizeSmall}>
+                      {new Date().toDateString()}
+                    </p>
+                  </Grid>
+                </Grid>
+              </Paper>
+              <Paper elevation={0} className={classes.comment}>
+                <Grid
+                  container
+                  justify="space-around"
+                  alignItems="flex-start"
+                  style={{ padding: 10 }}
+                >
+                  <Grid item>
+                    <Avatar src={require('assets/imgs/test_avatar.jpg')} />
+                  </Grid>
+                  <Grid item xs={10}>
+                    <p className={classes.sizeSmall} style={{ marginTop: '0' }}>
+                      100****2222
+                    </p>
+                    <p className={classes.sizeNormal}>
+                      太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗
+                    </p>
+                    <p className={classes.sizeSmall}>
+                      {new Date().toDateString()}
+                    </p>
+                  </Grid>
+                </Grid>
+              </Paper>
             </Paper>
+            <Grid container className={classes.inputWrap}>
+              <Grid item xs={10}>
+                <OutlinedInput
+                  fullWidth
+                  className={classes.input}
+                  placeholder="说点什么吧"
+                />
+              </Grid>
+              <Grid item xs={2} className={classes.flexCenter}>
+                <Button>评论</Button>
+              </Grid>
+            </Grid>
           </TabPanel>
+
           <TabPanel value={tabVal} index={1} dir={theme.direction}>
-            聊天
+            <Paper elevation={0} className={classes.comment}>
+              <Grid
+                container
+                justify="space-around"
+                alignItems="flex-start"
+                style={{ padding: 10 }}
+              >
+                <Grid item>
+                  <Avatar src={require('assets/imgs/test_avatar.jpg')} />
+                </Grid>
+                <Grid item xs={10}>
+                  <p className={classes.sizeSmall} style={{ marginTop: '0' }}>
+                    100****2222
+                  </p>
+                  <p className={classes.sizeNormal}>
+                    太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗
+                  </p>
+                  <p className={classes.sizeSmall}>
+                    {new Date().toDateString()}
+                  </p>
+                </Grid>
+              </Grid>
+            </Paper>
+            <Paper elevation={0} className={classes.comment}>
+              <Grid
+                container
+                justify="space-around"
+                alignItems="flex-start"
+                style={{ padding: 10 }}
+              >
+                <Grid item>
+                  <Avatar src={require('assets/imgs/test_avatar.jpg')} />
+                </Grid>
+                <Grid item xs={10}>
+                  <p className={classes.sizeSmall} style={{ marginTop: '0' }}>
+                    100****2222
+                  </p>
+                  <p className={classes.sizeNormal}>
+                    太好了，人美声甜形象生动通俗易懂，铭记历史勿忘苦难艰苦奋斗
+                  </p>
+                  <p className={classes.sizeSmall}>
+                    {new Date().toDateString()}
+                  </p>
+                </Grid>
+              </Grid>
+            </Paper>
           </TabPanel>
           <TabPanel value={tabVal} index={2} dir={theme.direction}>
             目录
           </TabPanel>
         </SwipeableViews>
       </Paper>
-    </>
+    </div>
   );
 }
