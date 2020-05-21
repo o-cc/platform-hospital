@@ -1,13 +1,14 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState } from 'react';
+import { makeStyles, styled } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { flexAll } from '@/golbalStyles';
-import { Grid, CardMedia } from '@material-ui/core';
+import { Grid, CardMedia, IconButton } from '@material-ui/core';
 import BackHeader from '../components/BackHeader';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { vw } from '@/utils';
+import { ArrowDownward } from '@material-ui/icons';
 const useStyles = makeStyles(theme => ({
   root: {
     ...flexAll,
@@ -33,6 +34,10 @@ const useStyles = makeStyles(theme => ({
   large: {
     fontSize: vw(35),
     paddingRight: vw(10)
+  },
+  iconBtn: {
+    alignSelf: 'flex-end',
+    transition: 'all 2s'
   }
 }));
 
@@ -74,11 +79,39 @@ const booksList = [
   }
 ];
 
+const Arrow = styled(({ sort, ...other }) => (
+  <ArrowDownward {...other} fontSize="inherit" />
+))(({ theme, sort }) => {
+  let angle;
+  if (sort) {
+    angle = 180;
+  } else {
+    angle = 0;
+  }
+  return {
+    transition: 'transform 0.5s',
+    transform: `rotate(${angle}deg)`
+  };
+});
+
 export default function SimpleCard() {
   const classes = useStyles();
+  const [sort, setSort] = useState(false);
+
+  const sortList = () => {};
+
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       <BackHeader title="积分商城" />
+      <IconButton
+        aria-label="delete"
+        className={classes.iconBtn}
+        onClick={() => {
+          setSort(sort => !sort);
+        }}
+      >
+        <Arrow sort={sort} onClick={sortList} />
+      </IconButton>
       <div className={classes.warp}>
         <div style={{ maxHeight: '91vh', overflow: 'auto' }}>
           {booksList.map(item => (
