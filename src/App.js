@@ -11,6 +11,7 @@ import VideoDetail from '@/pages/VideoDetail';
 import PageTemplate from './pages/components/PageTemplate';
 import Store from '@/pages/Store';
 import StoreDetail from '@/pages/Store/Detail';
+import StoreExchange from '@/pages/Store/Exchange';
 
 function OtherWrap() {
   return (
@@ -30,6 +31,7 @@ const Root = withRouter(props => {
       <Route exact path={`/video/detail/:id`} component={VideoDetail}></Route>
       <Route exact path={`/store`} component={Store}></Route>
       <Route exact path={`/store/detail/:id`} component={StoreDetail}></Route>
+      <Route path={`/store/exchange/:id`} component={StoreExchange}></Route>
     </>
   );
 });

@@ -3,6 +3,7 @@ import { Grid, styled, Divider, makeStyles, Button } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import Swiper from 'react-id-swiper';
 import { vw } from '@/utils';
+import { withRouter } from 'react-router-dom';
 
 const MyDiv = styled(({ color, ...other }) => <div {...other} />)({
   background: props =>
@@ -51,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default () => {
+export default withRouter(props => {
   const classes = useStyles();
   let params = {
     pagination: {
@@ -87,6 +88,7 @@ export default () => {
           </span>
         </p>
         <p>库存： 0</p>
+        <p>隆江猪脚始于南宋时期，</p>
       </Grid>
       <div className={classes.btnWrap}>
         <Button
@@ -94,10 +96,13 @@ export default () => {
           size="large"
           className={classes.btn}
           fullWidth
+          onClick={() => {
+            props.history.push('/store/exchange/book_id');
+          }}
         >
           立即兑换
         </Button>
       </div>
     </Grid>
   );
-};
+});
