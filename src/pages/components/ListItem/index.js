@@ -5,7 +5,8 @@ const useStyles = makeStyles(theme => ({
   imgItem: {
     height: theme.spacing(18),
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   },
   gridWrap: {
     paddingBottom: theme.spacing(2),
@@ -22,13 +23,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
-  maxWidth: '100%',
+  width: '100%',
+  maxWidth: '200px',
   height: 'auto'
-  // background: bg => {
-  //   return bg.bg === 'red'
-  //     ? 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
-  //     : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)';
-  // }
 });
 
 export default withRouter(function ListItem({ list = [], ...props }) {

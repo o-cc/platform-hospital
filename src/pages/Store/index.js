@@ -4,11 +4,13 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { flexAll } from '@/golbalStyles';
-import { Grid, CardMedia, IconButton } from '@material-ui/core';
+import { Grid, CardMedia, IconButton, Divider } from '@material-ui/core';
 import BackHeader from '../components/BackHeader';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { vw } from '@/utils';
 import { ArrowDownward } from '@material-ui/icons';
+import { withRouter } from 'react-router-dom';
+
 const useStyles = makeStyles(theme => ({
   root: {
     ...flexAll,
@@ -25,7 +27,6 @@ const useStyles = makeStyles(theme => ({
   },
   warp: {
     width: '100%',
-    marginTop: theme.spacing(2),
     flex: 1
   },
   smallTxt: {
@@ -94,7 +95,7 @@ const Arrow = styled(({ sort, ...other }) => (
   };
 });
 
-export default function SimpleCard() {
+export default withRouter(function SimpleCard(props) {
   const classes = useStyles();
   const [sort, setSort] = useState(false);
 
@@ -103,19 +104,37 @@ export default function SimpleCard() {
   return (
     <Grid container direction="column" justify="center" alignItems="center">
       <BackHeader title="积分商城" />
-      <IconButton
-        aria-label="delete"
-        className={classes.iconBtn}
-        onClick={() => {
-          setSort(sort => !sort);
-        }}
+      <Grid
+        container
+        style={{ padding: `0 ${vw(15)} ${vw(7)}` }}
+        justify="space-between"
+        alignItems="center"
       >
-        <Arrow sort={sort} onClick={sortList} />
-      </IconButton>
+        <Typography style={{ marginTop: vw(25), color: 'red' }}>
+          我的积分： <span style={{ fontSize: 20 }}>900</span>
+        </Typography>
+        <IconButton
+          aria-label="delete"
+          className={classes.iconBtn}
+          onClick={() => {
+            setSort(sort => !sort);
+            sortList();
+          }}
+        >
+          <Arrow sort={sort} />
+        </IconButton>
+      </Grid>
       <div className={classes.warp}>
+        <Divider />
         <div style={{ maxHeight: '91vh', overflow: 'auto' }}>
           {booksList.map(item => (
-            <Card key={item.id} className={classes.card}>
+            <Card
+              key={item.id}
+              className={classes.card}
+              onClick={() => {
+                props.history && props.history.push('/store/detail/' + item.id);
+              }}
+            >
               <CardActionArea>
                 <CardMedia
                   className={classes.media}
@@ -147,4 +166,4 @@ export default function SimpleCard() {
       </div>
     </Grid>
   );
-}
+});
