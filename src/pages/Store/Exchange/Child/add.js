@@ -13,7 +13,8 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import { vw } from '@/utils';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
-
+import AddressItem from 'pages/components/Address/Child/item';
+import { addressList as testList } from 'configs/test_data';
 const useStyles = makeStyles(theme => ({
   button: {
     width: '100%',
@@ -48,7 +49,7 @@ export default props => {
   const classes = useStyles();
   const [addModal, setAddModal] = useState(false);
   const [checkedB, setCheckedB] = useState(false);
-
+  const [addressList] = useState(testList);
   const validate = values => {
     const errors = {};
 
@@ -64,7 +65,7 @@ export default props => {
     <Grid container>
       <BackHeader title="选择地址" back={props.onClose} />
 
-      <Grid item xs={12}>
+      <Grid item xs={12} style={{ background: '#fff' }}>
         <Button
           variant="text"
           className={classes.button}
@@ -75,6 +76,14 @@ export default props => {
         </Button>
         <Divider />
       </Grid>
+      <div style={{ overflow: 'auto', height: '86vh' }}>
+        {addressList.map(item => (
+          <Grid key={item.id} item xs={12} sm={4} dm={3}>
+            <AddressItem addressItem={item} />
+          </Grid>
+        ))}
+      </div>
+
       <Slider open={addModal} bgColor="#f8f8f8">
         <BackHeader
           title="新增地址"
