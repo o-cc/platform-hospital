@@ -1,5 +1,21 @@
 export const homeTestData = [
   {
+    title: '精彩视频',
+    type: 'video',
+    list: [
+      {
+        text: '视频播放厅',
+        time: '2020/02/22 胖虎',
+        img: 'jcImg1'
+      },
+      {
+        text: '视频播放厅',
+        time: '2020/02/22 胖虎',
+        img: 'jcImg1'
+      }
+    ]
+  },
+  {
     title: '原创文章',
     list: [
       {

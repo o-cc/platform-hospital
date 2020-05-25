@@ -40,6 +40,7 @@ export default withRouter(function ListItem({ list = [], ...props }) {
             spacing={3}
             className={classes.gridWrap}
             onClick={() => {
+              if (props.onClick) return props.onClick(idx);
               props.history && props.history.push('/detail/' + idx);
             }}
           >

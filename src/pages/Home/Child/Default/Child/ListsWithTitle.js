@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { Grid, Divider, Link } from '@material-ui/core';
 import { vw } from '@/utils';
 import ItemList from 'pages/components/ListItem';
-
+import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SimplePaper({ listItem }) {
+function SimplePaper({ listItem, ...props }) {
   const classes = useStyles();
 
   return (
@@ -47,7 +47,14 @@ export default function SimplePaper({ listItem }) {
           </Link>
         </Grid>
         <Divider />
-        <ItemList list={listItem.list} />
+        <ItemList
+          list={listItem.list}
+          onClick={idx => {
+            if (listItem.type === 'video') {
+              props.history && props.history.push('/video/detail/' + idx);
+            }
+          }}
+        />
       </Paper>
     </div>
   );
@@ -58,3 +65,5 @@ SimplePaper.defaultProps = {
     list: []
   }
 };
+
+export default withRouter(SimplePaper);
