@@ -53,49 +53,33 @@ export const addressList = [
     id: 0,
     name: 'otis',
     phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道',
+    city: '广东省 广州市 天河区',
+    detail: '车陂街道',
+    post: '511300',
     is_default: 1
   },
   {
     id: 1,
     name: 'otis',
     phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道'
+    city: '广东省 广州市 天河区',
+    detail: '车陂街道',
+    post: '511300'
   },
   {
     id: 2,
     name: 'otis',
     phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道'
+    post: '511300',
+    city: '广东省 广州市 天河区',
+    detail: '车陂街道'
   },
   {
     id: 3,
     name: 'otis',
     phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道'
-  },
-  {
-    id: 4,
-    name: 'otis',
-    phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道'
-  },
-  {
-    id: 5,
-    name: 'otis',
-    phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道'
-  },
-  {
-    id: 6,
-    name: 'otis',
-    phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道'
-  },
-  {
-    id: 7,
-    name: 'otis',
-    phone: '199203282',
-    detail: '广东省 广州市 天河区 车陂街道'
+    post: '511300',
+    city: '广东省 广州市 天河区',
+    detail: '车陂街道'
   }
 ];

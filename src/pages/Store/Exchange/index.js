@@ -13,6 +13,7 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import { vw } from '@/utils';
 import { addressList as testList } from 'configs/test_data';
 import AddressItem from 'pages/components/Address/Child/item';
+import EditorAddress from 'pages/components/Address/editor';
 
 import Add from './Child/add';
 const useStyles = makeStyles(theme => ({
@@ -46,12 +47,13 @@ const useStyles = makeStyles(theme => ({
 export default () => {
   const classes = useStyles();
   const [addressModal, setAddressModal] = useState(false);
-  const [defaultAddress, setDefaultAddress] = useState({});
+  const [editorModal, setEditorModal] = useState(false);
+  const [Address, setAddress] = useState({});
   useEffect(() => {
     let list = testList;
     for (let i = 0; i < list.length; i++) {
       if (list[i].is_default) {
-        setDefaultAddress(list[i]);
+        setAddress(list[i]);
         break;
       }
     }
@@ -61,11 +63,17 @@ export default () => {
       <Grid container>
         <BackHeader title="商品兑换" />
 
-        {defaultAddress.is_default ? (
+        {Address.is_default ? (
           <AddressItem
-            addressItem={defaultAddress}
+            addressItem={Address}
             hasLocation={true}
             click={() => setAddressModal(true)}
+            onEditor={() => {
+              setEditorModal(true);
+            }}
+            onDelete={() => {
+              console.log('delete');
+            }}
           />
         ) : (
           <Grid item xs={12}>
@@ -133,6 +141,19 @@ export default () => {
         {/* 添加地址 */}
         <Slider open={addressModal} bgColor="#f8f8f8">
           <Add onClose={() => setAddressModal(false)} />
+        </Slider>
+
+        <Slider open={editorModal} bgColor="#f8f8f8">
+          <EditorAddress
+            back={() => {
+              setEditorModal(false);
+            }}
+            initValue={Address}
+            onSubmit={values => {
+              setEditorModal(false);
+              setAddress(sta => ({ ...sta, ...values }));
+            }}
+          />
         </Slider>
       </Grid>
     </div>

@@ -7,11 +7,11 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 const useStyles = makeStyles(theme => ({
   addressItem: {
     marginTop: theme.spacing(1),
-    padding: theme.spacing(2),
     paddingBottom: 0,
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
+    width: '100%',
     '&>.MuiGrid-container>div': {
       marginBottom: theme.spacing(1)
     }
@@ -40,7 +40,6 @@ const useStyles = makeStyles(theme => ({
 export default function AddressItem({
   addressItem: list,
   hasLocation,
-
   ...props
 }) {
   const classes = useStyles();
@@ -57,7 +56,7 @@ export default function AddressItem({
           <LocationOnIcon className={classes.icon} />
         </>
       )}
-      <Grid container>
+      <Grid container style={{ padding: 16 }}>
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={6}>
@@ -75,7 +74,7 @@ export default function AddressItem({
             {list.is_default && !hasLocation && (
               <span className={classes.colorRed}>[默认地址] </span>
             )}{' '}
-            {list.detail}
+            {list.city} {list.detail}
           </Typography>
         </Grid>
         <Grid item xs={12} style={{ marginBottom: 0 }}>
@@ -86,6 +85,10 @@ export default function AddressItem({
                 color="inherit"
                 size="small"
                 startIcon={<EditIcon />}
+                onClick={e => {
+                  e.stopPropagation();
+                  props.onEditor && props.onEditor();
+                }}
               >
                 编辑
               </Button>
@@ -96,6 +99,10 @@ export default function AddressItem({
                 color="secondary"
                 size="small"
                 startIcon={<DeleteIcon />}
+                onClick={e => {
+                  e.stopPropagation();
+                  props.onDelete && props.onDelete();
+                }}
               >
                 删除
               </Button>
