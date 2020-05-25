@@ -12,7 +12,7 @@ import PageTemplate from './pages/components/PageTemplate';
 import Store from '@/pages/Store';
 import StoreDetail from '@/pages/Store/Detail';
 import StoreExchange from '@/pages/Store/Exchange';
-
+import 'tools/vconsole';
 function OtherWrap() {
   return (
     <PageTemplate>

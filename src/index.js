@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+localStorage.setItem('vConsole_switch_y', window.innerHeight / 2 + '');
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

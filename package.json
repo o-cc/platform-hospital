@@ -28,7 +28,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-prod": "cross-env REACT_APP_VCONSOLE=false react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -51,7 +52,9 @@
   "homepage": ".",
   "devDependencies": {
     "axios-mock-adapter": "^1.18.1",
+    "cross-env": "^7.0.2",
     "customize-cra": "^0.9.1",
-    "react-app-rewired": "^2.1.6"
+    "react-app-rewired": "^2.1.6",
+    "vconsole": "^3.3.4"
   }
 }
