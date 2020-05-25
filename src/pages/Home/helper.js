@@ -1,21 +1,5 @@
 export const homeTestData = [
   {
-    title: '精彩视频',
-    type: 'video',
-    list: [
-      {
-        text: '视频播放厅',
-        time: '2020/02/22 胖虎',
-        img: 'jcImg1'
-      },
-      {
-        text: '视频播放厅',
-        time: '2020/02/22 胖虎',
-        img: 'jcImg1'
-      }
-    ]
-  },
-  {
     title: '原创文章',
     list: [
       {
@@ -42,6 +26,22 @@ export const homeTestData = [
         text: 'In a list, you should ensure the Divider is rendered as an',
         time: '2020/02/22 胖虎',
         img: 'img5'
+      }
+    ]
+  },
+  {
+    title: '精彩视频',
+    type: 'video',
+    list: [
+      {
+        text: '视频播放厅',
+        time: '2020/02/22 胖虎',
+        img: 'jcImg1'
+      },
+      {
+        text: '视频播放厅',
+        time: '2020/02/22 胖虎',
+        img: 'jcImg1'
       }
     ]
   },
