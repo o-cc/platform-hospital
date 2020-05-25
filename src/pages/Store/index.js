@@ -3,7 +3,7 @@ import { makeStyles, styled } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { flexAll } from '@/golbalStyles';
+import { flexAll } from '@/globalStyles';
 import { Grid, CardMedia, IconButton, Divider } from '@material-ui/core';
 import BackHeader from '../components/BackHeader';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -17,10 +17,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column'
   },
   card: {
-    width: '46%',
-    marginLeft: '3%',
-    float: 'left',
-    marginBottom: '3%'
+    margin: '3%'
   },
   media: {
     height: 140
@@ -126,43 +123,45 @@ export default withRouter(function SimpleCard(props) {
       </Grid>
       <div className={classes.warp}>
         <Divider />
-        <div style={{ maxHeight: '91vh', overflow: 'auto' }}>
+        <Grid container style={{ maxHeight: '91vh', overflow: 'auto' }}>
           {booksList.map(item => (
-            <Card
-              key={item.id}
-              className={classes.card}
-              onClick={() => {
-                props.history && props.history.push('/store/detail/' + item.id);
-              }}
-            >
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image={item.img}
-                  title={item.title}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="subtitle1" component="h2">
-                    {item.title}
-                  </Typography>
+            <Grid item xs={6} key={item.id} sm={4} md={3}>
+              <Card
+                className={classes.card}
+                onClick={() => {
+                  props.history &&
+                    props.history.push('/store/detail/' + item.id);
+                }}
+              >
+                <CardActionArea>
+                  <CardMedia
+                    className={classes.media}
+                    image={item.img}
+                    title={item.title}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="subtitle1" component="h2">
+                      {item.title}
+                    </Typography>
 
-                  <Typography component="span" color="secondary">
-                    <span className={classes.large}>{item.score}</span>
-                    <span className={classes.smallTxt}>积分</span>
-                  </Typography>
-                  <Typography
-                    component="p"
-                    variant="subtitle2"
-                    color="textSecondary"
-                  >
-                    <span>市场价：</span>
-                    {item.price}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
+                    <Typography component="span" color="secondary">
+                      <span className={classes.large}>{item.score}</span>
+                      <span className={classes.smallTxt}>积分</span>
+                    </Typography>
+                    <Typography
+                      component="p"
+                      variant="subtitle2"
+                      color="textSecondary"
+                    >
+                      <span>市场价：</span>
+                      {item.price}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       </div>
     </Grid>
   );

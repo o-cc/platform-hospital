@@ -18,12 +18,7 @@ const TopNav = props => {
 
   return (
     <>
-      <Grid
-        container
-        spacing={3}
-        justify="space-between"
-        className={classes.root}
-      >
+      <Grid container justify="space-between" className={classes.root}>
         <Grid item className={classes.back}>
           <IconButton onClick={() => props.history.go && props.history.go(-1)}>
             <ArrowBackIosIcon />

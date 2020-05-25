@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Grid, Button, Divider, Link, Avatar } from '@material-ui/core';
+import {
+  Grid,
+  Button,
+  Divider,
+  Link,
+  Avatar,
+  Typography
+} from '@material-ui/core';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/Home/components/Comment';
@@ -7,8 +14,8 @@ import { vw } from '@/utils';
 import { test_html } from 'configs/test_detail_html';
 import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/Home/components/InputComment';
-// import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
 import Back from 'pages/components/BackHeader';
+
 const useStyles = makeStyles(theme => ({
   root: {
     fontFamily: 'Microsoft Yahei',
@@ -23,7 +30,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '90%'
+    width: '90%',
+    margin: `${20}px 0`
   },
   normalText: {
     color: '#333',
@@ -34,7 +42,6 @@ const useStyles = makeStyles(theme => ({
   button: {
     color: 'red'
   },
-
   author: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -61,7 +68,6 @@ const Img = styled(({ src, ...other }) => (
 ))({
   width: '100%',
   height: 'auto'
-  // marginTop: vw(38)
 });
 
 function Detail(props) {
@@ -72,14 +78,18 @@ function Detail(props) {
       <Grid
         container
         className={classes.root}
-        spacing={3}
         justify="center"
         direction="column"
         alignItems="center"
       >
-        <Back title="company name" />
+        <Back title="" />
         <Grid item xs={11}>
-          微软改进Windows 10 v2004细节：整体游戏性能加强 支持光线追踪1.1
+          <Typography
+            variant="subtitle1"
+            style={{ marginTop: 10, fontWeight: 'bold' }}
+          >
+            微软改进Windows 10 v2004细节：整体游戏性能加强 支持光线追踪1.1
+          </Typography>
         </Grid>
         <Grid
           item

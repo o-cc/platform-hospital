@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1)
   },
   info: {
-    width: '100%',
+    // width: '100%',
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     display: 'flex',
