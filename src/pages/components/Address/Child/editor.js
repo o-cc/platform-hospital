@@ -55,6 +55,7 @@ export default props => {
         back={() => {
           props.back && props.back();
         }}
+        withoutHome={true}
       />
       <Grid
         container

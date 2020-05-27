@@ -13,9 +13,9 @@ import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounde
 import { vw } from '@/utils';
 import { addressList as testList } from 'configs/test_data';
 import AddressItem from 'pages/components/Address/Child/item';
-import EditorAddress from 'pages/components/Address/editor';
+import EditorAddress from '@/pages/components/Address/Child/editor';
+import Address from 'pages/components/Address';
 
-import Add from './Child/add';
 const useStyles = makeStyles(theme => ({
   button: {
     width: '100%',
@@ -48,7 +48,7 @@ export default () => {
   const classes = useStyles();
   const [addressModal, setAddressModal] = useState(false);
   const [editorModal, setEditorModal] = useState(false);
-  const [Address, setAddress] = useState({});
+  const [address, setAddress] = useState({});
   useEffect(() => {
     let list = testList;
     for (let i = 0; i < list.length; i++) {
@@ -63,9 +63,9 @@ export default () => {
       <Grid container>
         <BackHeader title="商品兑换" />
 
-        {Address.is_default ? (
+        {address.is_default ? (
           <AddressItem
-            addressItem={Address}
+            addressItem={address}
             hasLocation={true}
             click={() => setAddressModal(true)}
             onEditor={() => {
@@ -140,7 +140,7 @@ export default () => {
         </Paper>
         {/* 添加地址 */}
         <Slider open={addressModal} bgColor="#f8f8f8">
-          <Add onClose={() => setAddressModal(false)} />
+          <Address onClose={() => setAddressModal(false)} title="选择地址" />
         </Slider>
 
         <Slider open={editorModal} bgColor="#f8f8f8">
@@ -148,7 +148,7 @@ export default () => {
             back={() => {
               setEditorModal(false);
             }}
-            initValue={Address}
+            initValue={address}
             onSubmit={values => {
               setEditorModal(false);
               setAddress(sta => ({ ...sta, ...values }));
