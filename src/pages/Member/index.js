@@ -19,7 +19,7 @@ import PaymentIcon from '@material-ui/icons/Payment';
 import { Inbox } from '@material-ui/icons';
 import Address from '@/pages/components/Address';
 import History from './Child/History';
-
+import MyArticle from './Child/MyArticle';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
@@ -72,7 +72,7 @@ const types = {
   address: 'address',
   exchange: 'exchange',
   task: 'task',
-  verify: 'verify',
+  myArticle: 'myArticle',
   record: 'record'
 };
 
@@ -80,7 +80,7 @@ const menuList = [
   { id: 0, title: '收货地址', type: types.address },
   { id: 1, title: '兑换记录', type: types['exchange'] },
   { id: 2, title: '任务中心', type: types['task'] },
-  { id: 3, title: '审核中心', type: types['verify'] },
+  { id: 3, title: '我的文章', type: types['myArticle'] },
   { id: 4, title: '浏览记录', type: types['record'] }
 ];
 
@@ -99,13 +99,17 @@ export default () => {
     //     break;
     //   case types.task:
     //     break;
-    //   case types.verify:
+    //   case types.myArticle:
     //     break;
     //   case types.record:
     //     break;
     //   default:
     //     break;
     // }
+  };
+
+  const onClose = () => {
+    setModal(false);
   };
 
   return (
@@ -162,7 +166,7 @@ export default () => {
                     color="textSecondary"
                     style={{ marginRight: 5 }}
                   >
-                    赚积分
+                    签到
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -205,7 +209,7 @@ export default () => {
       >
         <AddCircleIcon className={classes.icon} />
       </IconButton>
-      <Drawer anchor={'bottom'} open={drawer} onClose={() => setDrawer(false)}>
+      <Drawer anchor={'bottom'} open={drawer} onClose={onClose}>
         <div style={{ paddingBottom: 16 }}>
           <List>
             <ListItem button>
@@ -224,8 +228,9 @@ export default () => {
         </div>
       </Drawer>
 
-      <Address open={modal === types.address} onClose={() => setModal('')} />
-      <History open={modal === types.record} onClose={() => setModal('')} />
+      <Address open={modal === types.address} onClose={onClose} />
+      <History open={modal === types.record} onClose={onClose} />
+      <MyArticle open={modal === types.myArticle} onClose={onClose} />
     </Grid>
   );
 };
