@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   },
   topAta: {
-    borderBottom: '6px solid #f8f8f8',
+    borderBottom: '8px solid #f8f8f8',
     padding: theme.spacing(3)
   },
   padding2: {
@@ -68,14 +68,45 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// const menuList = [{ id: 0, text: '收货地址', type: 'address' }];
+const types = {
+  address: 'address',
+  exchange: 'exchange',
+  task: 'task',
+  verify: 'verify',
+  record: 'record'
+};
+
+const menuList = [
+  { id: 0, title: '收货地址', type: types.address },
+  { id: 1, title: '兑换记录', type: types['exchange'] },
+  { id: 2, title: '任务中心', type: types['task'] },
+  { id: 3, title: '审核中心', type: types['verify'] },
+  { id: 4, title: '浏览记录', type: types['record'] }
+];
 
 export default () => {
   const classes = useStyles();
   const [drawer, setDrawer] = useState(false);
-  const [addressModal, setAddressModal] = useState(false);
-  const [historyModal, setHistoryModal] = useState(false);
+  const [modal, setModal] = useState('');
 
+  const toggleDrawer = item => {
+    setModal(item.type || '');
+    // switch (item.type) {
+    //   case types.address:
+    //     setAddressModal(true);
+    //     break;
+    //   case types.exchange:
+    //     break;
+    //   case types.task:
+    //     break;
+    //   case types.verify:
+    //     break;
+    //   case types.record:
+    //     break;
+    //   default:
+    //     break;
+    // }
+  };
 
   return (
     <Grid container className={classes.root}>
@@ -143,87 +174,25 @@ export default () => {
           <Divider />
         </Grid>
 
-        <Grid item xs={12}>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
-            className={classes.item}
-          >
-            <Grid item>
-              <Typography>收货地址</Typography>
+        {menuList.map(list => (
+          <Grid item xs={12} key={list.type}>
+            <Grid
+              container
+              justify="space-between"
+              alignItems="center"
+              className={classes.item}
+              onClick={() => toggleDrawer(list)}
+            >
+              <Grid item>
+                <Typography>{list.title}</Typography>
+              </Grid>
+              <Grid item>
+                <ArrowForwardIosIcon className={classes.arrow} />
+              </Grid>
             </Grid>
-            <Grid item>
-              <ArrowForwardIosIcon className={classes.arrow} />
-            </Grid>
+            <Divider />
           </Grid>
-          <Divider />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
-            className={classes.item}
-          >
-            <Grid item>
-              <Typography>兑换记录</Typography>
-            </Grid>
-            <Grid item>
-              <ArrowForwardIosIcon className={classes.arrow} />
-            </Grid>
-          </Grid>
-          <Divider />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
-            className={classes.item}
-          >
-            <Grid item>
-              <Typography>任务中心</Typography>
-            </Grid>
-            <Grid item>
-              <ArrowForwardIosIcon className={classes.arrow} />
-            </Grid>
-          </Grid>
-          <Divider />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
-            className={classes.item}
-          >
-            <Grid item>
-              <Typography>审核中心</Typography>
-            </Grid>
-            <Grid item>
-              <ArrowForwardIosIcon className={classes.arrow} />
-            </Grid>
-          </Grid>
-          <Divider />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
-            className={classes.item}
-          >
-            <Grid item>
-              <Typography>浏览历史</Typography>
-            </Grid>
-            <Grid item>
-              <ArrowForwardIosIcon className={classes.arrow} />
-            </Grid>
-          </Grid>
-          <Divider />
-        </Grid>
+        ))}
       </Grid>
 
       <IconButton
@@ -255,8 +224,8 @@ export default () => {
         </div>
       </Drawer>
 
-      <Address open={addressModal} onClose={() => setAddressModal(false)} />
-      <History open={historyModal} onClose={() => setHistoryModal(false)} />
+      <Address open={modal === types.address} onClose={() => setModal('')} />
+      <History open={modal === types.record} onClose={() => setModal('')} />
     </Grid>
   );
 };
