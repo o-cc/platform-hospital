@@ -14,7 +14,8 @@ import { isIOS } from 'utils';
 import AppCont from 'container';
 import { vw } from 'utils';
 import { withRouter } from 'react-router-dom';
-
+import PermContactCalendarOutlinedIcon from '@material-ui/icons/PermContactCalendarOutlined';
+import PersonIcon from '@material-ui/icons/Person';
 const useStyles = makeStyles({
   list: {
     width: 250
@@ -109,9 +110,20 @@ export default withRouter(function SwipeableTemporaryDrawer(props) {
         onClick={() => props.history.replace('/login')}
       >
         <ListItemIcon>
-          {/* {index % 2 === 0 ? <InboxIcon /> : <MailIcon />} */}
+          <PersonIcon />
         </ListItemIcon>
         <ListItemText primary={'登录'} />
+      </ListItem>
+
+      <ListItem
+        button
+        key="member"
+        onClick={() => props.history.replace('/member/2')}
+      >
+        <ListItemIcon>
+          <PermContactCalendarOutlinedIcon />
+        </ListItemIcon>
+        <ListItemText primary={'个人中心'} />
       </ListItem>
     </div>
   );

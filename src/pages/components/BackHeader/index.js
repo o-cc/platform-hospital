@@ -9,10 +9,14 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     fontSize: 18,
     background: '#fff'
+  },
+  withoutHome: {
+    visibility: 'hidden',
+    pointerEvents: 'none'
   }
 }));
 
-export default withRouter(props => {
+export default withRouter(({ withoutHome = false, ...props }) => {
   const classes = useStyles();
   return (
     <Grid item xs={12} className={classes.header}>
@@ -33,7 +37,10 @@ export default withRouter(props => {
           </Grid>
         </Grid>
         <Grid item>
-          <IconButton onClick={() => props.history && props.history.push('/')}>
+          <IconButton
+            className={withoutHome ? classes.withoutHome : ''}
+            onClick={() => props.history && props.history.push('/')}
+          >
             <HomeOutlinedIcon />
           </IconButton>
         </Grid>

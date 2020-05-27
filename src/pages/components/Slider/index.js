@@ -12,12 +12,13 @@ const useStyles = makeStyles(theme => ({
   },
   info: {
     width: '100vw',
-    height: '100vh'
+    height: '100vh',
+    overflowY: "auto"
   }
 }));
 
 export default function TransitionsModal(props) {
-  const classes = useStyles(props.bgColor);
+  const classes = useStyles();
 
   return (
     <div>
@@ -53,5 +54,6 @@ export default function TransitionsModal(props) {
   );
 }
 TransitionsModal.defaultProps = {
-  open: false
+  open: false,
+  onClose: () => {}
 };
