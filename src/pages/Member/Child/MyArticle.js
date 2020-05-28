@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
 import Slider from 'pages/components/Slider';
 import BackHeader from '@/pages/components/BackHeader';
-import {
-  Tabs,
-  Tab,
-  Grid,
-  Typography,
-  Divider,
-  IconButton,
-  Button
-} from '@material-ui/core';
+import { Tabs, Tab, Grid, Typography, Divider } from '@material-ui/core';
 import { useTheme, makeStyles } from '@material-ui/core/styles';
 import SwipeableViews from 'react-swipeable-views';
 import { format } from 'date-fns';
-
+import Detail from './ArticleDetail';
 function a11yProps(index) {
   return {
     id: `full-width-tab-${index}`,
@@ -167,50 +159,7 @@ export default props => {
         </TabPanel>
       </SwipeableViews>
 
-      <Slider open={detailModal}>
-        <BackHeader
-          back={() => setDetailModal(false)}
-          title=""
-          homeComponent={() => (
-            <IconButton className={classes.release}>发布</IconButton>
-          )}
-        />
-        <div
-          style={{
-            padding: 8,
-            height: 'calc(100vh - 106px)',
-            overflow: 'auto'
-          }}
-        >
-          <h1>你总说 时间还很多</h1>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-          <p>你知道我在等你吗 你还在那里等着我？你的钱包还会带着钱吗</p>
-        </div>
-        <Button fullWidth variant="contained" size="large" color="secondary">
-          编辑
-        </Button>
-      </Slider>
+      <Detail open={detailModal} onClose={() => setDetailModal(false)} />
     </Slider>
   );
 };

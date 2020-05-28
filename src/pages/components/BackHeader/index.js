@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
 export default withRouter(
   ({ withoutHome = false, homeComponent: Home, ...props }) => {
     const classes = useStyles();
-    console.log(Home)
     return (
       <Grid item xs={12} className={classes.header}>
         <Grid container justify="space-between">
