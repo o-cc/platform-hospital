@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-
+import text from './text.json';
 export const comment_list = [
   {
     id: 0,
@@ -83,3 +83,5 @@ export const addressList = [
     detail: '车陂街道'
   }
 ];
+
+export const editorContent = text;

@@ -1,36 +1,74 @@
 import React, { useRef, useEffect } from 'react';
 import Slider from 'pages/components/Slider';
 import Quill from 'quill';
-import "quill/dist/quill.snow.css";
+import 'quill/dist/quill.snow.css';
+import { makeStyles, IconButton } from '@material-ui/core';
+import BackHeader from 'pages/components/BackHeader';
+import { editorContent } from 'configs/test_data';
+const useStyles = makeStyles(t => ({
+  editor: {
+    height: 'calc(100vh - 92px)'
+  },
+  release: {
+    fontSize: 16,
+    color: '#666'
+  }
+}));
+
+const toolbarOptions = [
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['image'],
+  [{ color: [] }, { background: [] }],
+  [{ align: [] }],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  ['clean']
+];
+
 export default props => {
   const textRef = useRef();
-
+  const quillRef = useRef(null);
+  const classes = useStyles();
   useEffect(() => {
- 
-    if (props.open) {
-      setTimeout(() => {
-      new Quill(textRef.current, {
-        modules: { toolbar: '#toolbar' },
-        theme: 'snow',
-        placeholder: '说什么吧....',
-        // formats: ["underline", "image"]
+    if (!props.open) return;
+
+    setTimeout(() => {
+      quillRef.current = new Quill(textRef.current, {
+        modules: {
+          toolbar: toolbarOptions
+        },
+        placeholder: '说点什么吧...',
+        theme: 'snow'
       });
-      }, 10);
-      
-    }
+      quillRef.current.setContents &&
+        quillRef.current.setContents(editorContent.ops);
+    }, 10);
+    return () => {
+      quillRef.current = null;
+    };
   }, [props.open]);
   return (
     <Slider open={props.open}>
-      <h1>ddd</h1>
-      <div id="toolbar">
-        <button className="ql-bold">Bold</button>
-        <button className="ql-italic">Italic</button>
-        <button className="ql-underline">Italic</button>
-        <button className="ql-image">Italic</button>
-      </div>
+      <BackHeader
+        back={props.onClose}
+        title=""
+        homeComponent={() => (
+          <IconButton
+            className={classes.release}
+            onClick={() => {
+              let delta =
+                quillRef.current.getContents && quillRef.current.getContents();
+              //post
+              console.log(JSON.stringify(delta));
+            }}
+          >
+            发布
+          </IconButton>
+        )}
+      />
+      <div id="toolbar"></div>
 
-      <div className="" ref={textRef}>
-      </div>
+      <div className={classes.editor} ref={textRef}></div>
     </Slider>
   );
 };
