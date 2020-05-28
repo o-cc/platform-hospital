@@ -16,36 +16,43 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default withRouter(({ withoutHome = false, ...props }) => {
-  const classes = useStyles();
-  return (
-    <Grid item xs={12} className={classes.header}>
-      <Grid container justify="space-between">
-        <Grid item>
-          <IconButton
-            onClick={() => {
-              if (props.back) return props.back();
-              props.history.go && props.history.go(-1);
-            }}
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
-        </Grid>
-        <Grid item>
-          <Grid container alignItems="center" style={{ height: '100%' }}>
-            {props.title}
+export default withRouter(
+  ({ withoutHome = false, homeComponent: Home, ...props }) => {
+    const classes = useStyles();
+    console.log(Home)
+    return (
+      <Grid item xs={12} className={classes.header}>
+        <Grid container justify="space-between">
+          <Grid item>
+            <IconButton
+              onClick={() => {
+                if (props.back) return props.back();
+                props.history.go && props.history.go(-1);
+              }}
+            >
+              <ArrowBackIosIcon />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            <Grid container alignItems="center" style={{ height: '100%' }}>
+              {props.title}
+            </Grid>
+          </Grid>
+          <Grid item>
+            {Home ? (
+              <Home />
+            ) : (
+              <IconButton
+                className={withoutHome ? classes.withoutHome : ''}
+                onClick={() => props.history && props.history.push('/')}
+              >
+                <HomeOutlinedIcon />
+              </IconButton>
+            )}
           </Grid>
         </Grid>
-        <Grid item>
-          <IconButton
-            className={withoutHome ? classes.withoutHome : ''}
-            onClick={() => props.history && props.history.push('/')}
-          >
-            <HomeOutlinedIcon />
-          </IconButton>
-        </Grid>
+        <Divider />
       </Grid>
-      <Divider />
-    </Grid>
-  );
-});
+    );
+  }
+);

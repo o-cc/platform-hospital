@@ -13,7 +13,8 @@ const useStyles = makeStyles(theme => ({
   info: {
     width: '100vw',
     height: '100vh',
-    overflowY: "auto"
+    overflowY: "auto",
+    outline: "none"
   }
 }));
 
