@@ -139,9 +139,12 @@ export default () => {
           </Grid>
         </Paper>
         {/* 添加地址 */}
-        <Slider open={addressModal} bgColor="#f8f8f8">
-          <Address onClose={() => setAddressModal(false)} title="选择地址" />
-        </Slider>
+
+        <Address
+          open={addressModal}
+          onClose={() => setAddressModal(false)}
+          title="选择地址"
+        />
 
         <Slider open={editorModal} bgColor="#f8f8f8">
           <EditorAddress

@@ -23,7 +23,7 @@ export default function Address(props) {
   const [addressList, setAddressList] = useState(testList);
   const [address, setAddress] = useState({});
   return (
-    <Slider open={props.open}>
+    <Slider open={props.open}  bgColor="#f8f8f8" >
       <Grid container>
         <BackHeader
           title={props.title}
