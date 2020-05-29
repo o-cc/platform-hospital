@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Slider from 'pages/components/Slider';
 import BackHeader from '@/pages/components/BackHeader';
-import { IconButton, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Editor from './Editor';
 import Quill from 'quill';
@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
   editor: {
     padding: 8,
-    height: 'calc(100vh - 95px)',
+    height: 'calc(100vh - 92px)',
     overflow: 'auto',
     border: '0!important'
   }
@@ -50,9 +50,10 @@ export default props => {
       <BackHeader
         back={props.onClose}
         title=""
-        homeComponent={() => (
-          <IconButton className={classes.release}>发布</IconButton>
-        )}
+        withoutHome={true}
+        // homeComponent={() => (
+        //   <IconButton className={classes.release}>发布</IconButton>
+        // )}
       />
       <div className={classes.editor} ref={editorRef}></div>
       <Button

@@ -2,15 +2,15 @@ import React, { useRef, useEffect } from 'react';
 import Slider from 'pages/components/Slider';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import { makeStyles, IconButton } from '@material-ui/core';
+import { makeStyles, IconButton, Grid } from '@material-ui/core';
 import BackHeader from 'pages/components/BackHeader';
 import { editorContent } from 'configs/test_data';
 const useStyles = makeStyles(t => ({
   editor: {
-    height: 'calc(100vh - 92px)'
+    height: 'calc(100vh - 49px)'
   },
   release: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#666'
   }
 }));
@@ -66,9 +66,14 @@ export default props => {
           </IconButton>
         )}
       />
-      <div id="toolbar"></div>
-
-      <div className={classes.editor} ref={textRef}></div>
+      <Grid
+        container
+        direction="column"
+        wrap="nowrap"
+        className={classes.editor}
+      >
+        <div ref={textRef}></div>
+      </Grid>
     </Slider>
   );
 };

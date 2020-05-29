@@ -18,8 +18,10 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import PaymentIcon from '@material-ui/icons/Payment';
 import { Inbox } from '@material-ui/icons';
 import Address from '@/pages/components/Address';
-import History from './Child/History';
-import MyArticle from './Child/MyArticle';
+import History from './components/History';
+import MyArticle from './components/MyArticle/';
+import BackHeader from 'pages/components/BackHeader';
+import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
@@ -32,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   item: {
-    padding: `${theme.spacing(1)}px ${theme.spacing(2)}px`,
+    padding: `${theme.spacing(1.5)}px ${theme.spacing(2)}px`,
     color: '#333',
     fontSize: theme.spacing(2)
   },
@@ -84,7 +86,7 @@ const menuList = [
   { id: 4, title: '浏览记录', type: types['record'] }
 ];
 
-export default () => {
+export default withRouter(props => {
   const classes = useStyles();
   const [drawer, setDrawer] = useState(false);
   const [modal, setModal] = useState('');
@@ -114,6 +116,9 @@ export default () => {
 
   return (
     <Grid container className={classes.root}>
+      <Grid item xs={12}>
+        <BackHeader withoutHome={true} title="" />
+      </Grid>
       <Grid item xs={12}>
         <Grid
           container
@@ -233,4 +238,4 @@ export default () => {
       <MyArticle open={modal === types.myArticle} onClose={onClose} />
     </Grid>
   );
-};
+});
