@@ -22,6 +22,7 @@ import History from './components/History';
 import MyArticle from './components/MyArticle/';
 import BackHeader from 'pages/components/BackHeader';
 import { withRouter } from 'react-router-dom';
+import Info from "./components/PersonInfo"
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
@@ -75,7 +76,8 @@ const types = {
   exchange: 'exchange',
   task: 'task',
   myArticle: 'myArticle',
-  record: 'record'
+  record: 'record',
+  info: "info"
 };
 
 const menuList = [
@@ -93,21 +95,6 @@ export default withRouter(props => {
 
   const toggleDrawer = item => {
     setModal(item.type || '');
-    // switch (item.type) {
-    //   case types.address:
-    //     setAddressModal(true);
-    //     break;
-    //   case types.exchange:
-    //     break;
-    //   case types.task:
-    //     break;
-    //   case types.myArticle:
-    //     break;
-    //   case types.record:
-    //     break;
-    //   default:
-    //     break;
-    // }
   };
 
   const onClose = () => {
@@ -125,7 +112,7 @@ export default withRouter(props => {
           alignItems="center"
           justify="space-between"
           className={classes.topAta}
-          onClick={() => console.log('去主页')}
+          onClick={() => setModal(types.info)}
         >
           <Grid item xs={3}>
             <Avatar
@@ -214,7 +201,7 @@ export default withRouter(props => {
       >
         <AddCircleIcon className={classes.icon} />
       </IconButton>
-      <Drawer anchor={'bottom'} open={drawer} onClose={onClose}>
+      <Drawer anchor={'bottom'} open={drawer} onClose={() => setDrawer(false)}>
         <div style={{ paddingBottom: 16 }}>
           <List>
             <ListItem button>
@@ -232,7 +219,7 @@ export default withRouter(props => {
           </List>
         </div>
       </Drawer>
-
+      <Info open={modal === types.info} />
       <Address open={modal === types.address} onClose={onClose} />
       <History open={modal === types.record} onClose={onClose} />
       <MyArticle open={modal === types.myArticle} onClose={onClose} />

@@ -7,7 +7,7 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 const useStyles = makeStyles(theme => ({
   header: {
     width: '100%',
-    fontSize: 18,
+    fontSize: 17,
     background: '#fff'
   },
   withoutHome: {

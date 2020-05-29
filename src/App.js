@@ -14,6 +14,8 @@ import StoreDetail from '@/pages/Store/Detail';
 import StoreExchange from '@/pages/Store/Exchange';
 import Member from '@/pages/Member';
 import 'tools/vconsole';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 function OtherWrap() {
   return (
     <PageTemplate>
@@ -41,7 +43,9 @@ function App() {
   return (
     <AppCont.Provider>
       <Router>
-        <Root></Root>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <Root />
+    </MuiPickersUtilsProvider>
       </Router>
     </AppCont.Provider>
   );
