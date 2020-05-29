@@ -53,7 +53,7 @@ export default function SignIn(props) {
   const [tabIdx, setTabIdx] = useState(0);
 
   const login = () => {
-    props.history && props.history.push('/');
+    props.history && props.history.replace('/');
   };
   return (
     <Container component="main" maxWidth="xs">

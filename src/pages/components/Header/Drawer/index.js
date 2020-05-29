@@ -79,7 +79,7 @@ export default withRouter(function SwipeableTemporaryDrawer(props) {
   };
 
   const clickMenu = (item, index) => {
-    props.history && props.history.replace(getRouterType(item.type));
+    props.history && props.history.push(getRouterType(item.type));
   };
 
   const list = anchor => (
@@ -107,7 +107,7 @@ export default withRouter(function SwipeableTemporaryDrawer(props) {
       <ListItem
         button
         key="login"
-        onClick={() => props.history.replace('/login')}
+        onClick={() => props.history.push('/login')}
       >
         <ListItemIcon>
           <PersonIcon />
@@ -118,7 +118,7 @@ export default withRouter(function SwipeableTemporaryDrawer(props) {
       <ListItem
         button
         key="member"
-        onClick={() => props.history.replace('/member/2')}
+        onClick={() => props.history.push('/member/2')}
       >
         <ListItemIcon>
           <PermContactCalendarOutlinedIcon />
