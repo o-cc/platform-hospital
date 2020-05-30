@@ -11,7 +11,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { isIOS } from 'utils';
-import AppCont from 'container';
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import { vw } from 'utils';
 import { withRouter } from 'react-router-dom';
 import PermContactCalendarOutlinedIcon from '@material-ui/icons/PermContactCalendarOutlined';
@@ -55,10 +55,7 @@ function getRouterType(type) {
   return res;
 }
 
-export default withRouter(function SwipeableTemporaryDrawer(props) {
-  const appCont = AppCont.useContainer();
-  const { menuLists } = appCont.state;
-
+function SwipeableTemporaryDrawer(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -93,22 +90,24 @@ export default withRouter(function SwipeableTemporaryDrawer(props) {
         <ListItem button>
           <ListItemText primary={'logo'} />
         </ListItem>
-        {menuLists.map((item, index) => (
+        <ListItem button onClick={() => clickMenu({ type: 'home' })}>
+          <ListItemIcon>
+            <HomeOutlinedIcon />
+          </ListItemIcon>
+          <ListItemText primary={'首页'} />
+        </ListItem>
+        {props.menuData.map((item, index) => (
           <ListItem button key={index} onClick={() => clickMenu(item, index)}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
-            <ListItemText primary={item.title} />
+            <ListItemText primary={item.name} />
           </ListItem>
         ))}
       </List>
       <Divider />
 
-      <ListItem
-        button
-        key="login"
-        onClick={() => props.history.push('/login')}
-      >
+      <ListItem button key="login" onClick={() => props.history.push('/login')}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
@@ -150,4 +149,10 @@ export default withRouter(function SwipeableTemporaryDrawer(props) {
       </SwipeableDrawer>
     </>
   );
-});
+}
+
+SwipeableTemporaryDrawer.defaultProps = {
+  menuData: []
+};
+
+export default withRouter(SwipeableTemporaryDrawer);

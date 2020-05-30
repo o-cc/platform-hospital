@@ -41,20 +41,13 @@ function SimplePaper({ listItem, ...props }) {
     <div className={classes.root}>
       <Paper elevation={2} className={classes.paper}>
         <Grid container justify="space-between" alignItems="center">
-          <h4 className={classes.subTitle}>{listItem.title}</h4>
+          <h4 className={classes.subTitle}>{listItem.name}</h4>
           <Link href="#" className={classes.more} onClick={() => {}}>
             查看更多
           </Link>
         </Grid>
         <Divider />
-        <ItemList
-          list={listItem.list}
-          onClick={idx => {
-            if (listItem.type === 'video') {
-              props.history && props.history.push('/video/detail/' + idx);
-            }
-          }}
-        />
+        <ItemList list={listItem.news} />
       </Paper>
     </div>
   );
@@ -62,7 +55,7 @@ function SimplePaper({ listItem, ...props }) {
 
 SimplePaper.defaultProps = {
   listItem: {
-    list: []
+    news: []
   }
 };
 

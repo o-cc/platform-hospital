@@ -13,12 +13,15 @@ const useStyles = makeStyles(theme => ({
       paddingTop: 0,
       paddingBottom: 0
     }
+  },
+  text: {
+    padding: `${theme.spacing(0.5)}px 0`
   }
 }));
 
 export default withRouter(function ListDividers(props) {
   const classes = useStyles();
-  const { lists, history } = props;
+  const { lists } = props;
   return (
     <List component="nav" className={classes.root} aria-label="mailbox folders">
       {lists.map((item, idx) => (
@@ -26,10 +29,10 @@ export default withRouter(function ListDividers(props) {
           <ListItem
             button
             onClick={() => {
-              history.push('/detail/' + item.id);
+              if (item.url) window.location.href = item.url;
             }}
           >
-            <ListItemText primary={item.text} />
+            <ListItemText className={classes.text} primary={item.title} />
           </ListItem>
           <Divider />
         </Fragment>

@@ -40,14 +40,22 @@ export default withRouter(function ListItem({ list = [], ...props }) {
             spacing={3}
             className={classes.gridWrap}
             onClick={() => {
-              if (props.onClick) return props.onClick(idx);
-              props.history && props.history.push('/detail/' + idx);
+              if (props.onClick) return props.onClick(item.news_id);
+
+              if (item.news_type === 'video') {
+                props.history &&
+                  props.history.push('/video/detail/' + item.news_id);
+              } else {
+                props.history && props.history.push('/detail/' + item.news_id);
+              }
             }}
           >
             <Grid item xs={8}>
               <Paper elevation={0} className={classes.gridItem}>
-                {item.text}
-                <h5>{item.time}</h5>
+                {item.title}
+                <h5>
+                  {item.create_time} {item.username}
+                </h5>
               </Paper>
             </Grid>
 
@@ -57,7 +65,7 @@ export default withRouter(function ListItem({ list = [], ...props }) {
               className={classes.imgItem}
               style={{ paddingLeft: 0 }}
             >
-              <Img bg={require('assets/imgs/test.jpg')}></Img>
+              <Img bg={item.index_image_url}></Img>
             </Grid>
           </Grid>
           <Divider />

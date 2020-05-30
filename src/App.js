@@ -14,6 +14,8 @@ import StoreDetail from '@/pages/Store/Detail';
 import StoreExchange from '@/pages/Store/Exchange';
 import Member from '@/pages/Member';
 import 'tools/vconsole';
+
+import Error from 'pages/Error';
 function OtherWrap() {
   return (
     <PageTemplate>
@@ -22,8 +24,12 @@ function OtherWrap() {
   );
 }
 const Root = withRouter(props => {
+  const appCont = AppCont.useContainer();
+  const { error } = appCont;
   return (
     <>
+      {error && <Error error={error} />}
+
       <Route path="/login" component={Login}></Route>
       <Route exact path="/" component={Home}></Route>
       <Route path="/detail/:id" component={Detail}></Route>
