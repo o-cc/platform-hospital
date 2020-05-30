@@ -7,9 +7,7 @@ import { makeStyles, styled } from '@material-ui/core/styles';
 import 'swiper/css/swiper.css';
 import Recommend from './Child/Recommend';
 import ListsWithTitle from './Child/ListsWithTitle';
-import { homeTestData } from 'pages/Home/helper';
 import Loading from 'pages/components/Loading';
-import { Divider } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,7 +58,6 @@ export default props => {
   const { setError } = appCont;
   const classes = useStyles();
   const [homeData, setHomeData] = useState({ contents: [], news: [] });
-  const [menuData, setMenuData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function getHomeInfo() {
@@ -78,17 +75,6 @@ export default props => {
     getHomeInfo();
   }, [setError]);
 
-  useEffect(() => {
-    async function getMenuData() {
-      let { result, error } = await requestApi('getMenu');
-      if (error) {
-        return setError(error);
-      }
-      setMenuData(result);
-    }
-    getMenuData();
-  }, [setError]);
-
   const { contents, news } = homeData;
   const { contents: swiperList = [] } =
     formatArray2Obj(contents)['index-banner'] || {};
@@ -96,7 +82,7 @@ export default props => {
     formatArray2Obj(contents)['index-list'] || {};
 
   return (
-    <PageTemplate menuData={menuData}>
+    <PageTemplate>
       {loading ? (
         <Loading />
       ) : (

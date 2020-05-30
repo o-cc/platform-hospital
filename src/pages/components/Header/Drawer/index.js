@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
@@ -12,11 +12,17 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { isIOS } from 'utils';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import { vw } from 'utils';
+import { vw, requestApi } from 'utils';
 import { withRouter } from 'react-router-dom';
 import PermContactCalendarOutlinedIcon from '@material-ui/icons/PermContactCalendarOutlined';
 import PersonIcon from '@material-ui/icons/Person';
-const useStyles = makeStyles({
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import { Collapse } from '@material-ui/core';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import AppCont from 'container';
+
+const useStyles = makeStyles(theme => ({
   list: {
     width: 250
   },
@@ -27,23 +33,20 @@ const useStyles = makeStyles({
     padding: 10,
     fontSize: vw(18),
     color: 'white'
+  },
+  nested: {
+    paddingLeft: theme.spacing(4)
   }
-});
+}));
 
-function getRouterType(type) {
+function getRouterType(type, index) {
   let res = '';
   switch (type) {
     case 'store':
       res = '/store';
       break;
-    case 'video':
-      res = '/other/video';
-      break;
-    case 'books':
-      res = '/other/books';
-      break;
-    case 'case':
-      res = '/other/case';
+    case 'other':
+      res = '/other/' + index;
       break;
     case 'home':
       res = '/';
@@ -57,12 +60,10 @@ function getRouterType(type) {
 
 function SwipeableTemporaryDrawer(props) {
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false
-  });
+  const [state, setState] = React.useState({ left: false });
+  const [subActive, setSubActive] = React.useState([]);
+  const { setError } = AppCont.useContainer();
+  const [menuData, setMenuData] = React.useState([]);
 
   const toggleDrawer = (anchor, open) => event => {
     if (
@@ -75,57 +76,119 @@ function SwipeableTemporaryDrawer(props) {
     setState({ ...state, [anchor]: open });
   };
 
-  const clickMenu = (item, index) => {
-    props.history && props.history.push(getRouterType(item.type));
+  useEffect(() => {
+    async function getMenuData() {
+      let { result, error } = await requestApi('getMenu');
+      if (error) {
+        return setError(error);
+      }
+      setMenuData(result);
+      setSubActive(result.map(() => true));
+    }
+    getMenuData();
+  }, [setError]);
+
+  const clickMenu = (type, index) => {
+    props.history && props.history.push(getRouterType(type, index));
+    toggleDrawer('left', false)();
   };
 
-  const list = anchor => (
-    <div
-      className={classes.list}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        <ListItem button>
-          <ListItemText primary={'logo'} />
-        </ListItem>
-        <ListItem button onClick={() => clickMenu({ type: 'home' })}>
-          <ListItemIcon>
-            <HomeOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText primary={'首页'} />
-        </ListItem>
-        {props.menuData.map((item, index) => (
-          <ListItem button key={index} onClick={() => clickMenu(item, index)}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={item.name} />
+  const clickTopMenu = idx => {
+    setSubActive(tfs => {
+      return tfs.map((tf, k) => {
+        if (k === idx) return !tf;
+        return tf;
+      });
+    });
+  };
+
+  const list = anchor => {
+    const menu = menuData;
+    return (
+      <div className={classes.list} role="presentation">
+        <List>
+          <ListItem button>
+            <ListItemText primary={'logo'} />
           </ListItem>
-        ))}
-      </List>
-      <Divider />
+          {/* 首页 */}
+          <ListItem button>
+            <ListItemIcon>
+              <HomeOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={'首页'}
+              onClick={() => {
+                props.history && props.history.push('/');
+                toggleDrawer(anchor, false)();
+              }}
+            />
+          </ListItem>
+          {/* 配置类 */}
+          {menu.map((item, index) => (
+            <Fragment key={index}>
+              <ListItem button onClick={() => clickTopMenu(index)}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={item.name} />
+                {item.sub_categories.length > 0 && subActive[index] ? (
+                  <ExpandLess />
+                ) : (
+                  <ExpandMore />
+                )}
+              </ListItem>
+              {item.sub_categories.map(sub => (
+                <Collapse
+                  in={subActive[index]}
+                  timeout="auto"
+                  unmountOnExit
+                  key={sub.sub_id}
+                >
+                  <List component="div" disablePadding>
+                    <ListItem
+                      button
+                      className={classes.nested}
+                      onClick={() => {
+                        clickMenu('other', sub.sub_id);
+                      }}
+                    >
+                      <ListItemIcon>
+                        <SubdirectoryArrowRightIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={sub.name} />
+                    </ListItem>
+                  </List>
+                </Collapse>
+              ))}
+            </Fragment>
+          ))}
+        </List>
+        <Divider />
 
-      <ListItem button key="login" onClick={() => props.history.push('/login')}>
-        <ListItemIcon>
-          <PersonIcon />
-        </ListItemIcon>
-        <ListItemText primary={'登录'} />
-      </ListItem>
+        <ListItem
+          button
+          key="login"
+          onClick={() => props.history.push('/login')}
+        >
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary={'登录'} />
+        </ListItem>
 
-      <ListItem
-        button
-        key="member"
-        onClick={() => props.history.push('/member/2')}
-      >
-        <ListItemIcon>
-          <PermContactCalendarOutlinedIcon />
-        </ListItemIcon>
-        <ListItemText primary={'个人中心'} />
-      </ListItem>
-    </div>
-  );
+        <ListItem
+          button
+          key="member"
+          onClick={() => props.history.push('/member/2')}
+        >
+          <ListItemIcon>
+            <PermContactCalendarOutlinedIcon />
+          </ListItemIcon>
+          <ListItemText primary={'个人中心'} />
+        </ListItem>
+      </div>
+    );
+  };
 
   const anchor = 'left';
   return (
