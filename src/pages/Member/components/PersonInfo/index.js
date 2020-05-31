@@ -49,7 +49,7 @@ export default props => {
   return (
     <Slider open={props.open}>
       <Grid container>
-        <BackHeader withoutHome={true} title="我的信息" />
+        <BackHeader withoutHome={true} title="我的信息" back={props.onClose} />
       </Grid>
       {getObjKey(infoList).map(item => (
         <Fragment key={item}>
@@ -67,19 +67,18 @@ export default props => {
             }}
           >
             {item === 'img' && (
-               <Grid item xs={12}>
-               <input
-                 accept="image/*"
-                 className={classes.input}
-                 id="contained-button-file"
-                 multiple
-                 type="file"
-               />
-               <label htmlFor="contained-button-file">
-                 <div className={classes.inputWrap}></div>
-               </label>
-             </Grid>
-           )} 
+              <Grid item xs={12}>
+                <input
+                  accept="image/*"
+                  className={classes.input}
+                  id="contained-button-file"
+                  type="file"
+                />
+                <label htmlFor="contained-button-file">
+                  <div className={classes.inputWrap}></div>
+                </label>
+              </Grid>
+            )}
             <Grid item>{infoList[item]}</Grid>
             <Grid item>
               {item === 'img' ? (

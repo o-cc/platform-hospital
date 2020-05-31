@@ -39,6 +39,7 @@ export default props => {
 
       quillRef.current.setContents &&
         quillRef.current.setContents(editorContent.ops);
+      // quillRef.current.root.innerHTML = '<h1>ddd</h1>';
     }, 10);
     return () => {
       console.log('destroy');

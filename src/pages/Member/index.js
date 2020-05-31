@@ -22,7 +22,7 @@ import History from './components/History';
 import MyArticle from './components/MyArticle/';
 import BackHeader from 'pages/components/BackHeader';
 import { withRouter } from 'react-router-dom';
-import Info from "./components/PersonInfo"
+import Info from './components/PersonInfo';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
@@ -56,8 +56,8 @@ const useStyles = makeStyles(theme => ({
     right: '2%'
   },
   icon: {
-    width: theme.spacing(9),
-    height: theme.spacing(9)
+    width: '72px!important',
+    height: '72px!important'
   },
   arrow: {
     color: '#888',
@@ -77,7 +77,7 @@ const types = {
   task: 'task',
   myArticle: 'myArticle',
   record: 'record',
-  info: "info"
+  info: 'info'
 };
 
 const menuList = [
@@ -219,7 +219,7 @@ export default withRouter(props => {
           </List>
         </div>
       </Drawer>
-      <Info open={modal === types.info} />
+      <Info open={modal === types.info} onClose={onClose} />
       <Address open={modal === types.address} onClose={onClose} />
       <History open={modal === types.record} onClose={onClose} />
       <MyArticle open={modal === types.myArticle} onClose={onClose} />
