@@ -103,5 +103,54 @@ export default {
         }
       ]
     }
-  ]
+  ],
+  [`onGet:${/\/categories\/\d+\/$/}`]: [
+    {
+      id: 2,
+      name: '测试类别2',
+      news: [
+        {
+          news_id: 4,
+          title: '我思故我在',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'http://qb2ljz0fe.bkt.clouddn.com/FsD7HjnTT723g2zPhoYpN5e5oJrP',
+          news_type: 'GraphText'
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: '测试类别3',
+      news: [
+        {
+          news_id: 3,
+          title: '2001：太空漫游',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url: 'http://qb2ljz0fe.bkt.clouddn.com/ix.jpg',
+          news_type: 'Video',
+          video_long: '18:26'
+        }
+      ],
+      next: 'http://192.168.1.105:8001/api/categories/3/news/?page=2'
+    }
+  ],
+  [`onGet:${/\/categories\/\d+\/news/}`]: {
+    count: 1,
+    next: '',
+    previous: '',
+    results: [
+      {
+        news_id: 4,
+        title: '我思故我在',
+        username: 'admin',
+        create_time: '2020/05/30',
+        index_image_url:
+          'http://qb2ljz0fe.bkt.clouddn.com/FsD7HjnTT723g2zPhoYpN5e5oJrP',
+        news_type: 'GraphText'
+      }
+    ]
+  }
 };

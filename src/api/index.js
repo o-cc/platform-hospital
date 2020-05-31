@@ -22,6 +22,12 @@ const api = {
   },
   getMenu() {
     return this.instance.get('/categories/');
+  },
+  getCategoriesById({ id }) {
+    return this.instance.get(`/categories/${id}/`);
+  },
+  getCategoriesDetail({ id }) {
+    return this.instance.get(`/categories/${id}/news/`);
   }
 };
 export default api;

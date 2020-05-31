@@ -9,6 +9,7 @@ function mock(ax) {
   Object.keys(mockData)
     .reduce((mo, key) => {
       let [method, pathname] = key.split(':');
+      if (pathname.indexOf('d+') >= 0) pathname = eval(pathname);
       mo[method](pathname).reply(200, mockData[key]);
       return mo;
     }, mo)
