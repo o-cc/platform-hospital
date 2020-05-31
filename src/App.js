@@ -34,7 +34,7 @@ const Root = withRouter(props => {
       <Route exact path="/" component={Home}></Route>
       <Route path="/detail/:id" component={Detail}></Route>
       <Route path="/user/:id" component={User}></Route>
-      <Route exact path={`/other/:menuType`} component={OtherWrap}></Route>
+      <Route exact path={`/other/:id`} component={OtherWrap}></Route>
       <Route exact path={`/video/detail/:id`} component={VideoDetail}></Route>
       <Route exact path={`/store`} component={Store}></Route>
       <Route exact path={`/store/detail/:id`} component={StoreDetail}></Route>
