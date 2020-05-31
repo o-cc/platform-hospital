@@ -10,12 +10,13 @@ import {
 import { makeStyles, styled } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/Home/components/Comment';
-import { vw } from '@/utils';
+import { vw, requestApi } from '@/utils';
 import { test_html } from 'configs/test_detail_html';
 import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/Home/components/InputComment';
 import Back from 'pages/components/BackHeader';
-
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {
     fontFamily: 'Microsoft Yahei',
@@ -73,6 +74,18 @@ const Img = styled(({ src, ...other }) => (
 function Detail(props) {
   const classes = useStyles();
   const [like, setLike] = useState(false);
+  const { id } = useParams();
+  useEffect(() => {
+    async function getDetailAndComment() {
+      const { result, error } = await requestApi('getNewsDetail', {
+        news_id: id
+      });
+      console.log(result);
+    }
+
+    getDetailAndComment();
+  }, []);
+
   return (
     <>
       <Grid

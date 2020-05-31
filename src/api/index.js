@@ -28,6 +28,15 @@ const api = {
   },
   getCategoriesDetail({ id }) {
     return this.instance.get(`/categories/${id}/news/`);
+  },
+  getNewsDetail({ news_id }) {
+    return this.instance.get(`/news/${news_id}/`);
+  },
+  getDetailComments({ news_id }) {
+    return this.instance.get(`/news/${news_id}/comments/`);
+  },
+  getSubComments({ news_id, comment_id }) {
+    return this.instance.get(`/news/${news_id}/comments/${comment_id}/`);
   }
 };
 export default api;
