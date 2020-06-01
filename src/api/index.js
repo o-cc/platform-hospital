@@ -17,6 +17,25 @@ const api = {
     timeout: 10000,
     withCredentials: true
   }),
+  login({ username, password }) {
+    let pathname = '/users/';
+    if (query.mock) {
+      pathname = '/users/login/';
+    }
+    return this.instance.post(pathname, {
+      username,
+      password
+    });
+  },
+  register({ username, password, mobile, re_password, sms_code }) {
+    return this.instance.post('/users', {
+      username,
+      password,
+      mobile,
+      re_password,
+      sms_code
+    });
+  },
   getHomeData() {
     return this.instance.get('/index/');
   },
@@ -40,3 +59,40 @@ const api = {
   }
 };
 export default api;
+
+// 添加请求拦截器
+api.instance.interceptors.request.use(
+  function (config) {
+    // 在发送请求之前做些什么
+    console.log(config);
+    const token = window.localStorage.getItem('token');
+    if (!token) {
+      setTimeout(() => {
+        window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
+      }, 100);
+      return config;
+    }
+    config.headers = {
+      ...config.headers,
+      Authorization: `JWT ${token}`
+    };
+    return config;
+  },
+  function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  }
+);
+
+// 添加响应拦截器
+api.instance.interceptors.response.use(
+  function (response) {
+    // 对响应数据做点什么
+    console.log('response', response);
+    return response;
+  },
+  function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  }
+);

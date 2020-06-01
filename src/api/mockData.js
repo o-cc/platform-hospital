@@ -1,4 +1,16 @@
 export default {
+  'onPost:/users/': {
+    token:
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIj oxNjIyMzg5ODc5LCJlbWFpbCI6IiIsImxhc3RfbG9naW4iOjE1OTA4ODI2Nzl9.XBL7ScjcU4r5N4Z0xHR qm7j-FiSJU18PLtMbjxXiAMU',
+    user_id: 1,
+    username: 'huang'
+  },
+  'onPost:/users/login/': {
+    token:
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIj oxNjIyMzg5ODc5LCJlbWFpbCI6IiIsImxhc3RfbG9naW4iOjE1OTA4ODI2Nzl9.XBL7ScjcU4r5N4Z0xHR qm7j-FiSJU18PLtMbjxXiAMU',
+    user_id: 1,
+    username: 'huang'
+  },
   'onGet:/index/': {
     contents: [
       {
