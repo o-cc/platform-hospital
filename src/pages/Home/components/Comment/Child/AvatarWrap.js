@@ -3,7 +3,7 @@ import { Grid, Avatar } from '@material-ui/core';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { vw } from '@/utils';
-
+import { format } from 'date-fns';
 const useStyles = makeStyles(theme => {
   return {
     avatar: {
@@ -61,7 +61,7 @@ export default function List({ list, idx = 0, ...props }) {
       className={classes.commentWrap}
       onClick={e => {
         //判断是否是有二级评论
-        props.reply && props.reply();
+        props.reply && props.reply(list);
         props.onClick && props.onClick(list);
       }}
     >
@@ -71,7 +71,7 @@ export default function List({ list, idx = 0, ...props }) {
             alt="avatar"
             src={list.avatar || require('assets/imgs/test_avatar.jpg')}
           />
-          <span>{list.user_name}</span>
+          <span>{list.username}</span>
         </div>
         <div className={classes.flex}>
           <FavoriteBorderOutlinedIcon
@@ -79,18 +79,18 @@ export default function List({ list, idx = 0, ...props }) {
             className={list.is_like ? classes.colorRed : ''}
             onClick={e => props.favorite(list, idx, e)}
           />
-          <span>{list.like_num}</span>
+          <span>{list.like_count}</span>
         </div>
       </Grid>
       <Grid item className={classes.comment} xs={11}>
-        {list.comment_info}
+        {list.content}
       </Grid>
 
       <Grid item xs={11} className={classes.prompt}>
-        {list.date}
-        {props.reply && list.reply && (
-          <div className={classes.reply}>{list.reply}回复</div>
-        )}
+        {list.create_time && format(new Date(list.create_time), 'yyyy-MM-dd')}
+        {props.reply && list.sub_comment_count ? (
+          <div className={classes.reply}>{list.sub_comment_count}回复</div>
+        ) : null}
       </Grid>
     </Grid>
   );

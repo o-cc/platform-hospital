@@ -7,16 +7,19 @@ import {
   Avatar,
   Typography
 } from '@material-ui/core';
-import { makeStyles, styled } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/Home/components/Comment';
 import { vw, requestApi } from '@/utils';
-import { test_html } from 'configs/test_detail_html';
 import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/Home/components/InputComment';
 import Back from 'pages/components/BackHeader';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import AppCont from 'container';
+import { format } from 'date-fns';
+import { defaultAvatar } from 'configs';
+
 const useStyles = makeStyles(theme => ({
   root: {
     fontFamily: 'Microsoft Yahei',
@@ -38,7 +41,12 @@ const useStyles = makeStyles(theme => ({
     color: '#333',
     fontSize: theme.spacing(2),
     fontFamily: 'arial',
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
+    lineHeight: '25px',
+    '& img': {
+      maxWidth: '100%!important',
+      height: 'auto!important'
+    }
   },
   button: {
     color: 'red'
@@ -64,28 +72,55 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Img = styled(({ src, ...other }) => (
-  <img src={src} alt="图片" {...other} />
-))({
-  width: '100%',
-  height: 'auto'
-});
-
 function Detail(props) {
   const classes = useStyles();
   const [like, setLike] = useState(false);
   const { id } = useParams();
+  const [detailInfo, setDetailInfo] = useState({});
+  const [comments, setComments] = useState([]);
+  const { setError } = AppCont.useContainer();
+
   useEffect(() => {
     async function getDetailAndComment() {
       const { result, error } = await requestApi('getNewsDetail', {
         news_id: id
       });
-      console.log(result);
+      console.log('result', result);
+      if (error) {
+        return setError(error);
+      }
+      setDetailInfo(result);
+
+      const { result: commentRes, error: commentErr } = await requestApi(
+        'getDetailComments',
+        {
+          news_id: id
+        }
+      );
+      console.log('comment', commentRes);
+
+      if (commentErr) return setError(commentErr);
+      setComments(commentRes);
     }
 
     getDetailAndComment();
-  }, []);
+  }, [id, setError]);
 
+  const attention = () => {
+    alert('关注');
+  };
+
+  const {
+    title,
+    create_time,
+    user_info = {},
+    content = '',
+    has_follow,
+    is_followed,
+    is_like,
+    comments_count,
+    collected
+  } = detailInfo;
   return (
     <>
       <Grid
@@ -101,7 +136,7 @@ function Detail(props) {
             variant="subtitle1"
             style={{ marginTop: 10, fontWeight: 'bold' }}
           >
-            微软改进Windows 10 v2004细节：整体游戏性能加强 支持光线追踪1.1
+            {title}
           </Typography>
         </Grid>
         <Grid
@@ -111,53 +146,60 @@ function Detail(props) {
           onClick={() => props.history.push('/user/1')}
         >
           <div className={classes.avatar}>
-            <Avatar alt="avatar" src={require('assets/imgs/test_avatar.jpg')} />
+            <Avatar alt="avatar" src={user_info.avatar || defaultAvatar} />
             <Grid style={{ marginLeft: 8 }} container direction="column">
-              <span className="user">胖虎西西</span>
+              <span className="user">{user_info.username}</span>
               <Grid item className="date">
-                2020/05/20
+                {create_time && format(new Date(create_time), 'yyyy-MM-dd')}
               </Grid>
             </Grid>
           </div>
-          <Link
-            href="#"
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          >
-            +关注
-          </Link>
-        </Grid>
-        <Grid item xs={11}>
-          <Img src={require('assets/imgs/detail.jpeg')} />
+          {has_follow && (
+            <Link
+              href="#"
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                attention();
+              }}
+            >
+              {is_followed ? '已关注' : '+关注'}
+            </Link>
+          )}
         </Grid>
 
         <Grid item xs={11}>
           <div
-            dangerouslySetInnerHTML={{ __html: test_html }}
+            dangerouslySetInnerHTML={{ __html: content }}
             className={classes.normalText}
           ></div>
         </Grid>
-
-        <Grid item xs={11}>
-          <Button
-            variant="outlined"
-            size="large"
-            className={like ? classes.button : ''}
-            onClick={() => {
-              setLike(true);
-            }}
-            startIcon={<FavoriteBorderOutlinedIcon />}
-          >
-            点赞
-          </Button>
-        </Grid>
+        {is_like && (
+          <Grid item xs={11}>
+            <Button
+              variant="outlined"
+              size="large"
+              className={like ? classes.button : ''}
+              onClick={() => {
+                setLike(true);
+              }}
+              startIcon={<FavoriteBorderOutlinedIcon />}
+            >
+              点赞
+            </Button>
+          </Grid>
+        )}
       </Grid>
       <Divider />
-      <Comment />
+      <Comment comments={comments} />
       {/* 评论文章 */}
       <InputComment
+        count={comments_count}
+        collected={collected}
+        onCollect={() => {
+          alert('收藏');
+          setDetailInfo(state => ({ ...state, collected: !state.collected }));
+        }}
         onRelease={val => {
           console.log('评论文章：', val);
         }}

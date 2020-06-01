@@ -4,7 +4,6 @@ import { Grid } from '@material-ui/core';
 import CommentDetail from './Child/CommentDetail';
 import { vw } from '@/utils';
 import ListItem from './Child/AvatarWrap';
-import { comment_list } from 'configs/test_data.js';
 
 const useStyles = makeStyles(theme => {
   return {
@@ -59,35 +58,36 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-export default () => {
+export default props => {
   const classes = useStyles();
-  const [commentList, setCommentList] = useState(comment_list);
-  const [showReply, setShowReply] = useState(false);
+  const [reply, setShowReply] = useState({ show: false });
   //点赞
   const favorite = (list, idx, e) => {
     e.stopPropagation();
-    setCommentList(lists => {
-      lists = lists.map(item => {
-        let like = item.is_like;
-        let like_num = 0;
+    // setCommentList(lists => {
+    //   lists = lists.map(item => {
+    //     let like = item.is_like;
+    //     let like_num = 0;
 
-        if (item.id === list.id) {
-          like = !like;
-          like_num = like ? 1 : -1;
-        }
-        return {
-          ...item,
-          is_like: like,
-          like_num: item.like_num + like_num
-        };
-      });
-      return [...lists];
-    });
+    //     if (item.id === list.id) {
+    //       like = !like;
+    //       like_num = like ? 1 : -1;
+    //     }
+    //     return {
+    //       ...item,
+    //       is_like: like,
+    //       like_num: item.like_num + like_num
+    //     };
+    //   });
+    // return [...lists];
+    // });
   };
 
-  const reply = () => {
-    setShowReply(sta => !sta);
+  const replyEvent = currList => {
+    setShowReply({ show: true, currList });
   };
+
+  const { results: commentList = [] } = props.comments || {};
   return (
     <>
       <Grid
@@ -102,17 +102,19 @@ export default () => {
             list={list}
             idx={idx}
             favorite={favorite}
-            reply={reply}
-            onClick={list => {
-              console.log('111', list);
-            }}
+            reply={replyEvent}
           />
         ))}
 
         <Grid item>没有更多了</Grid>
       </Grid>
       {/* 评论详情 */}
-      <CommentDetail open={showReply} onClose={() => setShowReply(false)} />
+      {reply.show && (
+        <CommentDetail
+          list={reply.currList}
+          onClose={() => setShowReply(false)}
+        />
+      )}
     </>
   );
 };

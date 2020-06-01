@@ -101,8 +101,14 @@ function In({
   );
 }
 
-function Default({ classes, changeComp, isDetail = false }) {
-  const [like, setLike] = useState(false);
+function Default({
+  collected,
+  classes,
+  changeComp,
+  isDetail = false,
+  count = 0,
+  ...props
+}) {
   return (
     <Grid container justify="space-between" className={classes.root}>
       <Grid item xs={!isDetail ? 8 : 12}>
@@ -126,23 +132,17 @@ function Default({ classes, changeComp, isDetail = false }) {
             <Badge
               //点击跑到评论这里
               // onClick={() => {}}
-              badgeContent={20}
+              badgeContent={count}
               max={999}
               color="secondary"
               children={<ChatBubbleOutlineIcon fontSize="small" />}
             />
           </Grid>
           <Grid item style={{ marginRight: 20 }}>
-            {like ? (
-              <StarRoundedIcon
-                color="secondary"
-                onClick={() => setLike(like => !like)}
-              />
+            {collected ? (
+              <StarRoundedIcon color="secondary" onClick={props.onCollect} />
             ) : (
-              <StarBorderRoundedIcon
-                color="action"
-                onClick={() => setLike(like => !like)}
-              />
+              <StarBorderRoundedIcon color="action" onClick={props.onCollect} />
             )}
           </Grid>
         </>

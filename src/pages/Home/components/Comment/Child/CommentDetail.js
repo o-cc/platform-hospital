@@ -4,10 +4,11 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import { Slide, Paper, Grid, Divider } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
-import { vw } from '@/utils';
+import { vw, requestApi } from '@/utils';
 import ListItem from './AvatarWrap';
-import { comment_list_detail } from 'configs/test_data.js';
 import InputComment from 'pages/Home/components/InputComment';
+import AppCont from 'container';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -19,7 +20,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3)
+    padding: theme.spacing(2, 4, 3),
+    outline: 'none'
   },
   paper1: {
     zIndex: 1,
@@ -32,7 +34,8 @@ const useStyles = makeStyles(theme => ({
   },
   info: {
     width: '100vw',
-    height: '100vh'
+    height: '100vh',
+    outline: 'none'
   },
   title: {
     padding: `${vw(15)} 0`,
@@ -41,16 +44,20 @@ const useStyles = makeStyles(theme => ({
   },
   allComment: {
     fontSize: vw(20),
-    alignSelf: 'flex-start',
+    textAlign: 'left',
     padding: `${vw(30)} ${vw(15)}`
   }
 }));
 
-export default function TransitionsModal(props) {
+export default function TransitionsModal({ list, ...props }) {
   const classes = useStyles();
   const [inputState, setInputState] = useState('In');
   const [inputCommentKey, setInputCommentKey] = useState(0);
+  const { setError } = AppCont.useContainer();
+  const { id: news_id } = useParams();
   const [holder, setHolder] = useState();
+  const [detailComments, setDetailComments] = useState({ results: [] });
+
   function updateInputCompKey() {
     setInputCommentKey(sta => {
       if (sta > 100) return 0;
@@ -59,15 +66,31 @@ export default function TransitionsModal(props) {
   }
 
   useEffect(() => {
-    setHolder('回复' + comment_list_detail[0].user_name + '的评论');
-  }, []);
+    setHolder('回复' + list.username + '的评论');
+  }, [list.username]);
+
+  useEffect(() => {
+    async function getDetailComment() {
+      let { result, error } = await requestApi('getSubComments', {
+        news_id,
+        comment_id: list.id
+      });
+      if (error) {
+        return setError(error);
+      }
+      setDetailComments(result);
+      console.log('detail comment', result);
+    }
+    getDetailComment();
+  }, [list.id, setError, news_id]);
+
   return (
     <div>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
-        open={props.open}
+        open={true}
         onClose={props.onClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
@@ -77,18 +100,13 @@ export default function TransitionsModal(props) {
       >
         <Slide
           direction="up"
-          in={props.open}
+          in={true}
           mountOnEnter
           unmountOnExit
           timeout={300}
         >
           <Paper elevation={4} className={classes.info}>
-            <Grid
-              container
-              justify="center"
-              alignItems="center"
-              direction="column"
-            >
+            <Grid container justify="center" alignItems="center">
               <Grid
                 container
                 justify="flex-start"
@@ -103,33 +121,33 @@ export default function TransitionsModal(props) {
                 >
                   <CloseOutlinedIcon />
                 </Grid>
-                <span>2条回复</span>
+                <span>{list.sub_comment_count}条回复</span>
               </Grid>
               <ListItem
-                list={comment_list_detail[0]}
+                list={list}
                 onClick={list => {
                   console.log('author list: ', list);
-                  setHolder('回复' + list.user_name + '的评论');
+                  setHolder('回复' + list.username + '的评论');
                   setInputState('In');
                   updateInputCompKey();
                 }}
               />
             </Grid>
             <Divider />
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <div className={classes.allComment}>全部评论</div>
-              {comment_list_detail.map(list => (
+            <Grid container justify="center" alignItems="center">
+              <Grid item xs={12} className={classes.allComment}>
+                全部评论
+              </Grid>
+              {detailComments.results.map(list => (
                 <ListItem
                   key={list.id}
                   list={list}
+                  favorite={() => {
+                    console.log('二级子评论点击喜欢');
+                  }}
                   onClick={list => {
                     console.log('consumer list: ', list);
-                    setHolder('回复' + list.user_name + '的评论');
+                    setHolder('回复' + list.username + '的评论');
                     setInputState('In');
                     updateInputCompKey();
                   }}
@@ -143,8 +161,8 @@ export default function TransitionsModal(props) {
               key={inputCommentKey}
               isDetail={true}
               onClickOutside={() => {
-                //恢复到对详情的的回复
-                setHolder('回复' + comment_list_detail[0].user_name + '的评论');
+                //恢复到对夫评论的回复
+                setHolder('回复' + list.username + '的评论');
               }}
             />
           </Paper>
@@ -154,5 +172,5 @@ export default function TransitionsModal(props) {
   );
 }
 TransitionsModal.defaultProps = {
-  open: false
+  replay: {}
 };
