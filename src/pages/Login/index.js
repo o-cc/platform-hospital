@@ -81,7 +81,7 @@ export default function SignIn(props) {
       phone
     });
 
-    if (error || result.message !== 'ok') {
+    if (error || result.message !== 'OK') {
       return setError(error || result.message);
     }
     setError('验证码发送成功', 'success');

@@ -30,13 +30,13 @@ export default withRouter(({ downCount, getCode, ...props }) => {
     if (!result.token) return setError('登录异常，请重新登录');
     window.localStorage.setItem(storageKeys.token, result.token);
     setTimeout(() => {
-      props.history && props.history.push('/');
+      props.history && props.history.push('/login');
     }, 100);
   });
 
   return (
     <Grid container justify="center">
-      <BackHeader title="密码找回" withoutHome={true} />
+      <BackHeader title="密码找回" withoutHome={true} back={props.onClose} />
       <Formik
         initialValues={{
           phone: '',

@@ -43,8 +43,7 @@ const LoginType = ({ downCount, classes, tabIdx, ...props }) => {
             <Link
               onClick={e => {
                 e.preventDefault();
-                props.onLink("forgot");
-
+                props.onLink('forgot');
               }}
               variant="body2"
             >
@@ -55,7 +54,7 @@ const LoginType = ({ downCount, classes, tabIdx, ...props }) => {
             <Link
               onClick={e => {
                 e.preventDefault();
-                props.onLink("register");
+                props.onLink('register');
               }}
               variant="body2"
             >
@@ -117,6 +116,7 @@ export default withRouter(({ tabIdx, classes, ...props }) => {
     let { result, error } = await requestApi(apiName, values);
     setSubmitting(false);
     if (error) {
+      console.log(error);
       return setError(error);
     }
 
@@ -138,7 +138,7 @@ export default withRouter(({ tabIdx, classes, ...props }) => {
       phone: phoneInfo.value
     });
 
-    if (error || result.message !== 'ok') {
+    if (error || result.message !== 'OK') {
       return setError(error || result.message);
     }
     setError('验证码发送成功', 'success');

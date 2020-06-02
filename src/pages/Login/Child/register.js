@@ -32,7 +32,7 @@ export default withRouter(({ getCode, downCount, ...props }) => {
     if (!result.token) return setError('登录异常，请重新登录');
     window.localStorage.setItem(storageKeys.token, result.token);
     setTimeout(() => {
-      props.history && props.history.push('/');
+      props.history && props.history.push('/login');
     }, 100);
   });
 
@@ -55,7 +55,7 @@ export default withRouter(({ getCode, downCount, ...props }) => {
 
           if (!values.name) {
             errors.name = '请输入正确的用户名';
-          } else if (values.pwd.length < 6) {
+          } else if (values.pwd.length < 4) {
             errors.pwd = '请输入正确密码';
           } else if (values.pwd !== values.re_pwd) {
             errors.re_pwd = '两次密码不一致';
@@ -91,7 +91,7 @@ export default withRouter(({ getCode, downCount, ...props }) => {
                   margin="normal"
                   required
                   fullWidth
-                  label="密码"
+                  label="包含数字、大小写字母和特殊符号"
                   name="pwd"
                   type="password"
                   component={TextField}
