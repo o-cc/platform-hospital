@@ -5,6 +5,7 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import CloseIcon from '@material-ui/icons/Close';
+import AppCont from 'container';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,14 +21,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function TransitionAlerts({ info, ...props }) {
+export default function TransitionAlerts({ ...props }) {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const { setError, error } = AppCont.useContainer();
   return (
     <div className={classes.root}>
-      <Collapse in={open}>
+      <Collapse in={!!error.error}>
         <Alert
-          severity={info.type}
+          severity={error.type || 'error'}
           variant="filled"
           action={
             <IconButton
@@ -35,19 +36,19 @@ export default function TransitionAlerts({ info, ...props }) {
               color="inherit"
               size="small"
               onClick={() => {
-                setOpen(false);
+                setError('');
               }}
             >
               <CloseIcon fontSize="inherit" />
             </IconButton>
           }
         >
-          {info.type === 'error' ? (
+          {error.type === 'error' ? (
             <>
               <AlertTitle>发生意外错误：</AlertTitle>
             </>
           ) : null}
-          {info.error}
+          {error.error}
         </Alert>
       </Collapse>
     </div>

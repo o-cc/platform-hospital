@@ -54,7 +54,7 @@ function useCounter() {
   }, []);
 
   const setError = useCallback((error, type = 'error', no_show) => {
-    if (type === 'error') console.error('###error###', error);
+    if (type === 'error' && error) console.error('###error###', error);
 
     if (no_show) return error;
     return setErrorData({ error, type });
