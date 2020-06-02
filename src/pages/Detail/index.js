@@ -151,6 +151,21 @@ function Detail(props) {
       };
     });
   };
+
+  //评论文章
+  const onRelease = useRunning(async val => {
+    if (!val) return;
+    let { result, error } = await requestApi('postComment', {
+      content: val,
+      news_id: id
+    });
+    if (error) return setError(error);
+    setComments(state => ({
+      ...state,
+      results: state.results.concat([result])
+    }));
+  });
+
   const {
     title,
     create_time,
@@ -253,9 +268,7 @@ function Detail(props) {
         count={comments_count}
         collected={collected}
         onCollect={onCollect}
-        onRelease={val => {
-          console.log('评论文章：', val);
-        }}
+        onRelease={onRelease}
       />
     </>
   );

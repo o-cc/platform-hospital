@@ -82,6 +82,18 @@ const api = {
   getSubComments({ news_id, comment_id }) {
     return this.instance.get(`/news/${news_id}/comments/${comment_id}/`);
   },
+  postComment({ news_id, content, replay_user, parent }) {
+    let data = { content };
+    if (replay_user || parent) {
+      data = {
+        ...data,
+        replay_user,
+        parent
+      };
+    }
+
+    return this.instance.post(`/news/${news_id}/comments/`, data);
+  },
   putLikeComment({ news_id, comment_id }) {
     return this.instance.put(`/news/${news_id}/comments/${comment_id}/like/
     `);
