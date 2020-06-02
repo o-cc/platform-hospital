@@ -85,6 +85,22 @@ const api = {
   putLikeComment({ news_id, comment_id }) {
     return this.instance.put(`/news/${news_id}/comments/${comment_id}/like/
     `);
+  },
+  postCollections({ news_id }) {
+    return this.instance.post(`/news/${news_id}/collections/`);
+  },
+  postFollowed({ id }) {
+    return this.instance.post(`/users/followers/${id}/`);
+  },
+  getAuthorInfo({ author_id }) {
+    return this.instance.get(`/users/${author_id}/`);
+  },
+  getAuthorNews({ author_id, type }) {
+    return this.instance.get(`/users/${author_id}/news/`, {
+      params: {
+        type
+      }
+    });
   }
 };
 export default api;

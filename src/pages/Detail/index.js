@@ -20,6 +20,7 @@ import AppCont from 'container';
 import { format } from 'date-fns';
 import { defaultAvatar } from 'configs';
 import InfiniteScroll from 'react-infinite-scroller';
+import useRunning from '@/hooks/useRunning';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,7 +78,7 @@ function Detail(props) {
   const classes = useStyles();
   const [like, setLike] = useState(false);
   const { id } = useParams();
-  const [detailInfo, setDetailInfo] = useState({});
+  const [detailInfo, setDetailInfo] = useState({ userInfo: {} });
   const [comments, setComments] = useState({});
   const { setError } = AppCont.useContainer();
 
@@ -107,8 +108,19 @@ function Detail(props) {
     getDetailAndComment();
   }, [id, setError]);
 
-  const attention = () => {
-    alert('关注');
+  const attention = async () => {
+    const { result, error } = await requestApi('postFollowed', {
+      id: detailInfo.user_info.user_id
+    });
+    if (error) return setError(error);
+    console.log('attention', result);
+
+    setDetailInfo(state => {
+      return {
+        ...state,
+        is_followed: result.is_followed
+      };
+    });
   };
 
   const loadFunc = async () => {
@@ -122,6 +134,14 @@ function Detail(props) {
     if (error) return setError(error);
     console.log(result);
   };
+
+  const onCollect = useRunning(async () => {
+    let { result, error } = await requestApi('postCollections', {
+      news_id: id
+    });
+    if (error) return setError(error);
+    setDetailInfo(state => ({ ...state, collected: result.collected }));
+  });
 
   const updateCommentByKey = (key, value) => {
     setComments(state => {
@@ -166,9 +186,11 @@ function Detail(props) {
           item
           className={classes.date}
           style={{ paddingTop: 0, paddingBottom: 0 }}
-          onClick={() => props.history.push('/user/1')}
         >
-          <div className={classes.avatar}>
+          <div
+            className={classes.avatar}
+            onClick={() => props.history.push('/user/' + user_info.user_id)}
+          >
             <Avatar alt="avatar" src={user_info.avatar || defaultAvatar} />
             <Grid style={{ marginLeft: 8 }} container direction="column">
               <span className="user">{user_info.username}</span>
@@ -186,7 +208,7 @@ function Detail(props) {
                 attention();
               }}
             >
-              {is_followed ? '已关注' : '+关注'}
+              {is_followed ? '取消关注' : '+关注'}
             </Link>
           )}
         </Grid>
@@ -230,10 +252,7 @@ function Detail(props) {
       <InputComment
         count={comments_count}
         collected={collected}
-        onCollect={() => {
-          alert('收藏');
-          setDetailInfo(state => ({ ...state, collected: !state.collected }));
-        }}
+        onCollect={onCollect}
         onRelease={val => {
           console.log('评论文章：', val);
         }}

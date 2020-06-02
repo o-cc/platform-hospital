@@ -246,5 +246,14 @@ export default {
       }
     ]
   },
-  [`onPut:${/\/news\/\d+\/comments\/\d+\/like\/$/}`]: { id: 12, like_count: 0 }
+  [`onPut:${/\/news\/\d+\/comments\/\d+\/like\/$/}`]: { id: 12, like_count: 0 },
+  [`onPost:${/\/news\/\d+\/collections\/$/}`]: {
+    news_id: '5',
+    collected: true
+  },
+  [`onPost:${/\/users\/followers\/\d+\/$/}`]: {
+    is_followed: false,
+    follower: 1,
+    followed: 4
+  }
 };
