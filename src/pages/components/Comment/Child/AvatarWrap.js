@@ -85,7 +85,10 @@ export default function List({ list, idx = 0, ...props }) {
           <FavoriteBorderOutlinedIcon
             fontSize="small"
             className={list.is_like ? classes.colorRed : ''}
-            onClick={e => props.favorite(list, idx, e)}
+            onClick={e => {
+              e.stopPropagation();
+              props.favorite && props.favorite(list, idx);
+            }}
           />
           <span>{list.like_count}</span>
         </div>
@@ -99,14 +102,18 @@ export default function List({ list, idx = 0, ...props }) {
         {props.reply && list.sub_comment_count ? (
           <div className={classes.reply}>{list.sub_comment_count}回复</div>
         ) : null}
-        {
-          list.has_delete && <div className={classes.delete} onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            props.deleteComment(list);
-          }}>删除</div>
-        }
-        
+        {list.has_delete && (
+          <div
+            className={classes.delete}
+            onClick={e => {
+              e.stopPropagation();
+              e.preventDefault();
+              props.deleteComment && props.deleteComment(list);
+            }}
+          >
+            删除
+          </div>
+        )}
       </Grid>
     </Grid>
   );

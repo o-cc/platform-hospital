@@ -212,7 +212,7 @@ export default {
   },
   [`onGet:${/\/news\/\d+\/comments\/$/}`]: {
     count: 1,
-    next: '',
+    next: 'http://192.168.1.105:8001/api/news/1/comments/?page=2',
     previous: '',
     results: [
       {
@@ -221,9 +221,9 @@ export default {
         avatar: 'http://qb2ljz0fe.bkt.clouddn.com/FqF5ZWsuR4gfxQQu3pTixE9XrTmi',
         username: 'huang3',
         content: 'ceshi测试测试评论ceshi',
-        like_count: 0,
-        has_delete: false,
-        sub_comment_count: 0,
+        like_count: 1,
+        has_delete: true,
+        sub_comment_count: 1,
         create_time: '2020-06-01 21:14'
       }
     ]
@@ -245,5 +245,6 @@ export default {
         create_time: '2020-05-31 14:24'
       }
     ]
-  }
+  },
+  [`onPut:${/\/news\/\d+\/comments\/\d+\/like\/$/}`]: { id: 12, like_count: 0 }
 };

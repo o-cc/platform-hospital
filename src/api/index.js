@@ -66,8 +66,12 @@ const api = {
   getCategoriesById({ id }) {
     return this.instance.get(`/categories/${id}/`);
   },
-  getCategoriesDetail({ id }) {
-    return this.instance.get(`/categories/${id}/news/`);
+  getCategoriesDetail({ id, page = 1 }) {
+    return this.instance.get(`/categories/${id}/news/`, {
+      params: {
+        page
+      }
+    });
   },
   getNewsDetail({ news_id }) {
     return this.instance.get(`/news/${news_id}/`);

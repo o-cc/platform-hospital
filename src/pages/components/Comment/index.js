@@ -4,12 +4,13 @@ import { Grid } from '@material-ui/core';
 import CommentDetail from './Child/CommentDetail';
 import { vw } from '@/utils';
 import ListItem from './Child/AvatarWrap';
+import useRunning from 'hooks/useRunning';
 
 const useStyles = makeStyles(theme => {
   return {
     root: {
       marginTop: theme.spacing(2),
-      marginBottom: vw(120),
+      marginBottom: vw(132),
       fontSize: vw(25),
       lineHeight: vw(35)
     },
@@ -61,31 +62,19 @@ const useStyles = makeStyles(theme => {
 export default props => {
   const classes = useStyles();
   const [reply, setShowReply] = useState({ show: false });
+
   //点赞
-  const favorite = (list, idx, e) => {
-    e.stopPropagation();
-    // setCommentList(lists => {
-    //   lists = lists.map(item => {
-    //     let like = item.is_like;
-    //     let like_num = 0;
+  const favorite = useRunning((list, idx) => {
+    console.log('点赞');
+  });
 
-    //     if (item.id === list.id) {
-    //       like = !like;
-    //       like_num = like ? 1 : -1;
-    //     }
-    //     return {
-    //       ...item,
-    //       is_like: like,
-    //       like_num: item.like_num + like_num
-    //     };
-    //   });
-    // return [...lists];
-    // });
-  };
-
-  const replyEvent = currList => {
+  const replyEvent = useRunning(currList => {
     setShowReply({ show: true, currList });
-  };
+  });
+
+  const deleteComment = useRunning(comment => {
+    console.log('删除');
+  });
 
   const { results: commentList = [] } = props.comments || {};
   return (
@@ -103,6 +92,7 @@ export default props => {
             idx={idx}
             favorite={favorite}
             reply={replyEvent}
+            deleteComment={deleteComment}
           />
         ))}
 

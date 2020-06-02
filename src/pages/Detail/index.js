@@ -10,7 +10,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/components/Comment';
-import { vw, requestApi } from '@/utils';
+import { vw, requestApi, getQueryByKey } from '@/utils';
 import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/components/InputComment';
 import Back from 'pages/components/BackHeader';
@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom';
 import AppCont from 'container';
 import { format } from 'date-fns';
 import { defaultAvatar } from 'configs';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -110,6 +111,18 @@ function Detail(props) {
     alert('关注');
   };
 
+  const loadFunc = async () => {
+    //知道文章的id、next
+    let next = comments.next;
+    let page = getQueryByKey('page', next);
+    let { result, error } = await requestApi('getDetailComments', {
+      news_id: id,
+      page
+    });
+    if (error) return setError(error);
+    console.log(result);
+  };
+
   const {
     title,
     create_time,
@@ -121,6 +134,8 @@ function Detail(props) {
     comments_count,
     collected
   } = detailInfo;
+  const hasMore = comments.next;
+
   return (
     <>
       <Grid
@@ -191,7 +206,18 @@ function Detail(props) {
         )}
       </Grid>
       <Divider />
-      <Comment comments={comments} />
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={loadFunc}
+        hasMore={hasMore ? true : false}
+        loader={
+          <div style={{ textAlign: 'center' }} key={0}>
+            正在加载...
+          </div>
+        }
+      >
+        <Comment comments={comments} />
+      </InfiniteScroll>
       {/* 评论文章 */}
       <InputComment
         count={comments_count}
