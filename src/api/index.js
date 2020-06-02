@@ -81,6 +81,10 @@ const api = {
   },
   getSubComments({ news_id, comment_id }) {
     return this.instance.get(`/news/${news_id}/comments/${comment_id}/`);
+  },
+  putLikeComment({ news_id, comment_id }) {
+    return this.instance.put(`/news/${news_id}/comments/${comment_id}/like/
+    `);
   }
 };
 export default api;

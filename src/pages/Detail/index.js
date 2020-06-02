@@ -78,7 +78,7 @@ function Detail(props) {
   const [like, setLike] = useState(false);
   const { id } = useParams();
   const [detailInfo, setDetailInfo] = useState({});
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState({});
   const { setError } = AppCont.useContainer();
 
   useEffect(() => {
@@ -123,6 +123,14 @@ function Detail(props) {
     console.log(result);
   };
 
+  const updateCommentByKey = (key, value) => {
+    setComments(state => {
+      return {
+        ...state,
+        [key]: value
+      };
+    });
+  };
   const {
     title,
     create_time,
@@ -216,7 +224,7 @@ function Detail(props) {
           </div>
         }
       >
-        <Comment comments={comments} />
+        <Comment comments={comments} updateCommentByKey={updateCommentByKey} />
       </InfiniteScroll>
       {/* 评论文章 */}
       <InputComment
