@@ -9,10 +9,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-import Comment from 'pages/Home/components/Comment';
+import Comment from 'pages/components/Comment';
 import { vw, requestApi } from '@/utils';
 import { withRouter } from 'react-router-dom';
-import InputComment from 'pages/Home/components/InputComment';
+import InputComment from 'pages/components/InputComment';
 import Back from 'pages/components/BackHeader';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';

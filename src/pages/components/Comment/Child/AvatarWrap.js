@@ -47,6 +47,14 @@ const useStyles = makeStyles(theme => {
     paper: {
       width: '100vw',
       height: '100vh'
+    },
+    delete: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: `${vw(2)} ${vw(15)}`,
+      color: 'red',
+      marginLeft: vw(7.5)
     }
   };
 });
@@ -91,6 +99,14 @@ export default function List({ list, idx = 0, ...props }) {
         {props.reply && list.sub_comment_count ? (
           <div className={classes.reply}>{list.sub_comment_count}回复</div>
         ) : null}
+        {
+          list.has_delete && <div className={classes.delete} onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            props.deleteComment(list);
+          }}>删除</div>
+        }
+        
       </Grid>
     </Grid>
   );

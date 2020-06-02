@@ -6,7 +6,7 @@ import { Slide, Paper, Grid, Divider } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import { vw, requestApi } from '@/utils';
 import ListItem from './AvatarWrap';
-import InputComment from 'pages/Home/components/InputComment';
+import InputComment from 'pages/components/InputComment';
 import AppCont from 'container';
 import { useParams } from 'react-router-dom';
 
