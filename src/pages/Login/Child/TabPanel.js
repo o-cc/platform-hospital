@@ -6,10 +6,9 @@ import { TextField } from 'formik-material-ui';
 import { requestApi } from '@/utils';
 import AppCont from 'container';
 import useRunning from '@/hooks/useRunning';
-import { storageKeys } from '@/configs';
+import { storageKeys, codeDownCount } from '@/configs';
 import { withRouter } from 'react-router-dom';
 
-const codeDownCount = 10;
 const LoginType = ({ downCount, classes, tabIdx, ...props }) => {
   const phones = useField('phone');
   if (tabIdx !== 0) {
@@ -41,12 +40,25 @@ const LoginType = ({ downCount, classes, tabIdx, ...props }) => {
         {props.children}
         <Grid container>
           <Grid item xs>
-            <Link href="#" variant="body2">
+            <Link
+              onClick={e => {
+                e.preventDefault();
+                props.onLink("forgot");
+
+              }}
+              variant="body2"
+            >
               忘记密码？
             </Link>
           </Grid>
           <Grid item>
-            <Link href="#" variant="body2">
+            <Link
+              onClick={e => {
+                e.preventDefault();
+                props.onLink("register");
+              }}
+              variant="body2"
+            >
               {'没有账号？去注册'}
             </Link>
           </Grid>
@@ -178,6 +190,7 @@ export default withRouter(({ tabIdx, classes, ...props }) => {
             classes={classes}
             downCount={downCount}
             getCode={getCode}
+            onLink={props.onLink}
           >
             {isSubmitting && <LinearProgress />}
             <Button

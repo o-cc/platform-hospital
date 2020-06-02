@@ -13,6 +13,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import TabPanel from './Child/TabPanel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Slider from 'pages/components/Slider';
+import Register from './Child/register';
 
 function Copyright() {
   return (
@@ -50,20 +52,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const MAP = {
+  register: Register
+};
 export default function SignIn(props) {
   const classes = useStyles();
   const [tabIdx, setTabIdx] = useState(0);
+  const [modal, setModal] = useState({show: false, type: "register"});
+  const toggleLink = type => {
+    setModal({ show: true, type });
+  };
 
+  const Comp = MAP[modal.type] || Copyright;
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          登录
-        </Typography>
+        </Avatar>        
         <Paper className={classes.root}>
           <Tabs
             value={tabIdx}
@@ -78,11 +85,19 @@ export default function SignIn(props) {
             <Tab label="账号登录" />
           </Tabs>
         </Paper>
-        <TabPanel tabIdx={tabIdx} classes={classes} />
+        <TabPanel tabIdx={tabIdx} classes={classes} onLink={toggleLink} />
       </div>
       <Box mt={8}>
         <Copyright />
       </Box>
+
+      <Slider open={modal.show}>
+        <Comp
+          onClose={() => {
+            setModal({ show: false });
+          }}
+        />
+      </Slider>
     </Container>
   );
 }

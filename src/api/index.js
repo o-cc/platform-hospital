@@ -38,7 +38,7 @@ const api = {
     name: username,
     pwd: password,
     phone: mobile,
-    re_password,
+    re_pwd: re_password,
     code: sms_code
   }) {
     return this.instance.post('/users/', {

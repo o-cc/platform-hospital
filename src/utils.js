@@ -1,4 +1,5 @@
 import api from './api';
+import qs from "qs";
 
 const baseWidth = 750;
 export const vw = function (px, base = baseWidth) {
@@ -25,3 +26,5 @@ export const requestApi = async (name, params = {}) => {
 
   return res;
 };
+
+export const query = qs.parse(window.location.search.slice(1));
