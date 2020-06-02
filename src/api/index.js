@@ -18,6 +18,14 @@ const api = {
     timeout: 10000,
     withCredentials: true
   }),
+
+  forgot({ phone, pwd: password, code: sms_code, re_pwd: re_password }) {
+    return this.instance.put(`/users/retrieves/${phone}/`, {
+      password,
+      sms_code,
+      re_password
+    });
+  },
   getSmsCode({ phone }) {
     return this.instance.get('/sms_codes/', {
       params: {
@@ -31,8 +39,8 @@ const api = {
       password
     });
   },
-  loginByMobile({code: sms_code, phone: mobile}) {
-    return this.instance.post("/users/sms_codes/", {mobile, sms_code})
+  loginByMobile({ code: sms_code, phone: mobile }) {
+    return this.instance.post('/users/sms_codes/', { mobile, sms_code });
   },
   register({
     name: username,
@@ -80,9 +88,6 @@ api.instance.interceptors.request.use(
     // console.log(config);
     const token = window.localStorage.getItem(storageKeys.token);
     if (!token) {
-      setTimeout(() => {
-        window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
-      }, 100);
       return config;
     }
     config.headers = {
@@ -101,7 +106,12 @@ api.instance.interceptors.request.use(
 api.instance.interceptors.response.use(
   function (response) {
     // 对响应数据做点什么
-    // console.log('response', response);
+    if (response.status === 401) {
+      setTimeout(() => {
+        window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
+      }, 100);
+      return response;
+    }
     return response;
   },
   function (error) {

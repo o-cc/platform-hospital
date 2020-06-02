@@ -15,6 +15,11 @@ import TabPanel from './Child/TabPanel';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Slider from 'pages/components/Slider';
 import Register from './Child/register';
+import Forgot from './Child/forgot';
+import useRunning from '@/hooks/useRunning';
+import AppCont from 'container';
+import { codeDownCount } from 'configs';
+import { requestApi } from 'utils';
 
 function Copyright() {
   return (
@@ -53,24 +58,56 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MAP = {
-  register: Register
+  register: Register,
+  forgot: Forgot
 };
 export default function SignIn(props) {
   const classes = useStyles();
+  const { setError } = AppCont.useContainer();
   const [tabIdx, setTabIdx] = useState(0);
-  const [modal, setModal] = useState({show: false, type: "register"});
+  const [modal, setModal] = useState({ show: false, type: 'register' });
+  const [downCount, setDown] = useState(codeDownCount);
+
   const toggleLink = type => {
     setModal({ show: true, type });
   };
 
+  const getCode = useRunning(async phone => {
+    if (!/^1\d{10}$/.test(phone)) {
+      return setError('请输入正确的手机号', 'warning');
+    }
+
+    let { result, error } = await requestApi('getSmsCode', {
+      phone
+    });
+
+    if (error || result.message !== 'ok') {
+      return setError(error || result.message);
+    }
+    setError('验证码发送成功', 'success');
+    //开始倒计时
+    codeDown();
+  });
+
+  const codeDown = () => {
+    setDown(count => {
+      if (count <= 0) return codeDownCount;
+      setTimeout(() => {
+        codeDown();
+      }, 1000);
+      return --count;
+    });
+  };
+
   const Comp = MAP[modal.type] || Copyright;
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
-        </Avatar>        
+        </Avatar>
         <Paper className={classes.root}>
           <Tabs
             value={tabIdx}
@@ -93,6 +130,8 @@ export default function SignIn(props) {
 
       <Slider open={modal.show}>
         <Comp
+          getCode={getCode}
+          downCount={downCount}
           onClose={() => {
             setModal({ show: false });
           }}

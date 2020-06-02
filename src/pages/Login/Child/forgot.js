@@ -20,14 +20,12 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2)
   }
 }));
-export default withRouter(({ getCode, downCount, ...props }) => {
+export default withRouter(({ downCount, getCode, ...props }) => {
   const classes = useStyles();
   const width = useWidth();
-
   const { setError } = AppCont.useContainer();
-
   const onSubmit = useRunning(async values => {
-    let { result, error } = await requestApi('register', values);
+    let { result, error } = await requestApi('forgot', values);
     if (error) return setError(error);
     if (!result.token) return setError('登录异常，请重新登录');
     window.localStorage.setItem(storageKeys.token, result.token);
@@ -38,31 +36,27 @@ export default withRouter(({ getCode, downCount, ...props }) => {
 
   return (
     <Grid container justify="center">
-      <BackHeader title="注册" back={props.onClose} withoutHome={true} />
+      <BackHeader title="密码找回" withoutHome={true} />
       <Formik
         initialValues={{
           phone: '',
           code: '',
           pwd: '',
-          re_pwd: '',
-          name: ''
+          re_pwd: ''
         }}
         validate={values => {
           const errors = {};
           if (query.debug) {
             return errors;
           }
-
-          if (!values.name) {
-            errors.name = '请输入正确的用户名';
+          if (!/^1\d{10}$/.test(values.phone)) {
+            errors.phone = 'Invalid phone number';
+          } else if (values.code.length <= 0) {
+            errors.code = 'Invalid code number';
           } else if (values.pwd.length < 6) {
             errors.pwd = '请输入正确密码';
           } else if (values.pwd !== values.re_pwd) {
             errors.re_pwd = '两次密码不一致';
-          } else if (!/^1\d{10}$/.test(values.phone)) {
-            errors.phone = 'Invalid phone number';
-          } else if (values.code.length <= 0) {
-            errors.code = 'Invalid code number';
           }
           return errors;
         }}
@@ -80,10 +74,36 @@ export default withRouter(({ getCode, downCount, ...props }) => {
                   margin="normal"
                   required
                   fullWidth
-                  label="用户名"
-                  name="name"
+                  label="手机号码"
+                  name="phone"
                   component={TextField}
                 />
+              </Grid>
+
+              <Grid item xs={11} sm={5}>
+                <Grid container justify="space-between">
+                  <Grid item xs={7}>
+                    <Field
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      label="验证码"
+                      name="code"
+                      component={TextField}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      disabled={downCount < codeDownCount}
+                      onClick={() => getCode(values.phone)}
+                    >
+                      {downCount >= codeDownCount ? '验证码' : downCount}
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={11} sm={5}>
                 <Field
@@ -109,44 +129,6 @@ export default withRouter(({ getCode, downCount, ...props }) => {
                   component={TextField}
                 />
               </Grid>
-              <Grid item xs={11} sm={5}>
-                <Field
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="手机号码"
-                  name="phone"
-                  component={TextField}
-                />
-              </Grid>
-
-              <Grid item xs={11} sm={5}>
-                <Grid container justify="space-between">
-                  <Grid item xs={7}>
-                    <Field
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      label="验证码"
-                      name="code"
-                      component={TextField}
-                    />
-                  </Grid>
-
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      disabled={downCount < codeDownCount}
-                      onClick={() => getCode(values.phone)}
-                    >
-                      {downCount >= codeDownCount ? '获取验证码' : downCount}
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
 
               <Grid item xs={11}>
                 <Button
@@ -156,7 +138,7 @@ export default withRouter(({ getCode, downCount, ...props }) => {
                   className={classes.submit}
                   onClick={submitForm}
                 >
-                  立即注册
+                  确定
                 </Button>
               </Grid>
 
