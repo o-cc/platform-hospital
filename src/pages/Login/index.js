@@ -12,14 +12,13 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import TabPanel from './Child/TabPanel';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
+      <Link color="inherit">Your Website</Link> {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
@@ -27,7 +26,7 @@ function Copyright() {
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    marginTop: theme.spacing(8),
+    paddingTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center'
@@ -45,6 +44,9 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     maxWidth: '180px'
+  },
+  root: {
+    marginTop: theme.spacing(1)
   }
 }));
 
@@ -52,14 +54,13 @@ export default function SignIn(props) {
   const classes = useStyles();
   const [tabIdx, setTabIdx] = useState(0);
 
-  const login = () => {
-    props.history && props.history.replace('/');
-  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>{/* <LockOutlinedIcon /> */}</Avatar>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
         <Typography component="h1" variant="h5">
           登录
         </Typography>
@@ -74,10 +75,10 @@ export default function SignIn(props) {
             centered
           >
             <Tab label="手机登录" />
-            <Tab label="账号密码登录" />
+            <Tab label="账号登录" />
           </Tabs>
         </Paper>
-        <TabPanel tabIdx={tabIdx} classes={classes} login={login} />
+        <TabPanel tabIdx={tabIdx} classes={classes} />
       </div>
       <Box mt={8}>
         <Copyright />

@@ -5,7 +5,16 @@ export default {
     user_id: 1,
     username: 'huang'
   },
-  'onPost:/users/login/': {
+  'onGet:/sms_codes/': {
+    message: 'ok'
+  },
+  'onPost:/authorizations/': {
+    token:
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIj oxNjIyMzg5ODc5LCJlbWFpbCI6IiIsImxhc3RfbG9naW4iOjE1OTA4ODI2Nzl9.XBL7ScjcU4r5N4Z0xHR qm7j-FiSJU18PLtMbjxXiAMU',
+    user_id: 1,
+    username: 'huang'
+  },
+  'onPost:/users/sms_codes/': {
     token:
       'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Imh1YW5nIiwiZXhwIj oxNjIyMzg5ODc5LCJlbWFpbCI6IiIsImxhc3RfbG9naW4iOjE1OTA4ODI2Nzl9.XBL7ScjcU4r5N4Z0xHR qm7j-FiSJU18PLtMbjxXiAMU',
     user_id: 1,

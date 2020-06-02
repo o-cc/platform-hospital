@@ -1,5 +1,6 @@
 import axios from 'axios';
 import qs from 'qs';
+import { storageKeys } from '@/configs';
 const query = qs.parse(window.location.search.slice(1));
 
 if (process.env.REACT_APP_PROD !== 'true')
@@ -17,18 +18,30 @@ const api = {
     timeout: 10000,
     withCredentials: true
   }),
-  login({ username, password }) {
-    let pathname = '/users/';
-    if (query.mock) {
-      pathname = '/users/login/';
-    }
-    return this.instance.post(pathname, {
+  getSmsCode({ phone }) {
+    return this.instance.get('/sms_codes/', {
+      params: {
+        mobile: phone
+      }
+    });
+  },
+  login({ name: username, pwd: password }) {
+    return this.instance.post('/authorizations/', {
       username,
       password
     });
   },
-  register({ username, password, mobile, re_password, sms_code }) {
-    return this.instance.post('/users', {
+  loginByMobile({code: sms_code, phone: mobile}) {
+    return this.instance.post("/users/sms_codes/", {mobile, sms_code})
+  },
+  register({
+    name: username,
+    pwd: password,
+    phone: mobile,
+    re_password,
+    code: sms_code
+  }) {
+    return this.instance.post('/users/', {
       username,
       password,
       mobile,
@@ -64,8 +77,8 @@ export default api;
 api.instance.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
-    console.log(config);
-    const token = window.localStorage.getItem('token');
+    // console.log(config);
+    const token = window.localStorage.getItem(storageKeys.token);
     if (!token) {
       setTimeout(() => {
         window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
@@ -88,7 +101,7 @@ api.instance.interceptors.request.use(
 api.instance.interceptors.response.use(
   function (response) {
     // 对响应数据做点什么
-    console.log('response', response);
+    // console.log('response', response);
     return response;
   },
   function (error) {

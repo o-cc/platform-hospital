@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, LinearProgress, Grid } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, useField } from 'formik';
 import { TextField } from 'formik-material-ui';
+import { requestApi } from '@/utils';
+import AppCont from 'container';
+import useRunning from '@/hooks/useRunning';
+import { storageKeys } from '@/configs';
+import { withRouter } from 'react-router-dom';
 
-const LoginType = ({ classes, tabIdx, ...props }) => {
+const codeDownCount = 10;
+const LoginType = ({ downCount, classes, tabIdx, ...props }) => {
+  const phones = useField('phone');
   if (tabIdx !== 0) {
     return (
       <>
@@ -47,6 +54,7 @@ const LoginType = ({ classes, tabIdx, ...props }) => {
       </>
     );
   }
+
   return (
     <>
       <Grid container justify={'space-between'}>
@@ -76,8 +84,10 @@ const LoginType = ({ classes, tabIdx, ...props }) => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={downCount < codeDownCount}
+            onClick={() => props.getCode(phones)}
           >
-            获取验证码
+            {downCount >= codeDownCount ? '获取验证码' : downCount}
           </Button>
         </Grid>
       </Grid>
@@ -85,7 +95,55 @@ const LoginType = ({ classes, tabIdx, ...props }) => {
     </>
   );
 };
-export default ({ tabIdx, classes, ...props }) => {
+export default withRouter(({ tabIdx, classes, ...props }) => {
+  const { setError } = AppCont.useContainer();
+  const [downCount, setDown] = useState(codeDownCount);
+
+  const onSubmit = useRunning(async (values, { setSubmitting }) => {
+    let apiName = 'loginByMobile';
+    if (tabIdx === 1) apiName = 'login';
+    let { result, error } = await requestApi(apiName, values);
+    setSubmitting(false);
+    if (error) {
+      return setError(error);
+    }
+
+    if (!result.token) return setError('登录异常，请重新登录');
+    window.localStorage.setItem(storageKeys.token, result.token);
+    setTimeout(() => {
+      props.history && props.history.push('/');
+    }, 100);
+  });
+
+  const getCode = useRunning(async phones => {
+    const [, phoneInfo] = phones;
+
+    if (!phoneInfo.value || phoneInfo.error) {
+      return setError('请填写正确手机号码.', 'warning');
+    }
+
+    let { result, error } = await requestApi('getSmsCode', {
+      phone: phoneInfo.value
+    });
+
+    if (error || result.message !== 'ok') {
+      return setError(error || result.message);
+    }
+    setError('验证码发送成功', 'success');
+    //开始倒计时
+    codeDown();
+  });
+
+  const codeDown = () => {
+    setDown(count => {
+      if (count <= 0) return codeDownCount;
+      setTimeout(() => {
+        codeDown();
+      }, 1000);
+      return --count;
+    });
+  };
+
   return (
     <Formik
       initialValues={{
@@ -96,11 +154,11 @@ export default ({ tabIdx, classes, ...props }) => {
       }}
       validate={values => {
         const errors = {};
-        console.log('value', values);
-
         if (tabIdx === 0) {
           if (!/^1\d{10}$/.test(values.phone)) {
             errors.phone = 'Invalid phone number';
+          } else if (values.code.length <= 0) {
+            errors.code = 'Invalid code number';
           }
         } else {
           if (values.pwd.length < 6) {
@@ -110,19 +168,17 @@ export default ({ tabIdx, classes, ...props }) => {
 
         return errors;
       }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          // await api res
-          setSubmitting(false);
-          props.login && props.login();
-          // alert(JSON.stringify(values, null, 2));
-        }, 500);
-      }}
+      onSubmit={onSubmit}
     >
       {({ submitForm, isSubmitting }) => (
         <Form className={classes.form}>
           {/* 手机验证码 */}
-          <LoginType tabIdx={tabIdx} classes={classes}>
+          <LoginType
+            tabIdx={tabIdx}
+            classes={classes}
+            downCount={downCount}
+            getCode={getCode}
+          >
             {isSubmitting && <LinearProgress />}
             <Button
               type="submit"
@@ -140,4 +196,4 @@ export default ({ tabIdx, classes, ...props }) => {
       )}
     </Formik>
   );
-};
+});

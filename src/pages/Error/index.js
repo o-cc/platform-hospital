@@ -20,15 +20,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function TransitionAlerts(props) {
+export default function TransitionAlerts({ info, ...props }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
   return (
     <div className={classes.root}>
       <Collapse in={open}>
         <Alert
-          severity="error"
+          severity={info.type}
           variant="filled"
           action={
             <IconButton
@@ -43,8 +42,12 @@ export default function TransitionAlerts(props) {
             </IconButton>
           }
         >
-          <AlertTitle>发生意外错误：</AlertTitle>
-          {props.error}
+          {info.type === 'error' ? (
+            <>
+              <AlertTitle>发生意外错误：</AlertTitle>
+            </>
+          ) : null}
+          {info.error}
         </Alert>
       </Collapse>
     </div>

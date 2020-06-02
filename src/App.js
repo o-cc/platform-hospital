@@ -28,7 +28,7 @@ const Root = withRouter(props => {
   const { error } = appCont;
   return (
     <>
-      {error && <Error error={error} />}
+      {error.error && <Error info={error} />}
 
       <Route path="/login" component={Login}></Route>
       <Route exact path="/" component={Home}></Route>

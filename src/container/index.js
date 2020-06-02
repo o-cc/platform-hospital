@@ -38,7 +38,7 @@ const INIT_STATE = {
 function useCounter() {
   const [state, setState] = useState(INIT_STATE);
   const stateRef = useRef();
-  const [error, setErrorData] = useState('');
+  const [error, setErrorData] = useState({});
   function merge(cb) {
     setState(state => {
       stateRef.current = cb(state);
@@ -53,11 +53,11 @@ function useCounter() {
     }));
   }, []);
 
-  const setError = useCallback((error, no_show) => {
-    console.error('###error###', error);
+  const setError = useCallback((error, type = 'error', no_show) => {
+    if (type === 'error') console.error('###error###', error);
 
     if (no_show) return error;
-    return setErrorData(error);
+    return setErrorData({ error, type });
   }, []);
 
   return { state, setMenuLists, setError, error };
