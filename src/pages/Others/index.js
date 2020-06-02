@@ -10,6 +10,8 @@ import SwipeableViews from 'react-swipeable-views';
 import ItemList from 'pages/components/ListItem';
 import { vw, requestApi } from '@/utils';
 import InfiniteScroll from 'react-infinite-scroller';
+import qs from 'qs';
+
 function TabPanel(props) {
   const { children, value, index, next, ...other } = props;
 
@@ -81,7 +83,12 @@ function Other() {
   const loadFunc = async () => {
     if (!lists[value]) return;
     const id = lists[value].id;
-    let { result, error } = await requestApi('getCategoriesDetail', { id });
+    const next = lists[value].next || '';
+    const page = qs.parse(next.slice(next.lastIndexOf('?') + 1)).page;
+    let { result, error } = await requestApi('getCategoriesDetail', {
+      id,
+      page
+    });
     if (error) {
       return setError(error);
     }

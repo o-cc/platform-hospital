@@ -28,3 +28,8 @@ export const requestApi = async (name, params = {}) => {
 };
 
 export const query = qs.parse(window.location.search.slice(1));
+
+export const getQueryByKey = (key, url = window.location.href) => {
+  let query = qs.parse(url.slice(url.lastIndexOf('?') + 1));
+  return query[key] && query[key];
+}
