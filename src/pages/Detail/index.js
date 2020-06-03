@@ -9,10 +9,10 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-import Comment from 'pages/components/Comment';
+import Comment from 'pages/Detail/Comment';
 import { vw, requestApi, getQueryKey } from '@/utils';
 import { withRouter } from 'react-router-dom';
-import InputComment from 'pages/components/InputComment';
+import InputComment from '@/pages/Detail/InputComment';
 import Back from 'pages/components/BackHeader';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -21,6 +21,7 @@ import { format } from 'date-fns';
 import { defaultAvatar } from 'configs';
 import InfiniteScroll from 'react-infinite-scroller';
 import useRunning from '@/hooks/useRunning';
+import Dialog from 'pages/components/Dialog';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -81,13 +82,13 @@ function Detail(props) {
   const [detailInfo, setDetailInfo] = useState({ userInfo: {} });
   const [comments, setComments] = useState({});
   const { setError } = AppCont.useContainer();
-
+  const [dialog, setDialog] = useState({ show: false, info: {} });
   useEffect(() => {
     async function getDetailAndComment() {
       const { result, error } = await requestApi('getNewsDetail', {
         news_id: id
       });
-      console.log('result', result);
+      console.log('article', result);
       if (error) {
         return setError(error);
       }
@@ -113,8 +114,6 @@ function Detail(props) {
       id: detailInfo.user_info.user_id
     });
     if (error) return setError(error);
-    console.log('attention', result);
-
     setDetailInfo(state => {
       return {
         ...state,
@@ -127,12 +126,20 @@ function Detail(props) {
     //知道文章的id、next
     let next = comments.next;
     let page = getQueryKey('page', next);
+
     let { result, error } = await requestApi('getDetailComments', {
       news_id: id,
       page
     });
     if (error) return setError(error);
     console.log(result);
+    setComments(state => {
+      return {
+        ...state,
+        ...result,
+        results: state.results.concat(result.results)
+      };
+    });
   };
 
   const onCollect = useRunning(async () => {
@@ -154,7 +161,7 @@ function Detail(props) {
 
   //评论文章
   const onRelease = useRunning(async val => {
-    if (!val) return;
+    if (!val) return setError('评论内容不能为空噢.', 'warning');
     let { result, error } = await requestApi('postComment', {
       content: val,
       news_id: id
@@ -163,6 +170,49 @@ function Detail(props) {
     setComments(state => ({
       ...state,
       results: state.results.concat([result])
+    }));
+  });
+
+  const favorite = useRunning(async list => {
+    const comment_id = list.id;
+    let { result, error } = await requestApi('putLikeComment', {
+      news_id: id,
+      comment_id
+    });
+    if (error) {
+      return setError(error);
+    }
+
+    setComments(comments => {
+      return {
+        ...comments,
+        results: comments.results.map(item => {
+          if (item.id === list.id) {
+            return {
+              ...item,
+              ...result
+            };
+          }
+          return item;
+        })
+      };
+    });
+  });
+
+  const deleteComment = useRunning(async () => {
+    let comment = dialog.info;
+    let { error } = await requestApi('deleteComment', {
+      news_id: id,
+      comment_id: comment.id
+    });
+    setDialog(state => ({ ...state, show: false }));
+    if (error) {
+      return setError(error);
+    }
+
+    setComments(comments => ({
+      ...comments,
+      results: comments.results.filter(item => item.id !== comment.id)
     }));
   });
 
@@ -261,7 +311,12 @@ function Detail(props) {
           </div>
         }
       >
-        <Comment comments={comments} updateCommentByKey={updateCommentByKey} />
+        <Comment
+          comments={comments}
+          updateCommentByKey={updateCommentByKey}
+          favorite={favorite}
+          deleteComment={comment => setDialog({ show: true, info: comment })}
+        />
       </InfiniteScroll>
       {/* 评论文章 */}
       <InputComment
@@ -270,6 +325,12 @@ function Detail(props) {
         onCollect={onCollect}
         onRelease={onRelease}
       />
+      <Dialog
+        text="删除评论后无法恢复噢"
+        handleOk={deleteComment}
+        open={dialog.show}
+        onClose={() => setDialog(stat => ({ ...stat, show: false }))}
+      ></Dialog>
     </>
   );
 }

@@ -255,5 +255,16 @@ export default {
     is_followed: false,
     follower: 1,
     followed: 4
+  },
+  [`onPost:${/\/news\/\d+\/comments\/$/}`]: {
+    id: 6,
+    user_id: 1,
+    username: 'huang',
+    replay_username: 'admin',
+    content: '123',
+    like_count: 0,
+    has_delete: true,
+    sub_comment_count: 0,
+    create_time: '2020-05-31 14:24'
   }
 };

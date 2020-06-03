@@ -4,6 +4,7 @@ import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutline
 import { makeStyles } from '@material-ui/core/styles';
 import { vw } from '@/utils';
 import { format } from 'date-fns';
+import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => {
   return {
     avatar: {
@@ -55,12 +56,20 @@ const useStyles = makeStyles(theme => {
       padding: `${vw(2)} ${vw(15)}`,
       color: 'red',
       marginLeft: vw(7.5)
+    },
+    colorBlue: {
+      color: '#3f51b5',
+      cursor: 'pointer'
     }
   };
 });
 
-export default function List({ list, idx = 0, ...props }) {
+function List({ list, idx = 0, ...props }) {
   const classes = useStyles();
+  const clickUser = (e) => {
+    e.stopPropagation();
+    props.history && props.history.push('/user/' + list.user_id);
+  };
   return (
     <Grid
       item
@@ -74,7 +83,7 @@ export default function List({ list, idx = 0, ...props }) {
       }}
     >
       <Grid container justify="space-between" alignItems="center">
-        <div className={classes.avatar}>
+        <div className={classes.avatar} onClick={clickUser}>
           <Avatar
             alt="avatar"
             src={list.avatar || require('assets/imgs/test_avatar.jpg')}
@@ -94,7 +103,13 @@ export default function List({ list, idx = 0, ...props }) {
         </div>
       </Grid>
       <Grid item className={classes.comment} xs={11}>
-        {list.content}
+        {list.content}{' '}
+        {list.replay_username && (
+          <span
+            className={classes.colorBlue}
+            onClick={clickUser}
+          >{`// @${list.replay_username}`}</span>
+        )}
       </Grid>
 
       <Grid item xs={11} className={classes.prompt}>
@@ -124,3 +139,4 @@ List.defaultProps = {
   idx: 0,
   favorite: () => {}
 };
+export default withRouter(List);

@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid } from '@material-ui/core';
 import CommentDetail from './Child/CommentDetail';
-import { vw, requestApi } from '@/utils';
+import { vw } from '@/utils';
 import ListItem from './Child/AvatarWrap';
 import useRunning from 'hooks/useRunning';
-import AppCont from 'container';
-import { useParams } from 'react-router-dom';
+// import AppCont from 'container';
+// import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => {
   return {
@@ -64,36 +64,9 @@ const useStyles = makeStyles(theme => {
 export default props => {
   const classes = useStyles();
   const [reply, setShowReply] = useState({ show: false });
-  const { setError } = AppCont.useContainer();
-  const { id: news_id } = useParams();
-  //点赞
-  const favorite = useRunning(async (list, idx) => {
-    const comment_id = list.id;
-    let { result, error } = await requestApi('putLikeComment', {
-      news_id,
-      comment_id
-    });
-    if (error) {
-      return setError(error);
-    }
-    let newRes = commentList.map(item => {
-      if (item.id === list.id) {
-        return {
-          ...list,
-          ...result
-        };
-      }
-      return item;
-    });
-    props.updateCommentByKey('results', newRes);
-  });
-
+  // const { setError } = AppCont.useContainer();
   const replyEvent = useRunning(currList => {
     setShowReply({ show: true, currList });
-  });
-
-  const deleteComment = useRunning(comment => {
-    console.log('删除');
   });
 
   const { results: commentList = [] } = props.comments || {};
@@ -110,9 +83,9 @@ export default props => {
             key={list.id}
             list={list}
             idx={idx}
-            favorite={favorite}
+            favorite={props.favorite}
             reply={replyEvent}
-            deleteComment={deleteComment}
+            deleteComment={props.deleteComment}
           />
         ))}
 
@@ -121,6 +94,8 @@ export default props => {
       {/* 评论详情 */}
       {reply.show && (
         <CommentDetail
+          favorite={props.favorite}
+          deleteComment={props.deleteComment}
           list={reply.currList}
           onClose={() => setShowReply(false)}
         />

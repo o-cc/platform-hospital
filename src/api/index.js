@@ -86,7 +86,12 @@ const api = {
   getSubComments({ news_id, comment_id }) {
     return this.instance.get(`/news/${news_id}/comments/${comment_id}/`);
   },
-  postComment({ news_id, content, replay_user, parent }) {
+  postComment({
+    news_id,
+    content,
+    replay_user_id: replay_user,
+    parent_comment_id: parent
+  }) {
     let data = { content };
     if (replay_user || parent) {
       data = {
@@ -99,8 +104,10 @@ const api = {
     return this.instance.post(`/news/${news_id}/comments/`, data);
   },
   putLikeComment({ news_id, comment_id }) {
-    return this.instance.put(`/news/${news_id}/comments/${comment_id}/like/
-    `);
+    return this.instance.put(`/news/${news_id}/comments/${comment_id}/like/`);
+  },
+  deleteComment({ news_id, comment_id }) {
+    return this.instance.delete(`/news/${news_id}/comments/${comment_id}/`);
   },
   postCollections({ news_id }) {
     return this.instance.post(`/news/${news_id}/collections/`);

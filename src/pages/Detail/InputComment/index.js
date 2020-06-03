@@ -18,7 +18,6 @@ const useStyles = makeStyles(theme => ({
     borderTop: '1px solid #ccc',
     padding: theme.spacing(2),
     fontSize: vw(30)
-    // zIndex: 9999
   },
   textarea: {
     display: 'block',

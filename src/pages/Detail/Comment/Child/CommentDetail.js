@@ -6,9 +6,11 @@ import { Slide, Paper, Grid, Divider } from '@material-ui/core';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 import { vw, requestApi } from '@/utils';
 import ListItem from './AvatarWrap';
-import InputComment from 'pages/components/InputComment';
+import InputComment from '@/pages/Detail/InputComment';
 import AppCont from 'container';
 import { useParams } from 'react-router-dom';
+import useRunning from '@/hooks/useRunning';
+import { useCallback } from 'react';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -55,8 +57,8 @@ export default function TransitionsModal({ list, ...props }) {
   const [inputCommentKey, setInputCommentKey] = useState(0);
   const { setError } = AppCont.useContainer();
   const { id: news_id } = useParams();
-  const [holder, setHolder] = useState();
   const [detailComments, setDetailComments] = useState({ results: [] });
+  const [currComment, setCurrComment] = useState(list);
 
   function updateInputCompKey() {
     setInputCommentKey(sta => {
@@ -65,11 +67,27 @@ export default function TransitionsModal({ list, ...props }) {
     });
   }
 
-  useEffect(() => {
-    setHolder('回复' + list.username + '的评论');
-  }, [list.username]);
+  const clickComment = list => {
+    setInputState('In');
+    updateInputCompKey();
+    setCurrComment(list);
+  };
 
-  useEffect(() => {
+  const releaseComment = useRunning(async val => {
+    if (!val) return setError('评论内容不能为空噢.', 'warning');
+    let data = {
+      news_id,
+      content: val,
+      replay_user_id: currComment.user_id,
+      parent_comment_id: list.id
+    };
+    let { error } = requestApi('postComment', data);
+    if (error) return setError(error);
+    //返回一条新的评论
+    await getDetailComment();
+  });
+
+  const getDetailComment = useCallback(
     async function getDetailComment() {
       let { result, error } = await requestApi('getSubComments', {
         news_id,
@@ -79,10 +97,14 @@ export default function TransitionsModal({ list, ...props }) {
         return setError(error);
       }
       setDetailComments(result);
-      console.log('detail comment', result);
-    }
+      console.log('sub comment', result);
+    },
+    [list.id, setError, news_id]
+  );
+
+  useEffect(() => {
     getDetailComment();
-  }, [list.id, setError, news_id]);
+  }, [getDetailComment]);
 
   return (
     <div>
@@ -107,6 +129,8 @@ export default function TransitionsModal({ list, ...props }) {
         >
           <Paper elevation={4} className={classes.info}>
             <Grid container justify="center" alignItems="center">
+              {/* 顶部导航 */}
+
               <Grid
                 container
                 justify="flex-start"
@@ -123,17 +147,17 @@ export default function TransitionsModal({ list, ...props }) {
                 </Grid>
                 <span>{list.sub_comment_count}条回复</span>
               </Grid>
+              {/* 父评论 */}
               <ListItem
                 list={list}
-                onClick={list => {
-                  console.log('author list: ', list);
-                  setHolder('回复' + list.username + '的评论');
-                  setInputState('In');
-                  updateInputCompKey();
-                }}
+                favorite={props.favorite}
+                deleteComment={props.deleteComment}
+                onClick={clickComment}
               />
             </Grid>
             <Divider />
+
+            {/* 子评论 */}
             <Grid container justify="center" alignItems="center">
               <Grid item xs={12} className={classes.allComment}>
                 全部评论
@@ -142,27 +166,23 @@ export default function TransitionsModal({ list, ...props }) {
                 <ListItem
                   key={list.id}
                   list={list}
-                  favorite={() => {
-                    console.log('二级子评论点击喜欢');
-                  }}
-                  onClick={list => {
-                    console.log('consumer list: ', list);
-                    setHolder('回复' + list.username + '的评论');
-                    setInputState('In');
-                    updateInputCompKey();
-                  }}
+                  favorite={props.favorite}
+                  deleteComment={props.deleteComment}
+                  onClick={clickComment}
                 />
               ))}
             </Grid>
+
             {/* 这个setKey的操作太骚了 */}
             <InputComment
-              holder={holder}
+              holder={`回复${currComment.username}的评论`}
               comType={inputState}
               key={inputCommentKey}
               isDetail={true}
+              onRelease={releaseComment}
               onClickOutside={() => {
                 //恢复到对夫评论的回复
-                setHolder('回复' + list.username + '的评论');
+                setCurrComment(list);
               }}
             />
           </Paper>
