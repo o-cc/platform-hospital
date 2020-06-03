@@ -5,8 +5,38 @@ function evil(fn) {
   var Fn = Function;
   return new Fn('return ' + fn)();
 }
-
+function updateKey(results, id = 'id') {
+  return results.map(item => ({
+    ...item,
+    [id]: Number(item[id]) + 1
+  }));
+}
 let test = {};
+function getNextPage(defaultData, activeKey) {
+  let page, results;
+  if (test.page) {
+    page = test.page;
+  } else {
+    page = getQueryKey('page', defaultData.next) << 0;
+  }
+
+  if (test.results) {
+    results = test.results;
+  } else {
+    results = defaultData.results;
+  }
+
+  page = page + 1;
+  results = updateKey(results, activeKey);
+
+  test.results = results;
+  test.page = page;
+
+  return {
+    page,
+    results
+  };
+}
 function mock(ax) {
   const mo = new MockAdapter(ax, {
     delayResponse: 50
@@ -17,34 +47,11 @@ function mock(ax) {
       let [method, pathname] = key.split(':');
       if (pathname.indexOf('d+') >= 0) pathname = evil(pathname);
       mo[method](pathname).reply(config => {
-        if (
-          /comments/.test(config.url) &&
-          config.params &&
-          config.params.page
-        ) {
+        if (config.params && config.params.page) {
           //重写mockData
-          let page;
-          if (test.page) {
-            page = test.page;
-          } else {
-            page = getQueryKey('page', mockData[key].next) << 0;
-          }
-
-          let results;
-          if (test.results) {
-            results = test.results;
-          } else {
-            results = mockData[key].results;
-          }
-
-          page = page + 1;
-          results = results.map(item => ({
-            ...item,
-            id: Number(item.id) + 1
-          }));
-         
-          test.results = results;
-          test.page = page;
+          let activeKey;
+          if (/\/users\/\d+\/news\//.test(config.url)) activeKey = 'user_id';
+          let { page, results } = getNextPage(mockData[key], activeKey);
 
           if (Number(config.params.page) < 10) {
             return [

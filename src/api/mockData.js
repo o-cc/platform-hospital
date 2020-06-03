@@ -266,5 +266,42 @@ export default {
     has_delete: true,
     sub_comment_count: 0,
     create_time: '2020-05-31 14:24'
+  },
+  [`onGet:${/\/users\/\d+\/$/}`]: {
+    aid: 3,
+    avatar: '',
+    author: '13155667788',
+    fans_count: 0,
+    followers_count: 0,
+    news_count: 20302,
+    intro:
+      '广东财经研究院副院长，职业操盘手，专业研究道指二十年从未失手，号称国内第一股神"九菲特"',
+    is_followed: false,
+    has_follow: true
+  },
+  [`onGet:${/\/users\/\d+\/news\/$/}`]: {
+    count: 4,
+    next: 'http://192.168.1.105:8001/api/users/2/news/?page=2',
+    previous: '',
+    results: [
+      {
+        news_id: 1,
+        title: '金合欢花或',
+        username: 'admin',
+        create_time: '2020/05/30',
+        index_image_url: 'http://qb2ljz0fe.bkt.clouddn.com/ix.jpg',
+        news_type: 'Video',
+        video_long: '00:07'
+      },
+      {
+        news_id: 5,
+        title: '测试图文测试图文',
+        username: 'huang',
+        create_time: '2020/06/01',
+        index_image_url:
+          'http://qb2ljz0fe.bkt.clouddn.com/FqF5ZWsuR4gfxQQu3pTixE9XrTmi',
+        news_type: 'GraphText'
+      }
+    ]
   }
 };

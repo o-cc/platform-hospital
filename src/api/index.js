@@ -118,10 +118,11 @@ const api = {
   getAuthorInfo({ author_id }) {
     return this.instance.get(`/users/${author_id}/`);
   },
-  getAuthorNews({ author_id, type }) {
+  getAuthorNews({ author_id, type, page = 1 }) {
     return this.instance.get(`/users/${author_id}/news/`, {
       params: {
-        type
+        type,
+        page
       }
     });
   }

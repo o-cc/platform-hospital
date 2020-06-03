@@ -98,8 +98,8 @@ function Other() {
         if (list.id === id) {
           return {
             ...list,
+            ...result,
             news: list.news.concat(result.results),
-            next: result.next
           };
         }
         return list;

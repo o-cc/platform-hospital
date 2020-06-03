@@ -38,3 +38,14 @@ export const getQueryKey = (key, url = window.location.href) => {
   let query = qs.parse(url.slice(url.lastIndexOf('?') + 1));
   return query[key] && query[key];
 };
+
+
+const unit = ['', '', '', '', '万', '十万', '百万'];
+const unitMap = [1, 10, 100, 1000, 10000, 100000, 1000000];
+export const keepPoint = (num = 0, bit) => {
+  if (num.toString().length < bit) return num;
+  bit = bit >> 0;
+  num = (num / unitMap[bit]).toFixed(1).toString();
+  if (/.0/.test(num)) num = num.match(/^\d+(?:)?/);
+  return `${num} ${unit[bit]}`;
+};

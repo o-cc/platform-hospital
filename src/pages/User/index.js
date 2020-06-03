@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   makeStyles,
@@ -7,10 +7,13 @@ import {
   styled,
   Button
 } from '@material-ui/core';
-import { vw } from 'utils';
+import { vw, requestApi, keepPoint } from 'utils';
 import TopNav from 'pages/components/TopNav';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import Tabs from 'pages/components/Tabs';
+import Tabs from '@/pages/User/Tabs';
+import { useParams } from 'react-router-dom';
+import AppCont from 'container';
+
 const useStyles = makeStyles(theme => ({
   back: {
     alignSelf: 'flex-start',
@@ -64,18 +67,40 @@ const FlexColumn = styled(({ ...other }) => <div {...other}></div>)({
 });
 export default props => {
   const classes = useStyles();
-  const [isAttention, setAttention] = useState(false);
+  const { id: userId } = useParams();
+  const { setError } = AppCont.useContainer();
+  const [userInfo, setUserInfo] = useState({});
 
+  useEffect(() => {
+    async function getAuthor() {
+      let { result, error } = await requestApi('getAuthorInfo', {
+        author_id: userId
+      });
+      if (error) return setError(error);
+      setUserInfo(result);
+    }
+
+    getAuthor();
+  }, [userId, setError]);
+
+  const attention = async () => {
+    let { error } = await requestApi('postFollowed', { id: userId });
+    if (error) return setError(error);
+    setUserInfo(sta => ({
+      ...sta,
+      is_followed: !sta.is_followed
+    }));
+  };
   return (
     <>
-      <TopNav title="你的名字是" unDivider={false} />
+      <TopNav title={userInfo.author} unDivider={false} />
       <Paper variant="outlined" className={classes.info}>
         <Grid container justify="center">
           <Grid item xs={3}>
             <Avatar
               className={classes.avatar}
               alt="avatar"
-              src={require('assets/imgs/test_avatar.jpg')}
+              src={userInfo.avatar || require('assets/imgs/test_avatar.jpg')}
             />
           </Grid>
           <Grid item xs={8}>
@@ -83,41 +108,54 @@ export default props => {
               <Grid container justify="space-around">
                 <Grid item>
                   <FlexColumn>
-                    <span className={classes.bold}>8.9万</span>
+                    <span className={classes.bold}>
+                      {keepPoint(userInfo.news_count, 4)}
+                    </span>
+                    <span className={classes.small}>文章</span>
+                  </FlexColumn>
+                </Grid>
+                <Grid item>
+                  <FlexColumn>
+                    <span className={classes.bold}>
+                      {keepPoint(userInfo.followers_count, 4)}
+                    </span>
                     <span className={classes.small}>关注</span>
                   </FlexColumn>
                 </Grid>
                 <Grid item>
                   <FlexColumn>
-                    <span className={classes.bold}>8.9万</span>
-                    <span className={classes.small}>关注</span>
+                    <span className={classes.bold}>
+                      {keepPoint(userInfo.fans_count, 4)}
+                    </span>
+                    <span className={classes.small}>粉丝</span>
                   </FlexColumn>
                 </Grid>
-                <Grid item>
-                  <FlexColumn>
-                    <span className={classes.bold}>8.9万</span>
-                    <span className={classes.small}>关注</span>
-                  </FlexColumn>
-                </Grid>
-                <Grid item>
-                  <FlexColumn>
-                    <span className={classes.bold}>8.9万</span>
-                    <span className={classes.small}>关注</span>
-                  </FlexColumn>
-                </Grid>
+                {userInfo.like_count && (
+                  <Grid item>
+                    <FlexColumn>
+                      <span className={classes.bold}>
+                        {userInfo.like_count}
+                        {keepPoint(userInfo.fans_count, 4)}
+                      </span>
+                      <span className={classes.small}>获赞</span>
+                    </FlexColumn>
+                  </Grid>
+                )}
               </Grid>
             </FlexColumn>
-            <Grid item style={{ textAlign: 'center' }}>
-              <Btn
-                isAttention={isAttention}
-                style={{ background: isAttention ? '#fff' : '#f85a5b' }}
-                onClick={() => {
-                  setAttention(sta => !sta);
-                }}
-              >
-                {isAttention ? '已关注' : '关注'}
-              </Btn>
-            </Grid>
+            {userInfo.has_follow && (
+              <Grid item style={{ textAlign: 'center' }}>
+                <Btn
+                  isAttention={userInfo.is_followed}
+                  style={{
+                    background: userInfo.is_followed ? '#fff' : '#f85a5b'
+                  }}
+                  onClick={attention}
+                >
+                  {userInfo.is_followed ? '已关注' : '关注'}
+                </Btn>
+              </Grid>
+            )}
           </Grid>
         </Grid>
         <Grid container justify="center">
@@ -134,15 +172,13 @@ export default props => {
                 />
               </Grid>
               <Grid item xs={10}>
-                <div className={classes.introduce}>
-                  简介：广东财经研究院副院长，职业操盘手，专业研究道指二十年从未失手，号称国内第一股神'九菲特'
-                </div>
+                <div className={classes.introduce}>{userInfo.intro}</div>
               </Grid>
             </Grid>
           </Grid>
         </Grid>
       </Paper>
-      <Tabs />
+      <Tabs userId={userId} setError={setError} />
     </>
   );
 };
