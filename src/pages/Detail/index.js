@@ -10,7 +10,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/components/Comment';
-import { vw, requestApi, getQueryByKey } from '@/utils';
+import { vw, requestApi, getQueryKey } from '@/utils';
 import { withRouter } from 'react-router-dom';
 import InputComment from 'pages/components/InputComment';
 import Back from 'pages/components/BackHeader';
@@ -126,7 +126,7 @@ function Detail(props) {
   const loadFunc = async () => {
     //知道文章的id、next
     let next = comments.next;
-    let page = getQueryByKey('page', next);
+    let page = getQueryKey('page', next);
     let { result, error } = await requestApi('getDetailComments', {
       news_id: id,
       page

@@ -76,8 +76,12 @@ const api = {
   getNewsDetail({ news_id }) {
     return this.instance.get(`/news/${news_id}/`);
   },
-  getDetailComments({ news_id }) {
-    return this.instance.get(`/news/${news_id}/comments/`);
+  getDetailComments({ news_id, page = 1 }) {
+    return this.instance.get(`/news/${news_id}/comments/`, {
+      params: {
+        page
+      }
+    });
   },
   getSubComments({ news_id, comment_id }) {
     return this.instance.get(`/news/${news_id}/comments/${comment_id}/`);
