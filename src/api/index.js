@@ -125,6 +125,14 @@ const api = {
         page
       }
     });
+  },
+  getUserInfo() {
+    return this.instance.get('/users/infos/');
+  },
+  putUserInfo(data) {
+    return this.instance.put('/users/infos/', {
+      data
+    });
   }
 };
 export default api;

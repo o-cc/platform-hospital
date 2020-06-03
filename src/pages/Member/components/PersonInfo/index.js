@@ -2,9 +2,14 @@ import React, { useState, Fragment } from 'react';
 import Slider from 'pages/components/Slider';
 import { Grid, makeStyles, Avatar, Divider } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
-import { getObjKey } from '@/utils';
+import { getObjKey, requestApi } from '@/utils';
 import { format } from 'date-fns';
 import EditorModal from './EditorModal';
+import Area from 'pages/components/Area';
+import AppCont from 'container';
+import { storageKeys } from 'configs';
+import useRunning from 'hooks/useRunning';
+
 const useStyles = makeStyles(theme => ({
   root: {
     padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`,
@@ -29,23 +34,42 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const infoList = {
-  img: '更换头像',
-  name: '更换昵称',
-  sex: '更改性别',
-  birthday: '更改生日',
-  introduce: '编辑个人简介'
+  avatar: '更换头像',
+  username: '更换昵称',
+  area: '更改区域',
+  addr: '详细地址',
+  pwd: '修改密码',
+  intro: '编辑个人简介'
 };
 const info = {
-  img: require('assets/imgs/test_avatar.jpg'),
-  name: '胖虎张无忌',
-  sex: '男',
+  avatar: require('assets/imgs/test_avatar.jpg'),
+  username: '胖虎张无忌',
   birthday: format(new Date(), 'yyyy-MM-dd'),
-  introduce: '有的人活着,但他已经死了.有的人已经死了,但他还活着.'
+  intro: '有的人活着,但他已经死了.有的人已经死了,但他还活着.',
+  addr: '',
+  area: '',
+  pwd: ''
 };
 
 export default props => {
   const classes = useStyles();
   const [modal, setModal] = useState({ show: false, type: '' });
+  const userInfo = props.userInfo || {};
+  const [area, setArea] = useState(false);
+  const { setError } = AppCont.useContainer();
+
+  const updateUserInfo = async data => {
+    let { result, error } = requestApi('putUserInfo', data);
+    if (error) return setError(error);
+    setError('操作成功.', 'success');
+    if (result.token)
+      window.localStorage.setItem(storageKeys.token, result.token);
+    return result;
+  };
+
+  const handleOk = useRunning(async picks => {
+    await updateUserInfo({ area: picks.join(' ') });
+  });
   return (
     <Slider open={props.open}>
       <Grid container>
@@ -59,14 +83,15 @@ export default props => {
             justify="space-between"
             className={classes.root}
             onClick={() => {
-              if (item === 'img') return;
+              if (item === 'avatar') return;
+              if (item === 'area') return setArea(true);
               setModal({
                 show: true,
                 type: item
               });
             }}
           >
-            {item === 'img' && (
+            {item === 'avatar' && (
               <Grid item xs={12}>
                 <input
                   accept="image/*"
@@ -81,12 +106,12 @@ export default props => {
             )}
             <Grid item>{infoList[item]}</Grid>
             <Grid item>
-              {item === 'img' ? (
-                <Avatar size="small" src={info[item]} />
-              ) : item === 'introduce' ? (
+              {item === 'avatar' ? (
+                <Avatar size="small" src={userInfo[item]} />
+              ) : item === 'intro' ? (
                 ''
               ) : (
-                info[item]
+                userInfo[item] || info[item]
               )}
             </Grid>
           </Grid>
@@ -95,10 +120,12 @@ export default props => {
       ))}
 
       <EditorModal
+        userInfo={userInfo}
         info={modal}
         onClose={() => setModal({ show: false })}
         onConfirm={() => setModal({ show: false })}
       />
+      <Area open={area} onClose={() => setArea(false)} onHandleOk={handleOk} />
     </Slider>
   );
 };

@@ -6,9 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 // import DialogContentText from '@material-ui/core/DialogContentText';
 import { makeStyles } from '@material-ui/core/styles';
-import { format } from 'date-fns';
 import { InputLabel, Select } from '@material-ui/core';
-
+import { Formik, Form, Field } from 'formik';
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
@@ -29,6 +28,7 @@ export default function FormDialog(props) {
 
   const inputProps = type => ({
     id: type,
+    name: type,
     InputLabelProps: {
       shrink: true
     },
@@ -38,12 +38,29 @@ export default function FormDialog(props) {
   const content = type => {
     let com = null;
     switch (type) {
-      case 'name':
+      case 'addr':
         com = (
-          <TextField
+          <Field
+            margin="normal"
+            required
+            label="请输入详细地址"
+            defaultValue={props.userInfo.addr}
+            component={TextField}
+            {...inputProps('addr')}
+            name="addr"
+          />
+        );
+        break;
+      case 'username':
+        com = (
+          <Field
+            margin="normal"
+            required
             label="更换昵称"
-            defaultValue="胖虎张无忌"
-            {...inputProps('name')}
+            defaultValue={props.userInfo.username}
+            component={TextField}
+            {...inputProps('username')}
+            name="username"
           />
         );
         break;
@@ -66,23 +83,19 @@ export default function FormDialog(props) {
           </>
         );
         break;
-      case 'birthday':
+
+      case 'intro':
         com = (
-          <TextField
-            type="date"
-            label="请选择日期"
-            defaultValue={format(new Date(), 'yyyy-MM-dd')}
-            {...inputProps('date')}
-          />
-        );
-        break;
-      case 'introduce':
-        com = (
-          <TextField
+          <Field
+            margin="normal"
+            required
+            component={TextField}
+            defaultValue={props.userInfo.intro}
             type="text"
             label="个人简介"
             placeholder="一句话介绍自己"
-            {...inputProps('introduce')}
+            {...inputProps('intro')}
+            name="intro"
           />
         );
         break;
@@ -94,22 +107,42 @@ export default function FormDialog(props) {
 
   return (
     <div>
-      <Dialog
-        open={props.info.show}
-        onClose={props.onClose}
-        aria-labelledby="form-dialog-title"
+      <Formik
+        initialValues={{
+          username: '',
+          addr: '',
+          intro: '',
+          sex: ''
+        }}
+        validate={values => {
+          const errors = {};
+          return errors;
+        }}
+        onSubmit={values => {
+          console.log(values);
+        }}
       >
-        {/* <DialogTitle id="form-dialog-title">请选择生日</DialogTitle> */}
-        <DialogContent>{content(props.info.type)}</DialogContent>
-        <DialogActions>
-          <Button onClick={props.onClose} color="primary">
-            取消
-          </Button>
-          <Button onClick={props.confirm} color="primary">
-            确定
-          </Button>
-        </DialogActions>
-      </Dialog>
+        {({ submitForm }) => (
+          <Form>
+            <Dialog
+              open={props.info.show}
+              onClose={props.onClose}
+              aria-labelledby="form-dialog-title"
+            >
+              {/* <DialogTitle id="form-dialog-title">请选择生日</DialogTitle> */}
+              <DialogContent>{content(props.info.type)}</DialogContent>
+              <DialogActions>
+                <Button onClick={props.onClose} color="primary">
+                  取消
+                </Button>
+                <Button onClick={submitForm} color="primary">
+                  确定
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }

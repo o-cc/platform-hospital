@@ -303,5 +303,17 @@ export default {
         news_type: 'GraphText'
       }
     ]
+  },
+  'onGet:/users/infos/': {
+    user_id: 1,
+    username: 'huang',
+    mobile: '13189819825',
+    avatar: 'http://qb2ljz0fe.bkt.clouddn.com/FqF5ZWsuR4gfxQQu3pTixE9XrTmi',
+    company: '广东财经野鸡学院',
+    departments: '管理部门',
+    job: '鸡头',
+    area: 'xxx',
+    addr: 'xxx',
+    intro: '爱学习,爱唠叨'
   }
 };

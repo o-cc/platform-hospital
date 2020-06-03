@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Grid,
   makeStyles,
@@ -23,6 +23,9 @@ import MyArticle from './components/MyArticle/';
 import BackHeader from 'pages/components/BackHeader';
 import { withRouter } from 'react-router-dom';
 import Info from './components/PersonInfo';
+import { requestApi } from '@/utils';
+import AppCont from 'container';
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
@@ -92,10 +95,21 @@ export default withRouter(props => {
   const classes = useStyles();
   const [drawer, setDrawer] = useState(false);
   const [modal, setModal] = useState('');
-
+  const [userInfo, setUserInfo] = useState({});
+  const { setError } = AppCont.useContainer();
   const toggleDrawer = item => {
     setModal(item.type || '');
   };
+
+  useEffect(() => {
+    async function getUser() {
+      let { result, error } = await requestApi('getUserInfo');
+      if (error) return setError(error);
+      setUserInfo(result);
+      console.log(result);
+    }
+    getUser();
+  }, [setError]);
 
   const onClose = () => {
     setModal(false);
@@ -116,12 +130,12 @@ export default withRouter(props => {
         >
           <Grid item xs={3}>
             <Avatar
-              src={require('assets/imgs/test_avatar.jpg')}
+              src={userInfo.avatar || require('assets/imgs/test_avatar.jpg')}
               className={classes.avatar}
             />
           </Grid>
           <Grid item xs={8}>
-            <Typography variant="h6">single male</Typography>
+            <Typography variant="h6">{userInfo.username}</Typography>
             <Typography variant="subtitle2" className={classes.subtitle}>
               <Button size="small">关注0</Button>
               <Button size="small">粉丝0</Button>
@@ -219,7 +233,7 @@ export default withRouter(props => {
           </List>
         </div>
       </Drawer>
-      <Info open={modal === types.info} onClose={onClose} />
+      <Info open={modal === types.info} userInfo={userInfo} onClose={onClose} />
       <Address open={modal === types.address} onClose={onClose} />
       <History open={modal === types.record} onClose={onClose} />
       <MyArticle open={modal === types.myArticle} onClose={onClose} />
