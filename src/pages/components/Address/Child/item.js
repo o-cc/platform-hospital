@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
 export default function AddressItem({
   addressItem: list,
   hasLocation,
+  default_id,
   ...props
 }) {
   const classes = useStyles();
@@ -60,21 +61,21 @@ export default function AddressItem({
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={6}>
-              <Typography variant="subtitle2">{list.name}</Typography>
+              <Typography variant="subtitle2">{list.receiver}</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="subtitle2" align="right">
-                {list.phone}
+                {list.mobile}
               </Typography>
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="subtitle2" style={{ paddingRight: '12px' }}>
-            {list.is_default && !hasLocation && (
+            {default_id === list.id && !hasLocation && (
               <span className={classes.colorRed}>[默认地址] </span>
             )}{' '}
-            {list.city} {list.detail}
+            {list.area} {list.address}
           </Typography>
         </Grid>
         <Grid item xs={12} style={{ marginBottom: 0 }}>
@@ -101,7 +102,7 @@ export default function AddressItem({
                 startIcon={<DeleteIcon />}
                 onClick={e => {
                   e.stopPropagation();
-                  props.onDelete && props.onDelete();
+                  props.onDelete && props.onDelete(list);
                 }}
               >
                 删除

@@ -39,7 +39,6 @@ export const getQueryKey = (key, url = window.location.href) => {
   return query[key] && query[key];
 };
 
-
 const unit = ['', '', '', '', '万', '十万', '百万'];
 const unitMap = [1, 10, 100, 1000, 10000, 100000, 1000000];
 export const keepPoint = (num = 0, bit) => {
@@ -49,3 +48,48 @@ export const keepPoint = (num = 0, bit) => {
   if (/.0/.test(num)) num = num.match(/^\d+(?:)?/);
   return `${num} ${unit[bit]}`;
 };
+
+export function forEach(obj, fn) {
+  // Don't bother if no value provided
+  if (obj === null || typeof obj === 'undefined') {
+    return;
+  }
+
+  // Force an array if not already something iterable
+  if (typeof obj !== 'object') {
+    /*eslint no-param-reassign:0*/
+    obj = [obj];
+  }
+
+  if (Array.isArray(obj)) {
+    // Iterate over array values
+    for (var i = 0, l = obj.length; i < l; i++) {
+      fn.call(null, obj[i], i, obj);
+    }
+  } else {
+    // Iterate over object keys
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        fn.call(null, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+export function deepMerge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = deepMerge(result[key], val);
+    } else if (typeof val === 'object') {
+      result[key] = deepMerge({}, val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}

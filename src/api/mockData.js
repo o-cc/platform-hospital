@@ -315,5 +315,68 @@ export default {
     area: 'xxx',
     addr: 'xxx',
     intro: '爱学习,爱唠叨'
+  },
+  'onPost:/addresses/': {
+    id: 16,
+    receiver: '黄改',
+    area: '广东省广州市天河区改',
+    address: '青云里彗星百货改',
+    mobile: '13189819522改'
+  },
+  'onGet:/addresses/': {
+    user_id: 1,
+    default_address_id: 2,
+    limit: 15,
+    addresses: [
+      {
+        id: 2,
+        receiver: '黄志杰',
+        area: '广东省广州市天河区',
+        address: '青云里彗星百货',
+        mobile: '13189819522'
+      },
+      {
+        id: 3,
+        receiver: '黄志杰',
+        area: '广东省广州市天河区',
+        address: '青云里彗星百货',
+        mobile: '13189819522'
+      },
+      {
+        id: 4,
+        receiver: '黄志杰',
+        area: '广东省广州市天河区',
+        address: '青云里彗星百货',
+        mobile: '13189819522'
+      },
+      {
+        id: 5,
+        receiver: '黄志杰',
+        area: '广东省广州市天河区',
+        address: '青云里彗星百货',
+        mobile: '13189819522'
+      },
+      {
+        id: 6,
+        receiver: '黄志杰',
+        area: '广东省广州市天河区',
+        address: '青云里彗星百货',
+        mobile: '13189819522'
+      },
+      {
+        id: 7,
+        receiver: '黄志杰',
+        area: '广东省广州市天河区',
+        address: '青云里彗星百货',
+        mobile: '13189819522'
+      },
+      {
+        id: 8,
+        receiver: '黄志杰',
+        area: '广东省广州市天河区',
+        address: '青云里彗星百货',
+        mobile: '13189819522'
+      }
+    ]
   }
 };

@@ -137,6 +137,31 @@ const api = {
     return this.instance.put('/users/infos/', {
       data
     });
+  },
+  getAddress() {
+    return this.instance.get('/addresses/');
+  },
+  postAddress({ receiver, area, address, mobile }) {
+    return this.instance.post('/addresses/', {
+      receiver,
+      area,
+      address,
+      mobile
+    });
+  },
+  putAddress({ address_id, receiver, area, address, mobile }) {
+    return this.instance.put(`/addresses/${address_id}/`, {
+      receiver,
+      area,
+      address,
+      mobile
+    });
+  },
+  deleteAddress({ address_id }) {
+    return this.instance.put(`/addresses/${address_id}/`);
+  },
+  putDefaultAddress({ address_id }) {
+    return this.instance.put(`/addresses/${address_id}/status/`)
   }
 };
 export default api;

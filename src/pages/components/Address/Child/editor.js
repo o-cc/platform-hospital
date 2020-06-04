@@ -9,7 +9,9 @@ import {
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 import BackHeader from '@/pages/components/BackHeader';
-import { vw } from 'utils';
+import { vw, getObjKey, query, requestApi } from 'utils';
+import useRunning from '@/hooks/useRunning';
+import AppCont from 'container';
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -26,28 +28,40 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const initialValues = {
-  phone: '',
-  city: '',
+  mobile: '',
+  area: '',
   address: '',
-  name: '',
-  post: ''
+  receiver: ''
 };
 
 export default props => {
   const classes = useStyles();
-
-  const [checkedB, setCheckedB] = useState(false);
-
+  const { setError } = AppCont.useContainer();
+  const [checkedB, setCheckedB] = useState(props.isDefault);
   const validate = values => {
     const errors = {};
-
-    if (!/^1\d{10}$/.test(values.phone)) {
-      errors.phone = 'Invalid phone number';
-    } else if (values.post.toString().length < 6) {
-      errors.post = '无效的邮政编码';
+    if (query.debug) {
+      return errors;
+    }
+    if (values.receiver.length < 5) {
+      errors.receiver = '用户名必须5个字符';
+    } else if (!/^1\d{10}$/.test(values.mobile)) {
+      errors.mobile = 'Invalid phone number';
     }
     return errors;
   };
+
+  const switchChange = useRunning(async e => {
+    let { error } = await requestApi('putDefaultAddress', {
+      address_id: props.initValue.id
+    });
+    if (error) return setError(error);
+    setCheckedB(e.target.checked);
+  });
+
+  const init =
+    getObjKey(props.initValue).length > 0 ? props.initValue : initialValues;
+
   return (
     <>
       <BackHeader
@@ -64,13 +78,11 @@ export default props => {
       >
         <Grid item xs={11}>
           <Formik
-            initialValues={props.initValue || initialValues}
+            initialValues={init}
             validate={validate}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                setSubmitting(false);
-                props.onSubmit && props.onSubmit(values);
-              }, 500);
+            onSubmit={async (values, { setSubmitting }) => {
+              props.onSubmit && (await props.onSubmit(values));
+              setSubmitting(false);
             }}
           >
             {({ submitForm, isSubmitting }) => (
@@ -80,10 +92,8 @@ export default props => {
                     <Field
                       required
                       fullWidth
-                      id="name"
                       label="收货人姓名"
-                      name="name"
-                      autoComplete="name"
+                      name="receiver"
                       variant="standard"
                       component={TextField}
                     />
@@ -95,7 +105,7 @@ export default props => {
                       required
                       fullWidth
                       type="number"
-                      name="phone"
+                      name="mobile"
                       label="手机号码"
                     />
                   </Grid>
@@ -105,7 +115,7 @@ export default props => {
                       variant="standard"
                       required
                       fullWidth
-                      name="city"
+                      name="area"
                       label="所在城市"
                     />
                   </Grid>
@@ -115,20 +125,9 @@ export default props => {
                       variant="standard"
                       required
                       fullWidth
-                      name="detail"
+                      name="address"
                       label="详细地址"
                       multiline={true}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <Field
-                      component={TextField}
-                      variant="standard"
-                      required
-                      name="post"
-                      type="number"
-                      fullWidth
-                      label="邮政编码"
                     />
                   </Grid>
                 </Grid>
@@ -136,8 +135,8 @@ export default props => {
                   <p>
                     设为默认地址
                     <Switch
-                      value={checkedB}
-                      onChange={e => setCheckedB(e.target.checked)}
+                      checked={checkedB}
+                      onChange={switchChange}
                       color="primary"
                       name="checkedB"
                       inputProps={{ 'aria-label': 'primary checkbox' }}
