@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => {
 
 function List({ list, idx = 0, ...props }) {
   const classes = useStyles();
-  const clickUser = (e) => {
+  const clickUser = e => {
     e.stopPropagation();
     props.history && props.history.push('/user/' + list.user_id);
   };
@@ -78,7 +78,7 @@ function List({ list, idx = 0, ...props }) {
       className={classes.commentWrap}
       onClick={e => {
         //判断是否是有二级评论
-        props.reply && props.reply(list);
+        props.reply && props.reply(idx);
         props.onClick && props.onClick(list);
       }}
     >

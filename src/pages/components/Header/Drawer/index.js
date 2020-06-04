@@ -21,6 +21,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { Collapse } from '@material-ui/core';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import AppCont from 'container';
+import { storageKeys } from 'configs';
+import StoreMallDirectoryOutlined from '@material-ui/icons/StoreMallDirectoryOutlined';
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -104,6 +106,7 @@ function SwipeableTemporaryDrawer(props) {
 
   const list = anchor => {
     const menu = menuData;
+    const token = window.localStorage.getItem(storageKeys.token);
     return (
       <div className={classes.list} role="presentation">
         <List>
@@ -167,24 +170,37 @@ function SwipeableTemporaryDrawer(props) {
 
         <ListItem
           button
-          key="login"
-          onClick={() => props.history.push('/login')}
+          key="store"
+          onClick={() => props.history.push('/store/')}
         >
           <ListItemIcon>
-            <PersonIcon />
+            <StoreMallDirectoryOutlined />
           </ListItemIcon>
-          <ListItemText primary={'登录'} />
+          <ListItemText primary={'积分商城'} />
         </ListItem>
-
         <ListItem
           button
           key="member"
-          onClick={() => props.history.push('/member/2')}
+          onClick={() => props.history.push('/member')}
         >
           <ListItemIcon>
             <PermContactCalendarOutlinedIcon />
           </ListItemIcon>
           <ListItemText primary={'个人中心'} />
+        </ListItem>
+
+        <ListItem
+          button
+          key="login"
+          onClick={() => {
+            if (token) window.localStorage.setItem(storageKeys.token, '');
+            props.history.push('/login');
+          }}
+        >
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary={token ? '登出' : '登录'} />
         </ListItem>
       </div>
     );

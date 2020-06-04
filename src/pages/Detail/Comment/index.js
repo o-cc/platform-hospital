@@ -65,8 +65,8 @@ export default props => {
   const classes = useStyles();
   const [reply, setShowReply] = useState({ show: false });
   // const { setError } = AppCont.useContainer();
-  const replyEvent = useRunning(currList => {
-    setShowReply({ show: true, currList });
+  const replyEvent = useRunning(idx => {
+    setShowReply({ show: true, currIdx: idx });
   });
 
   const { results: commentList = [] } = props.comments || {};
@@ -96,7 +96,7 @@ export default props => {
         <CommentDetail
           favorite={props.favorite}
           deleteComment={props.deleteComment}
-          list={reply.currList}
+          list={commentList[reply.currIdx]}
           onClose={() => setShowReply(false)}
         />
       )}

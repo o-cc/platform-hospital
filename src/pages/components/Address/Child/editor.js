@@ -41,13 +41,15 @@ export default props => {
   const [checkedB, setCheckedB] = useState(props.isDefault);
   const [area, setArea] = useState(false);
   const [pick, setPick] = useState('');
+  const [areaVal, setAreaVal] = useState(props.initValue.area);
+
   const validate = values => {
     const errors = {};
     if (query.debug) {
       return errors;
     }
-    if (values.receiver.length < 5) {
-      errors.receiver = '用户名必须5个字符';
+    if (values.receiver.length <= 0) {
+      errors.receiver = '收货人不能为空';
     } else if (!/^1\d{10}$/.test(values.mobile)) {
       errors.mobile = 'Invalid phone number';
     }
@@ -63,9 +65,10 @@ export default props => {
   });
 
   const handleOk = async pick => {
-    console.log(pick.join(" "));
-    
-    setPick(pick.join(" "));
+    console.log(pick.join(' '));
+
+    setPick(pick.join(' '));
+    setAreaVal(pick.join(' '));
     setArea(false);
   };
 
@@ -92,7 +95,6 @@ export default props => {
             validate={validate}
             onSubmit={async (values, { setSubmitting }) => {
               if (pick) values.area = pick;
-              console.log(values)
               props.onSubmit && (await props.onSubmit(values));
               setSubmitting(false);
             }}
@@ -133,7 +135,8 @@ export default props => {
                       required
                       fullWidth
                       label="所在城市"
-                      value={pick || props.initValue.area}
+                      style={{ pointerEvents: 'none' }}
+                      value={areaVal}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>

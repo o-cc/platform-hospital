@@ -44,9 +44,7 @@ export default function TransitionAlerts({ ...props }) {
           }
         >
           {error.type === 'error' ? (
-            <>
-              <AlertTitle>发生意外错误：</AlertTitle>
-            </>
+            <AlertTitle>诶呀堵车了：</AlertTitle>
           ) : null}
           {error.error}
         </Alert>

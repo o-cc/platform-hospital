@@ -83,8 +83,12 @@ const api = {
       }
     });
   },
-  getSubComments({ news_id, comment_id }) {
-    return this.instance.get(`/news/${news_id}/comments/${comment_id}/`);
+  getSubComments({ news_id, comment_id, page = 1 }) {
+    return this.instance.get(`/news/${news_id}/comments/${comment_id}/`, {
+      params: {
+        page
+      }
+    });
   },
   postComment({
     news_id,
@@ -161,7 +165,7 @@ const api = {
     return this.instance.put(`/addresses/${address_id}/`);
   },
   putDefaultAddress({ address_id }) {
-    return this.instance.put(`/addresses/${address_id}/status/`)
+    return this.instance.put(`/addresses/${address_id}/status/`);
   }
 };
 export default api;
@@ -191,6 +195,7 @@ api.instance.interceptors.request.use(
 api.instance.interceptors.response.use(
   function (response) {
     // 对响应数据做点什么
+
     if (response.status === 401) {
       setTimeout(() => {
         window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
@@ -201,6 +206,12 @@ api.instance.interceptors.response.use(
   },
   function (error) {
     // 对响应错误做点什么
+
+    if (error.response && error.response.status === 401) {
+      setTimeout(() => {
+        window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
+      }, 100);
+    }
     return Promise.reject(error);
   }
 );

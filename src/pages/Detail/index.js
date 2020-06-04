@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Grid,
   Button,
@@ -83,31 +83,32 @@ function Detail(props) {
   const [comments, setComments] = useState({});
   const { setError } = AppCont.useContainer();
   const [dialog, setDialog] = useState({ show: false, info: {} });
+
+  const getArticleDetail = useCallback(async () => {
+    const { result, error } = await requestApi('getNewsDetail', {
+      news_id: id
+    });
+    if (error) {
+      return setError(error);
+    }
+    setDetailInfo(result);
+  }, [id, setError]);
   useEffect(() => {
     async function getDetailAndComment() {
-      const { result, error } = await requestApi('getNewsDetail', {
-        news_id: id
-      });
-      console.log('article', result);
-      if (error) {
-        return setError(error);
-      }
-      setDetailInfo(result);
-
+      await getArticleDetail();
       const { result: commentRes, error: commentErr } = await requestApi(
         'getDetailComments',
         {
           news_id: id
         }
       );
-      console.log('comment', commentRes);
 
       if (commentErr) return setError(commentErr);
       setComments(commentRes);
     }
 
     getDetailAndComment();
-  }, [id, setError]);
+  }, [id, setError, getArticleDetail]);
 
   const attention = async () => {
     const { result, error } = await requestApi('postFollowed', {
@@ -132,7 +133,6 @@ function Detail(props) {
       page
     });
     if (error) return setError(error);
-    console.log(result);
     setComments(state => {
       return {
         ...state,
@@ -150,15 +150,6 @@ function Detail(props) {
     setDetailInfo(state => ({ ...state, collected: result.collected }));
   });
 
-  const updateCommentByKey = (key, value) => {
-    setComments(state => {
-      return {
-        ...state,
-        [key]: value
-      };
-    });
-  };
-
   //评论文章
   const onRelease = useRunning(async val => {
     if (!val) return setError('评论内容不能为空噢.', 'warning');
@@ -171,6 +162,7 @@ function Detail(props) {
       ...state,
       results: state.results.concat([result])
     }));
+    await getArticleDetail();
   });
 
   const favorite = useRunning(async list => {
@@ -313,7 +305,6 @@ function Detail(props) {
       >
         <Comment
           comments={comments}
-          updateCommentByKey={updateCommentByKey}
           favorite={favorite}
           deleteComment={comment => setDialog({ show: true, info: comment })}
         />
