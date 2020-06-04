@@ -9,6 +9,7 @@ import AppCont from 'container';
 import { requestApi, query } from '@/utils';
 import useRunning from 'hooks/useRunning';
 import { withRouter } from 'react-router-dom';
+import useGetCode from '@/hooks/useGetCode';
 const useStyles = makeStyles(theme => ({
   mr2: {
     marginRight: theme.spacing(1)
@@ -20,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2)
   }
 }));
-export default withRouter(({ getCode, downCount, ...props }) => {
+export default withRouter(({ ...props }) => {
   const classes = useStyles();
   const width = useWidth();
 
@@ -35,7 +36,11 @@ export default withRouter(({ getCode, downCount, ...props }) => {
       props.history && props.history.push('/login');
     }, 100);
   });
-
+  const { downCount, getCode } = useGetCode();
+  const clickGetCode = useRunning(async values => {
+    let error = await getCode(values.phone);
+    error && setError(error[0], error[1]);
+  });
   return (
     <Grid container justify="center">
       <BackHeader title="注册" back={props.onClose} withoutHome={true} />
@@ -140,7 +145,7 @@ export default withRouter(({ getCode, downCount, ...props }) => {
                       color="primary"
                       className={classes.submit}
                       disabled={downCount < codeDownCount}
-                      onClick={() => getCode(values.phone)}
+                      onClick={() => clickGetCode(values)}
                     >
                       {downCount >= codeDownCount ? '获取验证码' : downCount}
                     </Button>

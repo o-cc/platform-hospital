@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, makeStyles, LinearProgress, Button } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import { Formik, Form, Field } from 'formik';
@@ -9,6 +9,8 @@ import AppCont from 'container';
 import { requestApi, query } from '@/utils';
 import useRunning from 'hooks/useRunning';
 import { withRouter } from 'react-router-dom';
+import useGetCode from 'hooks/useGetCode';
+
 const useStyles = makeStyles(theme => ({
   mr2: {
     marginRight: theme.spacing(1)
@@ -20,18 +22,30 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2)
   }
 }));
-export default withRouter(({ downCount, getCode, ...props }) => {
+export default withRouter(({ isLogin = true, ...props }) => {
   const classes = useStyles();
   const width = useWidth();
   const { setError } = AppCont.useContainer();
+  const { downCount, getCode } = useGetCode();
+
   const onSubmit = useRunning(async values => {
     let { result, error } = await requestApi('forgot', values);
     if (error) return setError(error);
     if (!result.token) return setError('登录异常，请重新登录');
     window.localStorage.setItem(storageKeys.token, result.token);
-    setTimeout(() => {
-      props.history && props.history.push('/login');
-    }, 100);
+
+    if (isLogin) {
+      setTimeout(() => {
+        props.history && props.history.push('/login');
+      }, 100);
+    } else {
+      setError('修改成功.', 'success');
+    }
+  });
+
+  const clickGetCode = useRunning(async values => {
+    let error = await getCode(values.phone);
+    error && setError(error[0], error[1]);
   });
 
   return (
@@ -98,7 +112,7 @@ export default withRouter(({ downCount, getCode, ...props }) => {
                       color="primary"
                       className={classes.submit}
                       disabled={downCount < codeDownCount}
-                      onClick={() => getCode(values.phone)}
+                      onClick={() => clickGetCode(values)}
                     >
                       {downCount >= codeDownCount ? '验证码' : downCount}
                     </Button>

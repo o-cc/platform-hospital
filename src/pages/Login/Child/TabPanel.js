@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, LinearProgress, Grid } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 import { Formik, Form, Field, useField } from 'formik';
@@ -8,6 +8,7 @@ import AppCont from 'container';
 import useRunning from '@/hooks/useRunning';
 import { storageKeys, codeDownCount } from '@/configs';
 import { withRouter } from 'react-router-dom';
+import useGetCode from "hooks/useGetCode";
 
 const LoginType = ({ downCount, classes, tabIdx, ...props }) => {
   const phones = useField('phone');
@@ -108,8 +109,7 @@ const LoginType = ({ downCount, classes, tabIdx, ...props }) => {
 };
 export default withRouter(({ tabIdx, classes, ...props }) => {
   const { setError } = AppCont.useContainer();
-  const [downCount, setDown] = useState(codeDownCount);
-
+  const { getCode, downCount } = useGetCode();
   const onSubmit = useRunning(async (values, { setSubmitting }) => {
     let apiName = 'loginByMobile';
     if (tabIdx === 1) apiName = 'login';
@@ -127,34 +127,6 @@ export default withRouter(({ tabIdx, classes, ...props }) => {
     }, 100);
   });
 
-  const getCode = useRunning(async phones => {
-    const [, phoneInfo] = phones;
-
-    if (!phoneInfo.value || phoneInfo.error) {
-      return setError('请填写正确手机号码.', 'warning');
-    }
-
-    let { result, error } = await requestApi('getSmsCode', {
-      phone: phoneInfo.value
-    });
-
-    if (error || result.message !== 'OK') {
-      return setError(error || result.message);
-    }
-    setError('验证码发送成功', 'success');
-    //开始倒计时
-    codeDown();
-  });
-
-  const codeDown = () => {
-    setDown(count => {
-      if (count <= 0) return codeDownCount;
-      setTimeout(() => {
-        codeDown();
-      }, 1000);
-      return --count;
-    });
-  };
 
   return (
     <Formik

@@ -10,6 +10,7 @@ import AppCont from 'container';
 import { storageKeys } from 'configs';
 import useRunning from 'hooks/useRunning';
 import ImagePicker from 'tools/ImagePicker';
+import ForgotPwd from "pages/Login/Child/forgot";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,6 +58,7 @@ const info = {
 export default props => {
   const classes = useStyles();
   const [modal, setModal] = useState({ show: false, type: '' });
+  const [resetPwd, setResetPwd] = useState(false);
   const userInfo = props.userInfo || {};
   const [area, setArea] = useState(false);
   const { setError } = AppCont.useContainer();
@@ -88,6 +90,7 @@ export default props => {
             onClick={() => {
               if (item === 'avatar') return;
               if (item === 'area') return setArea(true);
+              if (item === "pwd") return setResetPwd(true);
               setModal({
                 show: true,
                 type: item
@@ -133,6 +136,9 @@ export default props => {
         onConfirm={() => setModal({ show: false })}
       />
       <Area open={area} onClose={() => setArea(false)} onHandleOk={handleOk} />
+      <Slider open={resetPwd}>
+        <ForgotPwd onClose={() => setResetPwd(false)} />
+      </Slider>
     </Slider>
   );
 };
