@@ -130,6 +130,10 @@ const api = {
     return this.instance.get('/users/infos/');
   },
   putUserInfo(data) {
+    /* data：
+    { "company": "广东财经野鸡学院", "departments": "管理部门", "job": "鸡头", "area": "xxx1", "addr": "xxx1", "intro": "爱学习,爱唠叨", "avatar_name": "FqF5ZWsuR4gfxQQu3pTixE9XrTmi", "username": "huang"
+}
+    */
     return this.instance.put('/users/infos/', {
       data
     });

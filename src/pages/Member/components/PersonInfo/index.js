@@ -9,6 +9,7 @@ import Area from 'pages/components/Area';
 import AppCont from 'container';
 import { storageKeys } from 'configs';
 import useRunning from 'hooks/useRunning';
+import ImagePicker from 'tools/ImagePicker';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 const infoList = {
   avatar: '更换头像',
   username: '更换昵称',
+  sex: '修改性别',
   area: '更改区域',
   addr: '详细地址',
   pwd: '修改密码',
@@ -43,12 +45,13 @@ const infoList = {
 };
 const info = {
   avatar: require('assets/imgs/test_avatar.jpg'),
-  username: '胖虎张无忌',
+  username: '',
   birthday: format(new Date(), 'yyyy-MM-dd'),
   intro: '有的人活着,但他已经死了.有的人已经死了,但他还活着.',
   addr: '',
   area: '',
-  pwd: ''
+  pwd: '',
+  sex: ''
 };
 
 export default props => {
@@ -93,11 +96,15 @@ export default props => {
           >
             {item === 'avatar' && (
               <Grid item xs={12}>
-                <input
-                  accept="image/*"
+                <ImagePicker
                   className={classes.input}
                   id="contained-button-file"
-                  type="file"
+                  onPick={(canvas, data) => {
+                    canvas.toBlob(bin => {
+                      //upload
+                      console.log('upload');
+                    });
+                  }}
                 />
                 <label htmlFor="contained-button-file">
                   <div className={classes.inputWrap}></div>

@@ -1,13 +1,13 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputLabel, Select } from '@material-ui/core';
+import { InputLabel, FormControl, MenuItem } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
+import { TextField, Select } from 'formik-material-ui';
+
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
@@ -19,13 +19,12 @@ const useStyles = makeStyles(theme => ({
     width: 200
   },
   input: {
-    display: 'none'
+    opacity: '0'
   }
 }));
 
 export default function FormDialog(props) {
   const classes = useStyles();
-
   const inputProps = type => ({
     id: type,
     name: type,
@@ -44,10 +43,8 @@ export default function FormDialog(props) {
             margin="normal"
             required
             label="请输入详细地址"
-            defaultValue={props.userInfo.addr}
             component={TextField}
             {...inputProps('addr')}
-            name="addr"
           />
         );
         break;
@@ -57,45 +54,39 @@ export default function FormDialog(props) {
             margin="normal"
             required
             label="更换昵称"
-            defaultValue={props.userInfo.username}
             component={TextField}
             {...inputProps('username')}
-            name="username"
           />
         );
         break;
       case 'sex':
         com = (
-          <>
-            <InputLabel htmlFor="age-native-simple">请选择性别</InputLabel>
-            <Select
-              native
+          <FormControl style={{ width: '100%' }}>
+            <InputLabel htmlFor="sex-simple">性别</InputLabel>
+            <Field
+              component={Select}
+              name="sex"
               inputProps={{
-                name: 'male',
-                id: 'age-native-simple'
+                id: 'sex-simple'
               }}
-              defaultValue="male"
             >
-              <option value="secret">私密</option>
-              <option value="male">男</option>
-              <option value="female">女</option>
-            </Select>
-          </>
+              <MenuItem value="secret">私密</MenuItem>
+              <MenuItem value="male">男</MenuItem>
+              <MenuItem value="female">女</MenuItem>
+            </Field>
+          </FormControl>
         );
         break;
-
       case 'intro':
         com = (
           <Field
             margin="normal"
             required
             component={TextField}
-            defaultValue={props.userInfo.intro}
             type="text"
             label="个人简介"
             placeholder="一句话介绍自己"
             {...inputProps('intro')}
-            name="intro"
           />
         );
         break;
@@ -105,31 +96,37 @@ export default function FormDialog(props) {
     return com;
   };
 
+  const onUpdateInfo = async values => {
+    let type = props.info.type;
+    let data = {
+      [type]: values[type]
+    };
+    props.updateUserInfo && (await props.updateUserInfo(data));
+  };
+
+  const userInfo = props.userInfo;
   return (
     <div>
-      <Formik
-        initialValues={{
-          username: '',
-          addr: '',
-          intro: '',
-          sex: ''
-        }}
-        validate={values => {
-          const errors = {};
-          return errors;
-        }}
-        onSubmit={values => {
-          console.log(values);
-        }}
+      <Dialog
+        open={props.info.show}
+        onClose={props.onClose}
+        aria-labelledby="form-dialog-title"
       >
-        {({ submitForm }) => (
-          <Form>
-            <Dialog
-              open={props.info.show}
-              onClose={props.onClose}
-              aria-labelledby="form-dialog-title"
-            >
-              {/* <DialogTitle id="form-dialog-title">请选择生日</DialogTitle> */}
+        <Formik
+          initialValues={{
+            username: userInfo.username,
+            addr: userInfo.addr,
+            intro: userInfo.intro,
+            sex: userInfo.sex || 'male'
+          }}
+          validate={values => {
+            const errors = {};
+            return errors;
+          }}
+          onSubmit={onUpdateInfo}
+        >
+          {({ submitForm }) => (
+            <Form>
               <DialogContent>{content(props.info.type)}</DialogContent>
               <DialogActions>
                 <Button onClick={props.onClose} color="primary">
@@ -139,10 +136,10 @@ export default function FormDialog(props) {
                   确定
                 </Button>
               </DialogActions>
-            </Dialog>
-          </Form>
-        )}
-      </Formik>
+            </Form>
+          )}
+        </Formik>
+      </Dialog>
     </div>
   );
 }

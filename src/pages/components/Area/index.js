@@ -31,12 +31,11 @@ export default function DialogSelect(props) {
   return (
     <div>
       <Dialog
-        disableBackdropClick
-        disableEscapeKeyDown
         open={props.open}
+        aria-labelledby="form-dialog-title2"
         onClose={props.onClose}
       >
-        <DialogTitle>Fill the form</DialogTitle>
+        <DialogTitle>请选择地址</DialogTitle>
         <DialogContent>
           <AreaPicker
             level={3}
