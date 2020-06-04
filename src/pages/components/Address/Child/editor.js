@@ -4,7 +4,8 @@ import {
   Button,
   makeStyles,
   LinearProgress,
-  Switch
+  Switch,
+  TextField as TextFieldUi
 } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -12,7 +13,7 @@ import BackHeader from '@/pages/components/BackHeader';
 import { vw, getObjKey, query, requestApi } from 'utils';
 import useRunning from '@/hooks/useRunning';
 import AppCont from 'container';
-
+import Area from 'pages/components/Area';
 const useStyles = makeStyles(theme => ({
   form: {
     width: '100%',
@@ -38,6 +39,8 @@ export default props => {
   const classes = useStyles();
   const { setError } = AppCont.useContainer();
   const [checkedB, setCheckedB] = useState(props.isDefault);
+  const [area, setArea] = useState(false);
+  const [pick, setPick] = useState('');
   const validate = values => {
     const errors = {};
     if (query.debug) {
@@ -58,6 +61,13 @@ export default props => {
     if (error) return setError(error);
     setCheckedB(e.target.checked);
   });
+
+  const handleOk = async pick => {
+    console.log(pick.join(" "));
+    
+    setPick(pick.join(" "));
+    setArea(false);
+  };
 
   const init =
     getObjKey(props.initValue).length > 0 ? props.initValue : initialValues;
@@ -81,11 +91,13 @@ export default props => {
             initialValues={init}
             validate={validate}
             onSubmit={async (values, { setSubmitting }) => {
+              if (pick) values.area = pick;
+              console.log(values)
               props.onSubmit && (await props.onSubmit(values));
               setSubmitting(false);
             }}
           >
-            {({ submitForm, isSubmitting }) => (
+            {({ submitForm, isSubmitting, values }) => (
               <Form className={classes.form}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={3}>
@@ -109,14 +121,19 @@ export default props => {
                       label="手机号码"
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
-                    <Field
-                      component={TextField}
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={3}
+                    onClick={() => setArea(true)}
+                  >
+                    <TextFieldUi
                       variant="standard"
                       required
                       fullWidth
-                      name="area"
                       label="所在城市"
+                      value={pick || props.initValue.area}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>
@@ -158,6 +175,11 @@ export default props => {
             )}
           </Formik>
         </Grid>
+        <Area
+          open={area}
+          onClose={() => setArea(false)}
+          onHandleOk={handleOk}
+        />
       </Grid>
     </>
   );

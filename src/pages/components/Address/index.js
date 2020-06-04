@@ -45,7 +45,10 @@ export default function Address(props) {
   });
 
   const modifiedAddress = useRunning(async values => {
-    let { result, error } = await requestApi('putAddress', values);
+    let { result, error } = await requestApi('putAddress', {
+      address_id: address.id,
+      ...values
+    });
     if (error) return setError(error);
     setAddressList(lists => ({
       ...lists,
@@ -136,7 +139,6 @@ export default function Address(props) {
         open={deleteDialog}
         text="删除后无法回复，确定吗？"
         onClose={() => setDeleteDialog(false)}
-        onHandleOk={deleteAddress}
       ></Dialog>
     </Slider>
   );

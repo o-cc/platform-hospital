@@ -113,6 +113,9 @@ export default function DialogSelect(props) {
           </Button>
           <Button
             onClick={() => {
+              if (!province || !city || !region) {
+                return;
+              }
               props.onHandleOk && props.onHandleOk(pick);
             }}
             color="primary"
