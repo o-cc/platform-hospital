@@ -115,6 +115,13 @@ export default withRouter(props => {
     setModal(false);
   };
 
+  const clickFollows = async e => {
+    e.preventDefault();
+    e.stopPropagation();
+    let { result } = await requestApi('getFans', { user_id: userInfo.user_id });
+    console.log(result);
+  };
+
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12}>
@@ -137,7 +144,9 @@ export default withRouter(props => {
           <Grid item xs={8}>
             <Typography variant="h6">{userInfo.username}</Typography>
             <Typography variant="subtitle2" className={classes.subtitle}>
-              <Button size="small">关注0</Button>
+              <Button size="small" onClick={clickFollows}>
+                关注0
+              </Button>
               <Button size="small">粉丝0</Button>
             </Typography>
           </Grid>

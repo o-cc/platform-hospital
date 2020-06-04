@@ -39,7 +39,7 @@ const Root = withRouter(props => {
       <Route exact path={`/store`} component={Store}></Route>
       <Route exact path={`/store/detail/:id`} component={StoreDetail}></Route>
       <Route path={`/store/exchange/:id`} component={StoreExchange}></Route>
-      <Route path={`/member/:id`} component={Member}></Route>
+      <Route path={`/member/`} component={Member}></Route>
     </>
   );
 });

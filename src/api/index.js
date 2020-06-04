@@ -166,6 +166,12 @@ const api = {
   },
   putDefaultAddress({ address_id }) {
     return this.instance.put(`/addresses/${address_id}/status/`);
+  },
+  getFans({ user_id }) {
+    return this.instance.get(`/users/${user_id}/fans/`);
+  },
+  getFollowPeople({ user_id }) {
+    return this.instance.get(`/users/${user_id}/fellow/`);
   }
 };
 export default api;
