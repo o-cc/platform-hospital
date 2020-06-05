@@ -130,7 +130,7 @@ function Other() {
       <InfiniteScroll
         pageStart={0}
         loadMore={loadFunc}
-        hasMore={hasMore ? true : false}
+        hasMore={!!hasMore}
         loader={
           <div style={{ textAlign: 'center' }} key={0}>
             正在加载...

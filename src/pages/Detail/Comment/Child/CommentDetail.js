@@ -192,7 +192,7 @@ export default function TransitionsModal({ list, ...props }) {
             <InfiniteScroll
               pageStart={0}
               loadMore={loadFunc}
-              hasMore={hasMore ? true : false}
+              hasMore={!!hasMore}
               style={{ height: '92%', overflowY: 'auto' }}
               loader={
                 <div style={{ textAlign: 'center' }} key={0}>

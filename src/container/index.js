@@ -53,12 +53,12 @@ function useCounter() {
     }));
   }, []);
 
-  const setError = useCallback((error, type = 'error', no_show) => {
+  const setError = useCallback((error, type = 'error', timeout, no_show) => {
     if (type === 'error' && error) console.error('###error###', error);
     if (typeof error === 'string' && /timeout/.test(error))
       error = '网络请求超时，请检查网络是否畅通';
     if (no_show) return error;
-    return setErrorData({ error, type });
+    return setErrorData({ error, type, timeout });
   }, []);
 
   return { state, setMenuLists, setError, error };

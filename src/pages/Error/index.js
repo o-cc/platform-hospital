@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -24,9 +24,16 @@ const useStyles = makeStyles(theme => ({
 export default function TransitionAlerts({ ...props }) {
   const classes = useStyles();
   const { setError, error } = AppCont.useContainer();
+  const [timeout, setTime] = useState(!!error.error);
+  useEffect(() => {
+    const time = error.type === 'error' ? 10000 : 5000;
+    setTimeout(() => {
+      setTime(false);
+    }, error.timeout || time);
+  }, [error.timeout, error.type]);
   return (
     <div className={classes.root}>
-      <Collapse in={!!error.error}>
+      <Collapse in={timeout}>
         <Alert
           severity={error.type || 'error'}
           variant="filled"
