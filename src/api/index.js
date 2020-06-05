@@ -172,6 +172,13 @@ const api = {
   },
   getFollowPeople({ user_id }) {
     return this.instance.get(`/users/${user_id}/fellow/`);
+  },
+  postOrder({ good_id, count, address_id }) {
+    return this.instance.post('/orders/', {
+      good: good_id,
+      count,
+      address: address_id
+    });
   }
 };
 export default api;

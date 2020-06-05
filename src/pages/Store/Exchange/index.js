@@ -5,17 +5,21 @@ import {
   makeStyles,
   Divider,
   Paper,
-  Typography
+  Typography,
+  IconButton
 } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import Slider from '@/pages/components/Slider';
 import ArrowForwardIosRoundedIcon from '@material-ui/icons/ArrowForwardIosRounded';
-import { vw } from '@/utils';
-import { addressList as testList } from 'configs/test_data';
+import { vw, requestApi } from '@/utils';
 import AddressItem from 'pages/components/Address/Child/item';
 import EditorAddress from '@/pages/components/Address/Child/editor';
 import Address from 'pages/components/Address';
-
+import AddIcon from '@material-ui/icons/Add';
+import { Remove } from '@material-ui/icons';
+import AppCont from 'container';
+import useRunning from '@/hooks/useRunning';
+import { withRouter, useParams } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   button: {
     width: '100%',
@@ -44,35 +48,59 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default () => {
+function getObjInArrayByKey(arr, objKey, value) {
+  return arr.filter(item => item[objKey] === value)[0];
+}
+
+export default withRouter(() => {
   const classes = useStyles();
   const [addressModal, setAddressModal] = useState(false);
   const [editorModal, setEditorModal] = useState(false);
-  const [address, setAddress] = useState({});
+  const [count, setCount] = useState(1);
+  const [currAddress, setCurrAddress] = useState({});
+  const { setError } = AppCont.useContainer();
+  const { id: good_id } = useParams();
+  const [isSubmit, setSubmit] = useState();
   useEffect(() => {
-    let list = testList;
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].is_default) {
-        setAddress(list[i]);
-        break;
+    async function getAddresses() {
+      let { result, error } = await requestApi('getAddress');
+      if (error) return setError(error);
+      let defaultId = result.default_address_id;
+      if (defaultId) {
+        setCurrAddress(getObjInArrayByKey(result.addresses, 'id', defaultId));
       }
     }
-  }, []);
+    getAddresses();
+  }, [setError]);
+
+  const submitOrder = useRunning(async () => {
+    if (!currAddress.id) return setError('请先选择地址', "warning");
+    if (!good_id) return setError("该商品不存在,换个商品吧", "warning"); 
+    let { error } = await requestApi("postOrder", {
+      good_id,
+      count,
+      address_id: currAddress.id
+    });
+    if (error) return setError(error);
+    setError('交易成功啦！请到个人中心查看订单交易状态', 'success')
+    setSubmit(true);
+  });
+
   return (
     <div style={{ width: '100%', height: '100%', background: '#f8f8f8' }}>
       <Grid container>
         <BackHeader title="商品兑换" />
 
-        {address.is_default ? (
+        {currAddress.receiver ? (
           <AddressItem
-            addressItem={address}
+            addressItem={currAddress}
             hasLocation={true}
             click={() => setAddressModal(true)}
             onEditor={() => {
               setEditorModal(true);
             }}
             onDelete={() => {
-              console.log('delete');
+              setCurrAddress({});
             }}
           />
         ) : (
@@ -109,7 +137,26 @@ export default () => {
                 <Grid item>
                   <Grid container justify="space-between">
                     <Typography>1900积分</Typography>
-                    <Typography align="right">x 1</Typography>
+                    <Grid container alignItems="center" justify="flex-end">
+                      <IconButton
+                        color="primary"
+                        aria-label="picture"
+                        component="span"
+                        disabled={count <= 1}
+                        onClick={() => setCount(count => count - 1)}
+                      >
+                        <Remove color="action" />
+                      </IconButton>
+                      <Typography align="right">{count}</Typography>
+                      <IconButton
+                        color="primary"
+                        aria-label="picture2"
+                        component="span"
+                        onClick={() => setCount(count => count + 1)}
+                      >
+                        <AddIcon color="action" />
+                      </IconButton>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
@@ -132,6 +179,8 @@ export default () => {
                 color="secondary"
                 variant="contained"
                 className={classes.pay}
+                onClick={submitOrder}
+                disabled={isSubmit}
               >
                 确认支付
               </Button>
@@ -144,6 +193,10 @@ export default () => {
           open={addressModal}
           onClose={() => setAddressModal(false)}
           title="选择地址"
+          onClick={list => {
+            setCurrAddress(list);
+            setAddressModal(false);
+          }}
         />
 
         <Slider open={editorModal} bgColor="#f8f8f8">
@@ -151,14 +204,14 @@ export default () => {
             back={() => {
               setEditorModal(false);
             }}
-            initValue={address}
+            initValue={currAddress}
             onSubmit={values => {
               setEditorModal(false);
-              setAddress(sta => ({ ...sta, ...values }));
+              console.log(values);
             }}
           />
         </Slider>
       </Grid>
     </div>
   );
-};
+});

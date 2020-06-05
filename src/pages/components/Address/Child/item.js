@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   icon: {
     color: '#999',
     marginTop: theme.spacing(-2),
-    marginRight: theme.spacing(1)
+    marginLeft: theme.spacing(1)
   },
   arrow: {
     position: 'absolute',
@@ -48,7 +48,7 @@ export default function AddressItem({
     <Paper
       className={classes.addressItem}
       onClick={() => {
-        props.click && props.click();
+        props.click && props.click(list);
       }}
     >
       {hasLocation && (

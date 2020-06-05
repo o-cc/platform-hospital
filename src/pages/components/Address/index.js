@@ -106,6 +106,9 @@ export default function Address(props) {
                 addressItem={item}
                 onDelete={deleteAddress}
                 default_id={default_address_id}
+                click={list => {
+                  props.onClick && props.onClick(list);
+                }}
                 onEditor={() => {
                   setAddress(item);
                   setAddModal(true);

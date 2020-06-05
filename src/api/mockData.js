@@ -330,56 +330,63 @@ export default {
     addresses: [
       {
         id: 2,
-        receiver: '黄志杰',
+        receiver: '黄志杰1',
         area: '广东省广州市天河区',
         address: '青云里彗星百货',
         mobile: '13189819522'
       },
       {
         id: 3,
-        receiver: '黄志杰',
+        receiver: '黄志杰2',
         area: '广东省广州市天河区',
         address: '青云里彗星百货',
         mobile: '13189819522'
       },
       {
         id: 4,
-        receiver: '黄志杰',
+        receiver: '黄志杰3',
         area: '广东省广州市天河区',
         address: '青云里彗星百货',
         mobile: '13189819522'
       },
       {
         id: 5,
-        receiver: '黄志杰',
+        receiver: '黄志杰4',
         area: '广东省广州市天河区',
         address: '青云里彗星百货',
         mobile: '13189819522'
       },
       {
         id: 6,
-        receiver: '黄志杰',
+        receiver: '黄志杰5',
         area: '广东省广州市天河区',
         address: '青云里彗星百货',
         mobile: '13189819522'
       },
       {
         id: 7,
-        receiver: '黄志杰',
+        receiver: '黄志杰6',
         area: '广东省广州市天河区',
         address: '青云里彗星百货',
         mobile: '13189819522'
       },
       {
         id: 8,
-        receiver: '黄志杰',
+        receiver: '黄志杰7',
         area: '广东省广州市天河区',
         address: '青云里彗星百货',
         mobile: '13189819522'
       }
     ]
   },
-  [`onPut:${/\/addresses\/\d+\//}`]: {
-    
+  [`onPut:${/\/addresses\/\d+\/$/}`]: {},
+  'onPost:/orders/': {
+    id: 4,
+    good: '龙江猪脚饭 max',
+    count: 1,
+    cost: '888.00',
+    address: '广东省广州市天河区青云里彗星百货',
+    status: '待发货',
+    create_time: '2020-06-05 01:30'
   }
 };

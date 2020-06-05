@@ -11,7 +11,6 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 import BackHeader from '@/pages/components/BackHeader';
 import { vw, getObjKey, query, requestApi } from 'utils';
-import useRunning from '@/hooks/useRunning';
 import AppCont from 'container';
 import Area from 'pages/components/Area';
 const useStyles = makeStyles(theme => ({
@@ -38,11 +37,11 @@ const initialValues = {
 export default props => {
   const classes = useStyles();
   const { setError } = AppCont.useContainer();
-  const [checkedB, setCheckedB] = useState(props.isDefault);
+  const [checkedB, setCheckedB] = useState(Boolean(props.isDefault));
   const [area, setArea] = useState(false);
   const [pick, setPick] = useState('');
   const [areaVal, setAreaVal] = useState(props.initValue.area || '');
-
+  const [defaultAddressRunning, setRunning] = useState(false);
   const validate = values => {
     const errors = {};
     if (query.debug) {
@@ -56,17 +55,21 @@ export default props => {
     return errors;
   };
 
-  const switchChange = useRunning(async e => {
+  const updateDefaultAddress = async checked => {
     let { error } = await requestApi('putDefaultAddress', {
       address_id: props.initValue.id
     });
+    setRunning(false);
     if (error) return setError(error);
-    setCheckedB(e.target.checked);
-  });
+    setCheckedB(checked);
+  };
+
+  const switchChange = e => {
+    updateDefaultAddress(e.target.checked);
+    setRunning(true);
+  };
 
   const handleOk = async pick => {
-    console.log(pick.join(' '));
-
     setPick(pick.join(' '));
     setAreaVal(pick.join(' '));
     setArea(false);
@@ -152,18 +155,24 @@ export default props => {
                     />
                   </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                  <p>
-                    设为默认地址
-                    <Switch
-                      checked={checkedB}
-                      onChange={switchChange}
-                      color="primary"
-                      name="checkedB"
-                      inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                  </p>
-                </Grid>
+                {props.initValue.id && (
+                  <Grid item xs={12}>
+                    <p>
+                      设为默认地址
+                      <Switch
+                        checked={checkedB}
+                        onChange={e => {
+                          switchChange(e);
+                        }}
+                        disabled={defaultAddressRunning}
+                        color="primary"
+                        name="checkedB"
+                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                      />
+                    </p>
+                  </Grid>
+                )}
+
                 <Grid container justify="center" className={classes.btnWrap}>
                   <Button
                     variant="contained"
