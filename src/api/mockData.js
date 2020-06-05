@@ -378,5 +378,8 @@ export default {
         mobile: '13189819522'
       }
     ]
+  },
+  [`onPut:${/\/addresses\/\d+\//}`]: {
+    
   }
 };

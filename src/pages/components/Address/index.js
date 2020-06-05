@@ -40,7 +40,7 @@ export default function Address(props) {
     if (error) return setError(error);
     setAddressList(lists => ({
       ...lists,
-      addresses: lists.addAddress.concat(result)
+      addresses: lists.addresses.concat(result)
     }));
   });
 
@@ -70,7 +70,7 @@ export default function Address(props) {
     setError('操作成功.', 'success');
     setAddressList(lists => ({
       ...lists,
-      addresses: lists.addAddress.filters(item => list.id !== item.id)
+      addresses: lists.addresses.filter(item => item.id !== list.id)
     }));
   });
   const { addresses = [], default_address_id } = addressList;
