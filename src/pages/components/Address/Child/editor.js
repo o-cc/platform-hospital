@@ -41,7 +41,7 @@ export default props => {
   const [checkedB, setCheckedB] = useState(props.isDefault);
   const [area, setArea] = useState(false);
   const [pick, setPick] = useState('');
-  const [areaVal, setAreaVal] = useState(props.initValue.area);
+  const [areaVal, setAreaVal] = useState(props.initValue.area || '');
 
   const validate = values => {
     const errors = {};
@@ -137,6 +137,7 @@ export default props => {
                       label="所在城市"
                       style={{ pointerEvents: 'none' }}
                       value={areaVal}
+                      InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6} md={3}>

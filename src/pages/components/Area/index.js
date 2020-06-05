@@ -113,7 +113,11 @@ export default function DialogSelect(props) {
           </Button>
           <Button
             onClick={() => {
-              if (!province || !city || !region) {
+              if (
+                !province ||
+                !city ||
+                (!/上海|北京|重庆|天津/.test(province) && !region)
+              ) {
                 return;
               }
               props.onHandleOk && props.onHandleOk(pick);
