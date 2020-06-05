@@ -25,6 +25,7 @@ import { withRouter } from 'react-router-dom';
 import Info from './components/PersonInfo';
 import { requestApi } from '@/utils';
 import AppCont from 'container';
+import Exchange from "./components/Order";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -80,7 +81,7 @@ const types = {
   task: 'task',
   myArticle: 'myArticle',
   record: 'record',
-  info: 'info'
+  info: 'info',
 };
 
 const menuList = [
@@ -246,6 +247,7 @@ export default withRouter(props => {
       <Address open={modal === types.address} onClose={onClose} />
       <History open={modal === types.record} onClose={onClose} />
       <MyArticle open={modal === types.myArticle} onClose={onClose} />
+      <Exchange open={modal === types.exchange} onClose={onClose} />
     </Grid>
   );
 });

@@ -3,7 +3,6 @@ import { Grid, makeStyles, LinearProgress, Button } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
-import useWidth from 'hooks/useWidth';
 import { codeDownCount, storageKeys } from 'configs';
 import AppCont from 'container';
 import { requestApi, query } from '@/utils';
@@ -24,7 +23,6 @@ const useStyles = makeStyles(theme => ({
 }));
 export default withRouter(({ isLogin = true, ...props }) => {
   const classes = useStyles();
-  const width = useWidth();
   const { setError } = AppCont.useContainer();
   const { downCount, getCode } = useGetCode();
 
@@ -80,9 +78,10 @@ export default withRouter(({ isLogin = true, ...props }) => {
           <Form className={classes.form}>
             <Grid
               container
-              justify={width === 'xs' ? 'center' : 'space-around'}
+              justify='center'
+              spacing={1}
             >
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"
                   margin="normal"
@@ -94,7 +93,7 @@ export default withRouter(({ isLogin = true, ...props }) => {
                 />
               </Grid>
 
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Grid container justify="space-between">
                   <Grid item xs={7}>
                     <Field
@@ -119,7 +118,7 @@ export default withRouter(({ isLogin = true, ...props }) => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"
                   margin="normal"
@@ -131,7 +130,7 @@ export default withRouter(({ isLogin = true, ...props }) => {
                   component={TextField}
                 />
               </Grid>
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"
                   margin="normal"

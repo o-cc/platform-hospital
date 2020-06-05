@@ -3,7 +3,6 @@ import { Grid, makeStyles, LinearProgress, Button } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
-import useWidth from 'hooks/useWidth';
 import { codeDownCount, storageKeys } from 'configs';
 import AppCont from 'container';
 import { requestApi, query } from '@/utils';
@@ -23,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 }));
 export default withRouter(({ ...props }) => {
   const classes = useStyles();
-  const width = useWidth();
 
   const { setError } = AppCont.useContainer();
 
@@ -77,9 +75,10 @@ export default withRouter(({ ...props }) => {
           <Form className={classes.form}>
             <Grid
               container
-              justify={width === 'xs' ? 'center' : 'space-around'}
+              spacing={1}
+              justify='center'
             >
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"
                   margin="normal"
@@ -90,7 +89,7 @@ export default withRouter(({ ...props }) => {
                   component={TextField}
                 />
               </Grid>
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"
                   margin="normal"
@@ -102,7 +101,7 @@ export default withRouter(({ ...props }) => {
                   component={TextField}
                 />
               </Grid>
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"
                   margin="normal"
@@ -114,7 +113,7 @@ export default withRouter(({ ...props }) => {
                   component={TextField}
                 />
               </Grid>
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"
                   margin="normal"
@@ -126,7 +125,7 @@ export default withRouter(({ ...props }) => {
                 />
               </Grid>
 
-              <Grid item xs={11} sm={5}>
+              <Grid item xs={11} sm={6} md={3}>
                 <Grid container justify="space-between">
                   <Grid item xs={7}>
                     <Field
