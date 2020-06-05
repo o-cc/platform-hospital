@@ -25,7 +25,8 @@ import { withRouter } from 'react-router-dom';
 import Info from './components/PersonInfo';
 import { requestApi } from '@/utils';
 import AppCont from 'container';
-import Exchange from "./components/Order";
+import Exchange from './components/Order';
+import Followers from './components/Followers';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,6 +83,7 @@ const types = {
   myArticle: 'myArticle',
   record: 'record',
   info: 'info',
+  followers: 'followers'
 };
 
 const menuList = [
@@ -119,8 +121,10 @@ export default withRouter(props => {
   const clickFollows = async e => {
     e.preventDefault();
     e.stopPropagation();
-    let { result } = await requestApi('getFans', { user_id: userInfo.user_id });
-    console.log(result);
+    console.log(1);
+    toggleDrawer({ type: types.followers });
+    // let { result } = await requestApi('getFans', { user_id: userInfo.user_id });
+    // console.log(result);
   };
 
   return (
@@ -248,6 +252,7 @@ export default withRouter(props => {
       <History open={modal === types.record} onClose={onClose} />
       <MyArticle open={modal === types.myArticle} onClose={onClose} />
       <Exchange open={modal === types.exchange} onClose={onClose} />
+      <Followers open={modal === types.followers} onClose={onClose} />
     </Grid>
   );
 });
