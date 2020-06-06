@@ -179,6 +179,7 @@ export default function MediaControlCard() {
   const loadFunc = async () => {
     //知道文章的id、next
     let next = comments.next;
+    console.log(next);
     let page = getQueryKey('page', next);
 
     let { result, error } = await requestApi('getDetailComments', {
@@ -223,6 +224,7 @@ export default function MediaControlCard() {
     is_followed
   } = videoInfo;
   const hasMore = comments.next;
+  console.log(!!hasMore);
   return (
     <>
       <BackHeader
@@ -334,31 +336,34 @@ export default function MediaControlCard() {
                 </Grid>
               </Paper>
               {/* 全部评论 */}
-              <Paper
-                className={classes.model}
-                elevation={0}
-                style={{ paddingBottom: '8vh' }}
+
+              <InfiniteScroll
+                pageStart={0}
+                loadMore={loadFunc}
+                hasMore={!!hasMore}
+                loader={
+                  <div style={{ textAlign: 'center' }} key={0}>
+                    正在加载...
+                  </div>
+                }
+                style={{ overflow: 'auto', height: '50vh' }}
               >
-                <Grid container justify="space-between">
-                  <Text size="large" text="全部评论" />
-                  {comment_count ? (
-                    <Text
-                      size="small"
-                      text={`+${comment_count}`}
-                      style={{ color: '#f30' }}
-                    />
-                  ) : null}
-                </Grid>
-                <InfiniteScroll
-                  pageStart={0}
-                  loadMore={loadFunc}
-                  hasMore={!!hasMore}
-                  loader={
-                    <div style={{ textAlign: 'center' }} key={0}>
-                      正在加载...
-                    </div>
-                  }
+                <Paper
+                  className={classes.model}
+                  elevation={0}
+                  style={{ paddingBottom: '8vh' }}
                 >
+                  <Grid container justify="space-between">
+                    <Text size="large" text="全部评论" />
+                    {comment_count ? (
+                      <Text
+                        size="small"
+                        text={`+${comment_count}`}
+                        style={{ color: '#f30' }}
+                      />
+                    ) : null}
+                  </Grid>
+
                   {comments.results.map(item => (
                     <Paper
                       elevation={0}
@@ -396,8 +401,8 @@ export default function MediaControlCard() {
                   >
                     已经到底啦
                   </Typography>
-                </InfiniteScroll>
-              </Paper>
+                </Paper>
+              </InfiniteScroll>
               <Paper elevation={4} className={classes.inputWrap}>
                 <Grid container>
                   <Grid item xs={10}>
