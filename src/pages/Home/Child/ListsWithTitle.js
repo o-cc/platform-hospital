@@ -42,7 +42,14 @@ function SimplePaper({ listItem, ...props }) {
       <Paper elevation={2} className={classes.paper}>
         <Grid container justify="space-between" alignItems="center">
           <h4 className={classes.subTitle}>{listItem.name}</h4>
-          <Link href="#" className={classes.more} onClick={() => {}}>
+          <Link
+            href="#"
+            className={classes.more}
+            onClick={e => {
+              e.preventDefault();
+              props.history && props.history.push(`/other/${listItem.id}`);
+            }}
+          >
             查看更多
           </Link>
         </Grid>

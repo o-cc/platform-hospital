@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { vw } from '@/utils';
 import { format } from 'date-fns';
 import { withRouter } from 'react-router-dom';
+import { defaultAvatar } from 'configs';
+
 const useStyles = makeStyles(theme => {
   return {
     avatar: {
@@ -84,10 +86,7 @@ function List({ list, idx = 0, ...props }) {
     >
       <Grid container justify="space-between" alignItems="center">
         <div className={classes.avatar} onClick={clickUser}>
-          <Avatar
-            alt="avatar"
-            src={list.avatar || require('assets/imgs/test_avatar.jpg')}
-          />
+          <Avatar alt="avatar" src={list.avatar || defaultAvatar} />
           <span>{list.username}</span>
         </div>
         <div className={classes.flex}>

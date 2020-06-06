@@ -116,8 +116,8 @@ const api = {
   postCollections({ news_id }) {
     return this.instance.post(`/news/${news_id}/collections/`);
   },
-  postFollowed({ id }) {
-    return this.instance.post(`/users/followers/${id}/`);
+  postFollowed({ user_id }) {
+    return this.instance.post(`/users/followers/${user_id}/`);
   },
   getAuthorInfo({ author_id }) {
     return this.instance.get(`/users/${author_id}/`);

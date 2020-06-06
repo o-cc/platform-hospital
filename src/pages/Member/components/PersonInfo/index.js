@@ -7,10 +7,10 @@ import { format } from 'date-fns';
 import EditorModal from './EditorModal';
 import Area from 'pages/components/Area';
 import AppCont from 'container';
-import { storageKeys } from 'configs';
+import { storageKeys, defaultAvatar } from 'configs';
 import useRunning from 'hooks/useRunning';
 import ImagePicker from 'tools/ImagePicker';
-import ForgotPwd from "pages/Login/Child/forgot";
+import ForgotPwd from 'pages/Login/Child/forgot';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,7 +45,7 @@ const infoList = {
   intro: '编辑个人简介'
 };
 const info = {
-  avatar: require('assets/imgs/test_avatar.jpg'),
+  avatar: defaultAvatar,
   username: '',
   birthday: format(new Date(), 'yyyy-MM-dd'),
   intro: '有的人活着,但他已经死了.有的人已经死了,但他还活着.',
@@ -90,7 +90,7 @@ export default props => {
             onClick={() => {
               if (item === 'avatar') return;
               if (item === 'area') return setArea(true);
-              if (item === "pwd") return setResetPwd(true);
+              if (item === 'pwd') return setResetPwd(true);
               setModal({
                 show: true,
                 type: item

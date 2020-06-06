@@ -112,7 +112,7 @@ function Detail(props) {
 
   const attention = async () => {
     const { result, error } = await requestApi('postFollowed', {
-      id: detailInfo.user_info.user_id
+      user_id: detailInfo.user_info.user_id
     });
     if (error) return setError(error);
     setDetailInfo(state => {

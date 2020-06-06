@@ -13,6 +13,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import Tabs from '@/pages/User/Tabs';
 import { useParams } from 'react-router-dom';
 import AppCont from 'container';
+import { defaultAvatar } from 'configs';
 
 const useStyles = makeStyles(theme => ({
   back: {
@@ -84,7 +85,7 @@ export default props => {
   }, [userId, setError]);
 
   const attention = async () => {
-    let { error } = await requestApi('postFollowed', { id: userId });
+    let { error } = await requestApi('postFollowed', { user_id: userId });
     if (error) return setError(error);
     setUserInfo(sta => ({
       ...sta,
@@ -100,7 +101,7 @@ export default props => {
             <Avatar
               className={classes.avatar}
               alt="avatar"
-              src={userInfo.avatar || require('assets/imgs/test_avatar.jpg')}
+              src={userInfo.avatar || defaultAvatar}
             />
           </Grid>
           <Grid item xs={8}>

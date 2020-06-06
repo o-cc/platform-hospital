@@ -42,7 +42,7 @@ export default withRouter(function ListItem({ list = [], ...props }) {
             onClick={() => {
               if (props.onClick) return props.onClick(item.news_id);
 
-              if (item.news_type === 'video') {
+              if (item.news_type === 'Video') {
                 props.history &&
                   props.history.push('/video/detail/' + item.news_id);
               } else {

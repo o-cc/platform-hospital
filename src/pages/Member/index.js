@@ -27,6 +27,7 @@ import { requestApi } from '@/utils';
 import AppCont from 'container';
 import Exchange from './components/Order';
 import Followers from './components/Followers';
+import { defaultAvatar } from 'configs';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -142,7 +143,7 @@ export default withRouter(props => {
         >
           <Grid item xs={3}>
             <Avatar
-              src={userInfo.avatar || require('assets/imgs/test_avatar.jpg')}
+              src={userInfo.avatar || defaultAvatar}
               className={classes.avatar}
             />
           </Grid>
