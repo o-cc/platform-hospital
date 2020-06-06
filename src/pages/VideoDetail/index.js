@@ -26,8 +26,7 @@ import { defaultAvatar } from 'configs';
 const useStyles = makeStyles(theme => ({
   wrap: {
     height: 'calc(100% - 49px)',
-    display: 'flex',
-    flexDirection: 'column'
+    position: 'relative'
   },
   root: {
     display: 'flex'
@@ -38,12 +37,6 @@ const useStyles = makeStyles(theme => ({
   },
   info: {
     marginTop: theme.spacing(3)
-  },
-  tabWrap: {
-    flex: 1,
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column'
   },
   model: {
     padding: `${vw(15)} ${vw(22.5)}`,
@@ -71,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 4
   },
   inputWrap: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: '0',
     left: 0,
     right: 0,
@@ -81,11 +74,6 @@ const useStyles = makeStyles(theme => ({
   input: {
     '& .MuiOutlinedInput-input': {
       padding: vw(22.5)
-    }
-  },
-  views: {
-    '& .react-swipeable-view-container': {
-      height: '100%'
     }
   },
   flexCenter: {
@@ -136,7 +124,6 @@ export default function MediaControlCard() {
       let { result, error } = await requestApi('getNewsDetail', { news_id });
       if (error) return setError(error);
       setVideoInfo(result);
-      console.log('result', result);
     }
     getVideoById();
   }, [setError, news_id]);
@@ -205,7 +192,6 @@ export default function MediaControlCard() {
     });
     if (error) return setError(error);
     setError('评论成功', 'success', 1000);
-    console.log(result);
     setComments(state => ({
       ...state,
       results: state.results.concat([{ ...result, content: commentVal }])
@@ -224,7 +210,6 @@ export default function MediaControlCard() {
     is_followed
   } = videoInfo;
   const hasMore = comments.next;
-  console.log(!!hasMore);
   return (
     <>
       <BackHeader
@@ -254,30 +239,38 @@ export default function MediaControlCard() {
             webkit-playsinline="true"
           />
         </Card>
-        <Paper className={classes.tabWrap}>
-          <Tabs
+        <Tabs
+          value={tabVal}
+          onChange={(e, val) => {
+            setTabVal(val);
+          }}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+        >
+          <Tab label="视频详情" />
+        </Tabs>
+
+        <SwipeableViews
+          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          index={tabVal}
+          onChangeIndex={idx => setTabVal(idx)}
+        >
+          <TabPanel
             value={tabVal}
-            onChange={(e, val) => {
-              setTabVal(val);
-            }}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
+            index={0}
+            dir={theme.direction}
+            style={{ background: '#f5f5f5' }}
           >
-            <Tab label="视频详情" />
-          </Tabs>
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={tabVal}
-            onChangeIndex={idx => setTabVal(idx)}
-            style={{ flex: 1, height: '50vh' }}
-            className={classes.views}
-          >
-            <TabPanel
-              value={tabVal}
-              index={0}
-              dir={theme.direction}
-              style={{ background: '#f5f5f5' }}
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={loadFunc}
+              hasMore={!!hasMore}
+              loader={
+                <div style={{ textAlign: 'center' }} key={'0dd'}>
+                  正在加载...
+                </div>
+              }
             >
               <Paper className={classes.model} elevation={0}>
                 <Text size="large" text={title}></Text>
@@ -336,93 +329,80 @@ export default function MediaControlCard() {
                 </Grid>
               </Paper>
               {/* 全部评论 */}
-
-              <InfiniteScroll
-                pageStart={0}
-                loadMore={loadFunc}
-                hasMore={!!hasMore}
-                loader={
-                  <div style={{ textAlign: 'center' }} key={0}>
-                    正在加载...
-                  </div>
-                }
-                style={{ overflow: 'auto', height: '50vh' }}
+              <Paper
+                className={classes.model}
+                elevation={0}
+                style={{
+                  paddingBottom: '8vh'
+                }}
               >
-                <Paper
-                  className={classes.model}
-                  elevation={0}
-                  style={{ paddingBottom: '8vh' }}
-                >
-                  <Grid container justify="space-between">
-                    <Text size="large" text="全部评论" />
-                    {comment_count ? (
-                      <Text
-                        size="small"
-                        text={`+${comment_count}`}
-                        style={{ color: '#f30' }}
-                      />
-                    ) : null}
-                  </Grid>
-
-                  {comments.results.map(item => (
-                    <Paper
-                      elevation={0}
-                      key={item.id}
-                      className={classes.comment}
-                    >
-                      <Grid
-                        container
-                        justify="space-around"
-                        alignItems="flex-start"
-                        style={{ padding: 10 }}
-                      >
-                        <Grid item>
-                          <Avatar src={item.avatar || defaultAvatar} />
-                        </Grid>
-                        <Grid item xs={10}>
-                          <p
-                            className={classes.sizeSmall}
-                            style={{ marginTop: '0' }}
-                          >
-                            {item.username}
-                          </p>
-                          <p className={classes.sizeNormal}>{item.content}</p>
-                          <p className={classes.sizeSmall}>
-                            {item.create_time}
-                          </p>
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                  ))}
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    align="center"
-                  >
-                    已经到底啦
-                  </Typography>
-                </Paper>
-              </InfiniteScroll>
-              <Paper elevation={4} className={classes.inputWrap}>
-                <Grid container>
-                  <Grid item xs={10}>
-                    <OutlinedInput
-                      fullWidth
-                      className={classes.input}
-                      placeholder="说点什么吧"
-                      value={commentVal}
-                      onChange={e => {
-                        setCommentVal(e.target.value);
-                      }}
+                <Grid container justify="space-between">
+                  <Text size="large" text="全部评论" />
+                  {comment_count ? (
+                    <Text
+                      size="small"
+                      text={`+${comment_count}`}
+                      style={{ color: '#f30' }}
                     />
-                  </Grid>
-                  <Grid item xs={2} className={classes.flexCenter}>
-                    <Button onClick={submitComment}>评论</Button>
-                  </Grid>
+                  ) : null}
                 </Grid>
+
+                {comments.results.map(item => (
+                  <Paper
+                    elevation={0}
+                    key={item.id}
+                    className={classes.comment}
+                  >
+                    <Grid
+                      container
+                      justify="space-around"
+                      alignItems="flex-start"
+                      style={{ padding: 10 }}
+                    >
+                      <Grid item>
+                        <Avatar src={item.avatar || defaultAvatar} />
+                      </Grid>
+                      <Grid item xs={10}>
+                        <p
+                          className={classes.sizeSmall}
+                          style={{ marginTop: '0' }}
+                        >
+                          {item.username}
+                        </p>
+                        <p className={classes.sizeNormal}>{item.content}</p>
+                        <p className={classes.sizeSmall}>{item.create_time}</p>
+                      </Grid>
+                    </Grid>
+                  </Paper>
+                ))}
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  align="center"
+                >
+                  已经到底啦
+                </Typography>
               </Paper>
-            </TabPanel>
-          </SwipeableViews>
+            </InfiniteScroll>
+          </TabPanel>
+        </SwipeableViews>
+        <Paper elevation={4} className={classes.inputWrap}>
+          <Grid container>
+            <Grid item xs={10}>
+              <OutlinedInput
+                fullWidth
+                className={classes.input}
+                placeholder="说点什么吧"
+                value={commentVal}
+                onChange={e => {
+                  setCommentVal(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={2} className={classes.flexCenter}>
+              <Button onClick={submitComment}>评论</Button>
+            </Grid>
+          </Grid>
         </Paper>
       </div>
     </>
