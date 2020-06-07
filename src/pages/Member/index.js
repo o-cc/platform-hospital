@@ -151,7 +151,7 @@ export default withRouter(props => {
             <Typography variant="h6">{userInfo.username}</Typography>
             <Typography variant="subtitle2" className={classes.subtitle}>
               <Button size="small" onClick={clickFollows}>
-                关注{userInfo.follows}
+                关注{userInfo.followers}
               </Button>
               <Button size="small">粉丝{userInfo.fans}</Button>
             </Typography>

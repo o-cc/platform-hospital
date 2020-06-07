@@ -203,12 +203,15 @@ const api = {
       }
     });
   },
-  getOrders({ page }) {
+  getOrders({ page = 1 }) {
     return this.instance.get('/orders/', {
       params: {
         page
       }
     });
+  },
+  getHistories() {
+    return this.instance.get('/news/histories/');
   }
 };
 export default api;

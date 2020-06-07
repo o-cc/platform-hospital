@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -63,6 +63,7 @@ export default withRouter(function SimpleCard(props) {
   const [goods, setGoods] = useState({ results: [] });
   const { setError } = AppCont.useContainer();
   const [showDetail, setShowDetail] = useState({ show: false });
+  const scrollRef = useRef();
   const sortList = () => {
     setGoods(goods => ({
       ...goods,
@@ -119,56 +120,69 @@ export default withRouter(function SimpleCard(props) {
         </IconButton>
       </Grid>
 
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={loadFunc}
-        hasMore={!!hasMore}
-        loader={
-          <div style={{ textAlign: 'center' }} key={0}>
-            正在加载...
-          </div>
-        }
-      >
-        <Divider />
-        <Grid container style={{ maxHeight: '81vh', overflow: 'auto' }}>
-          {goods.results.map(item => (
-            <Grid item xs={6} key={item.id} sm={4} md={3}>
-              <Card
-                className={classes.card}
-                onClick={() => {
-                  setShowDetail({ show: true, goodsItem: item });
-                }}
-              >
-                <CardActionArea>
-                  <CardMedia
-                    className={classes.media}
-                    image={item.images[0]}
-                    title={item.name}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="subtitle1" component="h2">
-                      {item.name}
-                    </Typography>
+      <Divider />
 
-                    <Typography component="span" color="secondary">
-                      <span className={classes.large}>{item.integral}</span>
-                      <span className={classes.smallTxt}>积分</span>
-                    </Typography>
-                    <Typography
-                      component="p"
-                      variant="subtitle2"
-                      color="textSecondary"
-                    >
-                      <span>市场价：</span>
-                      {item.price}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </InfiniteScroll>
+      <Grid
+        container
+        style={{ maxHeight: '85vh', overflow: 'auto' }}
+        ref={scrollRef}
+      >
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadFunc}
+          hasMore={!!hasMore}
+          loader={
+            <div style={{ textAlign: 'center' }} key={0}>
+              正在加载...
+            </div>
+          }
+          useWindow={false}
+          getScrollParent={() => scrollRef.current}
+        >
+          <Grid container>
+            {goods.results.map(item => (
+              <Grid item xs={6} key={item.id} sm={4} md={3}>
+                <Card
+                  className={classes.card}
+                  onClick={() => {
+                    setShowDetail({ show: true, goodsItem: item });
+                  }}
+                >
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      image={item.images[0]}
+                      title={item.name}
+                    />
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        variant="subtitle1"
+                        component="h2"
+                      >
+                        {item.name}
+                      </Typography>
+
+                      <Typography component="span" color="secondary">
+                        <span className={classes.large}>{item.integral}</span>
+                        <span className={classes.smallTxt}>积分</span>
+                      </Typography>
+                      <Typography
+                        component="p"
+                        variant="subtitle2"
+                        color="textSecondary"
+                      >
+                        <span>市场价：</span>
+                        {item.price}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </InfiniteScroll>
+      </Grid>
 
       <Detail
         showDetail={showDetail}
