@@ -74,6 +74,9 @@ function Other() {
       setLists(result);
     }
     getList();
+    return () => {
+      setValue(0);
+    };
   }, [id, setError]);
 
   const handleChange = (event, newValue) => {
@@ -99,7 +102,7 @@ function Other() {
           return {
             ...list,
             ...result,
-            news: list.news.concat(result.results),
+            news: list.news.concat(result.results)
           };
         }
         return list;

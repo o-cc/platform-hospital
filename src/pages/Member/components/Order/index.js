@@ -142,6 +142,11 @@ export default props => {
               </Paper>
             </Grid>
           ))}
+          {!hasMore && (
+            <Typography align="center" variant="body2" color="textSecondary">
+              已经到底啦
+            </Typography>
+          )}
         </InfiniteScroll>
       </div>
     </Slider>

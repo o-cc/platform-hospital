@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { homeTestData } from '@/pages/Home/helper';
 import ItemList from 'pages/components/ListItem';
 import Slider from 'pages/components/Slider';
 import BackHeader from '@/pages/components/BackHeader';
