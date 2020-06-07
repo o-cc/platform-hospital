@@ -26,7 +26,7 @@ import Info from './components/PersonInfo';
 import { requestApi } from '@/utils';
 import AppCont from 'container';
 import Exchange from './components/Order';
-import Followers from './components/Followers';
+import UserLists from './components/UserLists';
 import { defaultAvatar } from 'configs';
 
 const useStyles = makeStyles(theme => ({
@@ -84,7 +84,8 @@ const types = {
   myArticle: 'myArticle',
   record: 'record',
   info: 'info',
-  followers: 'followers'
+  followers: 'followers',
+  fans: 'fans'
 };
 
 const menuList = [
@@ -119,13 +120,11 @@ export default withRouter(props => {
     setModal(false);
   };
 
-  const clickFollows = async e => {
+  const clickF = async (e, type) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(1);
-    toggleDrawer({ type: types.followers });
-    // let { result } = await requestApi('getFans', { user_id: userInfo.user_id });
-    // console.log(result);
+    if (!userInfo.user_id) return;
+    toggleDrawer({ type });
   };
 
   return (
@@ -150,10 +149,12 @@ export default withRouter(props => {
           <Grid item xs={8}>
             <Typography variant="h6">{userInfo.username}</Typography>
             <Typography variant="subtitle2" className={classes.subtitle}>
-              <Button size="small" onClick={clickFollows}>
+              <Button size="small" onClick={e => clickF(e, types.followers)}>
                 关注{userInfo.followers}
               </Button>
-              <Button size="small">粉丝{userInfo.fans}</Button>
+              <Button size="small" onClick={e => clickF(e, types.fans)}>
+                粉丝{userInfo.fans}
+              </Button>
             </Typography>
           </Grid>
           <Grid item xs={1}>
@@ -258,7 +259,12 @@ export default withRouter(props => {
       <History open={modal === types.record} onClose={onClose} />
       <MyArticle open={modal === types.myArticle} onClose={onClose} />
       <Exchange open={modal === types.exchange} onClose={onClose} />
-      <Followers open={modal === types.followers} onClose={onClose} />
+      <UserLists
+        user_id={userInfo.user_id}
+        open={modal === types.followers || modal === types.fans}
+        type={modal}
+        onClose={onClose}
+      />
     </Grid>
   );
 });

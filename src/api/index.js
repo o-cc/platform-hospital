@@ -183,11 +183,19 @@ const api = {
   putDefaultAddress({ address_id }) {
     return this.instance.put(`/addresses/${address_id}/status/`);
   },
-  getFans({ user_id }) {
-    return this.instance.get(`/users/${user_id}/fans/`);
+  getFans({ user_id, page = 1 }) {
+    return this.instance.get(`/users/${user_id}/fans/`, {
+      params: {
+        page
+      }
+    });
   },
-  getFollowPeople({ user_id }) {
-    return this.instance.get(`/users/${user_id}/follows/`);
+  getFollowPeople({ user_id, page = 1 }) {
+    return this.instance.get(`/users/${user_id}/followers/`, {
+      params: {
+        page
+      }
+    });
   },
   postOrder({ goods_id, count, address_id }) {
     return this.instance.post('/orders/', {

@@ -62,7 +62,6 @@ export default props => {
   };
 
   const hasMore = orders.next;
-  console.log(!!hasMore);
 
   return (
     <Slider open={props.open}>
