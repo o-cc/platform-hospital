@@ -4,9 +4,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import { makeStyles } from '@material-ui/core/styles';
-import { InputLabel, FormControl, MenuItem } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
-import { TextField, Select } from 'formik-material-ui';
+import { TextField } from 'formik-material-ui';
+import { infoList } from './helper';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -53,28 +53,47 @@ export default function FormDialog(props) {
           <Field
             margin="normal"
             required
-            label="更换昵称"
+            label={infoList.username}
             component={TextField}
+            placeholder={infoList.username}
             {...inputProps('username')}
           />
         );
         break;
-      case 'sex':
+      case 'company':
         com = (
-          <FormControl style={{ width: '100%' }}>
-            <InputLabel htmlFor="sex-simple">性别</InputLabel>
-            <Field
-              component={Select}
-              name="sex"
-              inputProps={{
-                id: 'sex-simple'
-              }}
-            >
-              <MenuItem value="secret">私密</MenuItem>
-              <MenuItem value="male">男</MenuItem>
-              <MenuItem value="female">女</MenuItem>
-            </Field>
-          </FormControl>
+          <Field
+            margin="normal"
+            required
+            label={infoList.company}
+            placeholder={infoList.company}
+            component={TextField}
+            {...inputProps('company')}
+          />
+        );
+        break;
+      case 'departments':
+        com = (
+          <Field
+            margin="normal"
+            required
+            placeholder={infoList.departments}
+            label={infoList.departments}
+            component={TextField}
+            {...inputProps('departments')}
+          />
+        );
+        break;
+      case 'job':
+        com = (
+          <Field
+            margin="normal"
+            required
+            label={infoList.job}
+            placeholder={infoList.job}
+            component={TextField}
+            {...inputProps('job')}
+          />
         );
         break;
       case 'intro':
@@ -84,7 +103,7 @@ export default function FormDialog(props) {
             required
             component={TextField}
             type="text"
-            label="个人简介"
+            label={infoList.intro}
             placeholder="一句话介绍自己"
             {...inputProps('intro')}
           />
@@ -114,10 +133,12 @@ export default function FormDialog(props) {
       >
         <Formik
           initialValues={{
-            username: userInfo.username,
-            addr: userInfo.addr,
-            intro: userInfo.intro,
-            sex: userInfo.sex || 'male'
+            username: userInfo.username || '',
+            addr: userInfo.addr || '',
+            intro: userInfo.intro || '',
+            company: userInfo.company,
+            departments: userInfo.departments,
+            job: userInfo.job || ''
           }}
           validate={values => {
             const errors = {};

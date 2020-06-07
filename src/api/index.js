@@ -133,13 +133,29 @@ const api = {
   getUserInfo() {
     return this.instance.get('/users/infos/');
   },
-  putUserInfo(data) {
+  putUserInfo({
+    company,
+    departments,
+    job,
+    area,
+    addr,
+    intro,
+    avatar_name,
+    username
+  }) {
     /* data：
     { "company": "广东财经野鸡学院", "departments": "管理部门", "job": "鸡头", "area": "xxx1", "addr": "xxx1", "intro": "爱学习,爱唠叨", "avatar_name": "FqF5ZWsuR4gfxQQu3pTixE9XrTmi", "username": "huang"
 }
     */
     return this.instance.put('/users/infos/', {
-      data
+      company,
+      departments,
+      job,
+      area,
+      addr,
+      intro,
+      avatar_name,
+      username
     });
   },
   getAddress() {
@@ -171,7 +187,7 @@ const api = {
     return this.instance.get(`/users/${user_id}/fans/`);
   },
   getFollowPeople({ user_id }) {
-    return this.instance.get(`/users/${user_id}/fellow/`);
+    return this.instance.get(`/users/${user_id}/follows/`);
   },
   postOrder({ goods_id, count, address_id }) {
     return this.instance.post('/orders/', {

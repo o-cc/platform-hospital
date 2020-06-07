@@ -151,9 +151,9 @@ export default withRouter(props => {
             <Typography variant="h6">{userInfo.username}</Typography>
             <Typography variant="subtitle2" className={classes.subtitle}>
               <Button size="small" onClick={clickFollows}>
-                关注0
+                关注{userInfo.follows}
               </Button>
-              <Button size="small">粉丝0</Button>
+              <Button size="small">粉丝{userInfo.fans}</Button>
             </Typography>
           </Grid>
           <Grid item xs={1}>
@@ -248,7 +248,12 @@ export default withRouter(props => {
           </List>
         </div>
       </Drawer>
-      <Info open={modal === types.info} userInfo={userInfo} onClose={onClose} />
+      <Info
+        open={modal === types.info}
+        userInfo={userInfo}
+        setUserInfo={info => setUserInfo(info)}
+        onClose={onClose}
+      />
       <Address open={modal === types.address} onClose={onClose} />
       <History open={modal === types.record} onClose={onClose} />
       <MyArticle open={modal === types.myArticle} onClose={onClose} />

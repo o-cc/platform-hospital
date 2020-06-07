@@ -3,15 +3,14 @@ import Slider from 'pages/components/Slider';
 import { Grid, makeStyles, Avatar, Divider } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import { getObjKey, requestApi } from '@/utils';
-import { format } from 'date-fns';
 import EditorModal from './EditorModal';
 import Area from 'pages/components/Area';
 import AppCont from 'container';
-import { storageKeys, defaultAvatar } from 'configs';
+import { storageKeys } from 'configs';
 import useRunning from 'hooks/useRunning';
 import ImagePicker from 'tools/ImagePicker';
 import ForgotPwd from 'pages/Login/Child/forgot';
-
+import { info, infoList } from './helper';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: `${theme.spacing(1)}px ${theme.spacing(1.5)}px`,
@@ -35,26 +34,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const infoList = {
-  avatar: '更换头像',
-  username: '更换昵称',
-  sex: '修改性别',
-  area: '更改区域',
-  addr: '详细地址',
-  pwd: '修改密码',
-  intro: '编辑个人简介'
-};
-const info = {
-  avatar: defaultAvatar,
-  username: '',
-  birthday: format(new Date(), 'yyyy-MM-dd'),
-  intro: '有的人活着,但他已经死了.有的人已经死了,但他还活着.',
-  addr: '',
-  area: '',
-  pwd: '',
-  sex: ''
-};
-
 export default props => {
   const classes = useStyles();
   const [modal, setModal] = useState({ show: false, type: '' });
@@ -64,17 +43,21 @@ export default props => {
   const { setError } = AppCont.useContainer();
 
   const updateUserInfo = async data => {
-    let { result, error } = requestApi('putUserInfo', data);
+    let { result, error } = await requestApi('putUserInfo', data);
     if (error) return setError(error);
     setError('操作成功.', 'success');
     if (result.token)
       window.localStorage.setItem(storageKeys.token, result.token);
+    setModal({ show: false, type: '' });
+    props.setUserInfo(result);
     return result;
   };
 
   const handleOk = useRunning(async picks => {
     await updateUserInfo({ area: picks.join(' ') });
+    setArea(false);
   });
+
   return (
     <Slider open={props.open}>
       <Grid container>
@@ -106,6 +89,8 @@ export default props => {
                     canvas.toBlob(bin => {
                       //upload
                       console.log('upload');
+                      //拿到图片的名字, 然后更改
+                      // updateUserInfo({avatar_name: ""})
                     });
                   }}
                 />
@@ -132,6 +117,7 @@ export default props => {
       <EditorModal
         userInfo={userInfo}
         info={modal}
+        updateUserInfo={updateUserInfo}
         onClose={() => setModal({ show: false })}
         onConfirm={() => setModal({ show: false })}
       />
