@@ -24,16 +24,16 @@ const useStyles = makeStyles(theme => ({
 export default function TransitionAlerts({ ...props }) {
   const classes = useStyles();
   const { setError, error } = AppCont.useContainer();
-  const [timeout, setTime] = useState(!!error.error);
+  // const [timeout, setTime] = useState(!!error.error);
   useEffect(() => {
     const time = error.type === 'error' ? 10000 : 5000;
     setTimeout(() => {
-      setTime(false);
+      setError('');
     }, error.timeout || time);
-  }, [error.timeout, error.type]);
+  }, [error.timeout, error.type, setError]);
   return (
     <div className={classes.root}>
-      <Collapse in={timeout}>
+      <Collapse in={!!error.error}>
         <Alert
           severity={error.type || 'error'}
           variant="filled"

@@ -243,6 +243,7 @@ api.instance.interceptors.response.use(
     // 对响应数据做点什么
 
     if (response.status === 401) {
+      window.localStorage.setItem(storageKeys.token, '');
       setTimeout(() => {
         window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
       }, 100);

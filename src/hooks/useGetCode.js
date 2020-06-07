@@ -6,9 +6,12 @@ export default () => {
   const [downCount, setDown] = useState(codeDownCount);
 
   const getCode = async phone => {
+    console.log('11');
+
     if (!/^1\d{10}$/.test(phone)) {
       return ['请输入正确的手机号', 'warning'];
     }
+    console.log('phone', phone);
 
     let { result, error } = await requestApi('getSmsCode', {
       phone
