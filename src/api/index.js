@@ -173,11 +173,25 @@ const api = {
   getFollowPeople({ user_id }) {
     return this.instance.get(`/users/${user_id}/fellow/`);
   },
-  postOrder({ good_id, count, address_id }) {
+  postOrder({ goods_id, count, address_id }) {
     return this.instance.post('/orders/', {
-      good: good_id,
+      good: goods_id,
       count,
       address: address_id
+    });
+  },
+  getGoods({ page = 1 }) {
+    return this.instance.get('/goods/', {
+      params: {
+        page
+      }
+    });
+  },
+  getOrders({ page }) {
+    return this.instance.get('/orders/', {
+      params: {
+        page
+      }
     });
   }
 };
