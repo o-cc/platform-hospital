@@ -1,33 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Grid, styled, Divider, makeStyles, Button } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import Swiper from 'react-id-swiper';
 import { vw } from '@/utils';
 import { withRouter } from 'react-router-dom';
-
-const MyDiv = styled(({ color, ...other }) => <div {...other} />)({
-  background: props =>
-    props.color === 'red'
-      ? 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)'
-      : 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-  border: 0,
-  borderRadius: 3,
-  boxShadow: props =>
-    props.color === 'red'
-      ? '0 3px 5px 2px rgba(255, 105, 135, .3)'
-      : '0 3px 5px 2px rgba(33, 203, 243, .3)',
+import Slider from 'pages/components/Slider';
+import Exchange from '../Exchange';
+const MyDiv = styled(({ src, ...other }) => (
+  <img src={src} alt="商品介绍" {...other} />
+))({
   color: 'white',
-  width: '100vw',
-  height: vw(650),
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center'
+  maxWidth: '100%',
+  height: 'auto'
 });
 
 const useStyles = makeStyles(theme => ({
   info: {
     padding: vw(30),
-    width: '100%',
     fontSize: vw(25),
     '& p': {
       marginTop: vw(10)
@@ -54,6 +43,7 @@ const useStyles = makeStyles(theme => ({
 
 export default withRouter(props => {
   const classes = useStyles();
+  const [showExchange, setExchange] = useState(false);
   let params = {
     pagination: {
       el: '.swiper-pagination',
@@ -67,42 +57,58 @@ export default withRouter(props => {
       disableOnInteraction: false
     }
   };
+
+  const { show, goodsItem = {} } = props.showDetail || {};
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <BackHeader title="xxx商品" />
-      <Grid item xs={12}>
-        <Swiper {...params}>
-          <MyDiv>Slide1</MyDiv>
-          <MyDiv color="red">Slide2</MyDiv>
-          <MyDiv>Slide3</MyDiv>
-          <MyDiv color="red">Slide4</MyDiv>
-        </Swiper>
+    <Slider open={show}>
+      <Grid container justify="center" alignItems="center">
+        <BackHeader title={goodsItem.name} back={props.onClose} />
+        <Grid item xs={8} style={{ padding: 8 }}>
+          <Swiper {...params}>
+            {goodsItem.images &&
+              goodsItem.images.map(item => <MyDiv key={item} src={item} />)}
+          </Swiper>
+        </Grid>
+        <Grid item xs={12} className={classes.info}>
+          <Divider />
+          <h4>{goodsItem.name}</h4>
+          <p className={classes.integration}>
+            <span style={{ fontSize: vw(40), fontWeight: 'bold' }}>
+              {goodsItem.integral}
+            </span>{' '}
+            积分
+            <span className={classes.real}>
+              市场价: <del>{goodsItem.price}</del>
+            </span>
+          </p>
+          <p>库存： {goodsItem.stock}</p>
+          <p>{goodsItem.desc}</p>
+        </Grid>
+        <div className={classes.btnWrap}>
+          <Button
+            variant={'contained'}
+            size="large"
+            className={classes.btn}
+            fullWidth
+            onClick={() => {
+              setExchange(true);
+            }}
+          >
+            立即兑换
+          </Button>
+        </div>
       </Grid>
-      <Grid item className={classes.info}>
-        <Divider />
-        <h4 style={{}}>惠来隆江猪脚焖鸡</h4>
-        <p className={classes.integration}>
-          <span style={{ fontSize: vw(40), fontWeight: 'bold' }}>900</span> 积分
-          <span className={classes.real}>
-            市场价: <del>199</del>
-          </span>
-        </p>
-        <p>库存： 0</p>
-        <p>隆江猪脚始于南宋时期，</p>
-      </Grid>
-      <div className={classes.btnWrap}>
-        <Button
-          variant={'contained'}
-          size="large"
-          className={classes.btn}
-          fullWidth
-          onClick={() => {
-            props.history.push('/store/exchange/book_id');
-          }}
-        >
-          立即兑换
-        </Button>
-      </div>
-    </Grid>
+
+      <Exchange
+        open={showExchange}
+        goodsItem={goodsItem}
+        onClose={() => setExchange(false)}
+        successExchange={async () => {
+          setExchange(false);
+          props.onClose();
+          props.getGoodsByPage && (await props.getGoodsByPage());
+        }}
+      />
+    </Slider>
   );
 });

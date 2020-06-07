@@ -32,9 +32,10 @@ export default function Address(props) {
       if (error) return setError(error);
       setAddressList(result);
     }
+    if (!props.open) return;
 
     getAddress();
-  }, [setError]);
+  }, [setError, props.open]);
   const addAddress = useRunning(async values => {
     let { result, error } = await requestApi('postAddress', values);
     if (error) return setError(error);
