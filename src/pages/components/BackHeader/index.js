@@ -20,7 +20,12 @@ export default withRouter(
   ({ withoutHome = false, homeComponent: Home, ...props }) => {
     const classes = useStyles();
     return (
-      <Grid item xs={12} className={classes.header}>
+      <Grid
+        item
+        xs={12}
+        className={classes.header}
+        style={{ background: props.bgColor }}
+      >
         <Grid container justify="space-between">
           <Grid item>
             <IconButton

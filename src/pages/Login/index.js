@@ -16,6 +16,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Slider from 'pages/components/Slider';
 import Register from './Child/register';
 import Forgot from './Child/forgot';
+import BackHeader from 'pages/components/BackHeader';
 
 function Copyright() {
   return (
@@ -69,39 +70,42 @@ export default function SignIn(props) {
   const Comp = MAP[modal.type] || Copyright;
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Paper className={classes.root}>
-          <Tabs
-            value={tabIdx}
-            onChange={(e, val) => {
-              setTabIdx(val);
-            }}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <Tab label="手机登录" />
-            <Tab label="账号登录" />
-          </Tabs>
-        </Paper>
-        <TabPanel tabIdx={tabIdx} classes={classes} onLink={toggleLink} />
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
+    <>
+      <BackHeader title="" withoutHome={true} bgColor={'none'} />
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Paper className={classes.root}>
+            <Tabs
+              value={tabIdx}
+              onChange={(e, val) => {
+                setTabIdx(val);
+              }}
+              indicatorColor="primary"
+              textColor="primary"
+              centered
+            >
+              <Tab label="手机登录" />
+              <Tab label="账号登录" />
+            </Tabs>
+          </Paper>
+          <TabPanel tabIdx={tabIdx} classes={classes} onLink={toggleLink} />
+        </div>
+        <Box mt={8}>
+          <Copyright />
+        </Box>
 
-      <Slider open={modal.show}>
-        <Comp
-          onClose={() => {
-            setModal({ show: false });
-          }}
-        />
-      </Slider>
-    </Container>
+        <Slider open={modal.show}>
+          <Comp
+            onClose={() => {
+              setModal({ show: false });
+            }}
+          />
+        </Slider>
+      </Container>
+    </>
   );
 }
