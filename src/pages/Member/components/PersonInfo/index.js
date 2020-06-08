@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: 16
   },
   input: {
-    display: 'none'
+    opacity: '0'
   },
   inputWrap: {
     position: 'absolute',
@@ -58,6 +58,13 @@ export default props => {
     setArea(false);
   });
 
+  const imgPick = async (canvas, data, file) => {
+    let f = new FormData();
+    f.append('file', file);
+    let { result, error } = await requestApi('postImg', { blob: f });
+    if (error) return setError(error);
+    await updateUserInfo({ avatar_name: result.image_name });
+  };
   return (
     <Slider open={props.open}>
       <Grid container>
@@ -85,14 +92,7 @@ export default props => {
                 <ImagePicker
                   className={classes.input}
                   id="contained-button-file"
-                  onPick={(canvas, data) => {
-                    canvas.toBlob(bin => {
-                      //upload
-                      console.log('upload');
-                      //拿到图片的名字, 然后更改
-                      // updateUserInfo({avatar_name: ""})
-                    });
-                  }}
+                  onPick={imgPick}
                 />
                 <label htmlFor="contained-button-file">
                   <div className={classes.inputWrap}></div>

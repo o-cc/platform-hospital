@@ -10,12 +10,12 @@ if (process.env.REACT_APP_PROD !== 'true')
   }
 
 const baseURL =
-  process.env.NODE_ENV === 'development' ? '' : 'http://192.168.1.105:8001/api';
+  process.env.NODE_ENV === 'development' ? '' : 'http://39.97.71.196:8000/api';
 
 const api = {
   instance: axios.create({
     baseURL,
-    timeout: 10000,
+    // timeout: 10000,
     withCredentials: true
   }),
 
@@ -220,6 +220,13 @@ const api = {
   },
   getHistories() {
     return this.instance.get('/news/histories/');
+  },
+  postImg({ blob }) {
+    return this.instance.post('/media/images/', blob, {
+      // headers: {
+      //   'Content-Type': 'multipart/form-data'
+      // }
+    });
   }
 };
 export default api;
@@ -249,20 +256,13 @@ api.instance.interceptors.request.use(
 api.instance.interceptors.response.use(
   function (response) {
     // 对响应数据做点什么
-
-    if (response.status === 401) {
-      window.localStorage.setItem(storageKeys.token, '');
-      setTimeout(() => {
-        window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
-      }, 100);
-      return response;
-    }
     return response;
   },
   function (error) {
     // 对响应错误做点什么
-
     if (error.response && error.response.status === 401) {
+      window.localStorage.setItem(storageKeys.token, '');
+
       setTimeout(() => {
         window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
       }, 100);

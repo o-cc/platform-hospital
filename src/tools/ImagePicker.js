@@ -24,7 +24,7 @@ const ImagePicker = props => {
           loadImage(
             file,
             (canvas, data) => {
-              onPick && onPick(canvas, data);
+              onPick && onPick(canvas, data, file);
             },
             {
               ...defaultOptions,
