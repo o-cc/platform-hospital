@@ -26,9 +26,12 @@ export default function TransitionAlerts({ ...props }) {
   const { setError, error } = AppCont.useContainer();
   useEffect(() => {
     const time = error.type === 'error' ? 10000 : 5000;
-    setTimeout(() => {
+    let timer = setTimeout(() => {
       setError('');
     }, error.timeout || time);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [error.timeout, error.type, setError]);
   return (
     <div className={classes.root}>

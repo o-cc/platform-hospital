@@ -227,6 +227,30 @@ const api = {
       //   'Content-Type': 'multipart/form-data'
       // }
     });
+  },
+  getCategories() {
+    return this.instance.get('/news/categories/');
+  },
+  postNews({
+    category,
+    type = 'GraphText',
+    title,
+    index_image_name,
+    video_desc,
+    video_name,
+    content,
+    digest
+  }) {
+    return this.instance.post('/news/', {
+      category,
+      type,
+      title,
+      index_image_name,
+      video_desc,
+      video_name,
+      content,
+      digest
+    });
   }
 };
 export default api;

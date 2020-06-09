@@ -28,6 +28,7 @@ import AppCont from 'container';
 import Exchange from './components/Order';
 import UserLists from './components/UserLists';
 import { defaultAvatar } from 'configs';
+import Editor from './components/MyArticle/Editor';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -102,6 +103,7 @@ export default withRouter(props => {
   const [modal, setModal] = useState('');
   const [userInfo, setUserInfo] = useState({});
   const { setError } = AppCont.useContainer();
+  const [editor, setEditorModal] = useState(false);
   const toggleDrawer = item => {
     setModal(item.type || '');
   };
@@ -111,7 +113,6 @@ export default withRouter(props => {
       let { result, error } = await requestApi('getUserInfo');
       if (error) return setError(error);
       setUserInfo(result);
-      console.log(result);
     }
     getUser();
   }, [setError]);
@@ -234,7 +235,13 @@ export default withRouter(props => {
       <Drawer anchor={'bottom'} open={drawer} onClose={() => setDrawer(false)}>
         <div style={{ paddingBottom: 16 }}>
           <List>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                setEditorModal(true);
+                setDrawer(false);
+              }}
+            >
               <ListItemIcon>
                 <Inbox />
               </ListItemIcon>
@@ -244,7 +251,7 @@ export default withRouter(props => {
               <ListItemIcon>
                 <Inbox />
               </ListItemIcon>
-              <ListItemText primary={'写病例'} />
+              <ListItemText primary={'发布视频'} />
             </ListItem>
           </List>
         </div>
@@ -265,6 +272,7 @@ export default withRouter(props => {
         type={modal}
         onClose={onClose}
       />
+      <Editor open={editor} onClose={() => setEditorModal(false)} />
     </Grid>
   );
 });
