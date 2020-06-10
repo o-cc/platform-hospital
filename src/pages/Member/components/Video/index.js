@@ -1,13 +1,15 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import Slider from 'pages/components/Slider';
-import Quill from 'quill';
-import 'quill/dist/quill.snow.css';
 import {
   makeStyles,
   IconButton,
   Grid,
   InputLabel,
-  Button
+  Button,
+  Card,
+  CardMedia,
+  styled,
+  Typography
 } from '@material-ui/core';
 import BackHeader from 'pages/components/BackHeader';
 import ImagePicker from '@/tools/ImagePicker';
@@ -18,6 +20,9 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 import useRunning from '@/hooks/useRunning';
 import Se from '@material-ui/core/Select';
+import * as qiniu from 'qiniu-js';
+import { CloudUpload } from '@material-ui/icons';
+
 const useStyles = makeStyles(t => ({
   editor: {
     height: 'calc(80vh - 49px)'
@@ -40,25 +45,35 @@ const useStyles = makeStyles(t => ({
     marginTop: t.spacing(1),
     fontSize: 18
   },
+  video: {
+    width: '100%',
+    height: t.spacing(25)
+  },
   img: {
     maxWidth: '100%',
     height: 'auto'
   }
 }));
-
-const toolbarOptions = [
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  ['image'],
-  [{ color: [] }, { background: [] }],
-  [{ align: [] }],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  ['clean']
-];
+const ProgressUI = styled(({ progress, ...other }) => <div {...other} />)({
+  background: '#ccc',
+  borderRadius: 4,
+  width: '100%',
+  height: 8,
+  position: 'relative',
+  overflowY: 'hidden',
+  '& .child': {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    margin: 'auto',
+    width: p => p.progress + '%',
+    height: '100%',
+    background: '#f1393a'
+  }
+});
 
 function Editor(props) {
-  const textRef = useRef();
-  const quillRef = useRef(null);
   const classes = useStyles();
   const { setError } = AppCont.useContainer();
   const [posterName, setPosterName] = useState('');
@@ -69,28 +84,9 @@ function Editor(props) {
   const [currSelectCate, setCurrSelect] = useState({});
   const [selectImgName, setImgName] = useState('');
   const [imgUrl, setImgUrl] = useState('');
-  useEffect(() => {
-    if (!props.open) return;
-
-    setTimeout(() => {
-      quillRef.current = new Quill(textRef.current, {
-        modules: {
-          toolbar: toolbarOptions
-        },
-        placeholder: '说点什么吧...',
-        theme: 'snow'
-      });
-      quillRef.current.setContents(props.content);
-      let toolbar = quillRef.current.getModule('toolbar');
-      toolbar.addHandler('image', () => {
-        document.getElementById('contained-button-file').click();
-      });
-    }, 10);
-    return () => {
-      quillRef.current = null;
-    };
-  }, [props.open, props.content]);
-
+  const [videoUrl, setVideoUrl] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [videoInfo, setVideoInfo] = useState({});
   useEffect(() => {
     async function getCategory() {
       let { result, error } = await requestApi('getCategories');
@@ -110,34 +106,28 @@ function Editor(props) {
     },
     [setError]
   );
-  const imgPick = async (canvas, data, file) => {
-    let result = await uploadImg(file);
-    const range = quillRef.current.getSelection();
-    quillRef.current.insertEmbed(range.index, 'image', result.image_url);
-  };
 
   const release = useRunning(async values => {
-    const quill = quillRef.current;
-    let inner = quill.container.firstChild.innerHTML;
-    console.log(inner);
     if (!currSelectCate.id && !currSelectCate.sub_id)
-      return setError('请选择文章分类', 'warning');
+      return setError('请选择视频分类', 'warning');
     if (!posterName) return setError('请先上传文章封面', 'warning');
-    if (/<p><br><\/p>/.test(inner))
-      return setError('文本内容不能为空', 'warning');
     if (topCateIdx === '' || subCateIdx === '')
-      return setError('文章分类要求选择二级以上', 'warning');
+      return setError('视频分类要求选择二级以上', 'warning');
+
+    if (!videoInfo.key) return setError('请先上传视频', 'warning');
+    if (Number(progress) < 100)
+      return setError('请等待视频上传完成噢', 'warning');
 
     let { error } = await requestApi('postNews', {
       category: currSelectCate.id || currSelectCate.sub_id,
       title: values.title,
       index_image_name: posterName,
-      content: inner,
-      digest: values.desc
+      video_desc: values.desc,
+      type: 'Video',
+      video_name: videoInfo.key
     });
     if (error) return setError(error);
     setError('操作成功', 'success');
-
     props.onClose && props.onClose();
   });
 
@@ -147,6 +137,47 @@ function Editor(props) {
     setImgUrl(result.image_url);
   };
 
+  const putExtra = {
+    fname: '',
+    params: {},
+    mimeType: [] || null
+  };
+  const config = {
+    useCdnDomain: true,
+    region: null
+  };
+  const observer = {
+    next(res) {
+      console.log('observer:next:', res);
+      if (res.total && res.total.percent) {
+        setProgress(Math.floor(res.total.percent * 100) / 100);
+      }
+    },
+    error(err) {
+      console.log('error', err);
+    },
+    complete(res) {
+      console.log('complete', res);
+    }
+  };
+
+  const selectVideo = async e => {
+    let file = e.target.files[0];
+    console.log('file', file);
+    let { result, error } = await requestApi('getQiNiuToken');
+    if (error) return setError(error);
+    let { token, key, video_url } = result || {};
+    if (!token || !key || !video_url) {
+      return setError('错误，缺少关键信息', 'warning');
+    }
+    setVideoInfo(result);
+    setVideoUrl(video_url);
+    var observable = qiniu.upload(file, key, token, putExtra, config);
+    var subscription = observable.subscribe(observer);
+    console.log('subscription: ', subscription);
+  };
+
+  console.log(currSelectCate);
   return (
     <Slider open={props.open}>
       <Grid container className={classes.inputs}>
@@ -167,7 +198,7 @@ function Editor(props) {
           {({ submitForm, isSubmitting, values }) => (
             <>
               <BackHeader
-                title="写文章"
+                title="发布视频"
                 back={props.onClose}
                 homeComponent={() => (
                   <IconButton className={classes.release} onClick={submitForm}>
@@ -224,12 +255,12 @@ function Editor(props) {
                         color: '#888'
                       }}
                     >
-                      {imgUrl && '上传成功'}
+                      {selectImgName && '上传成功'}
                     </span>
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="category">文章分类：</InputLabel>
+                    <InputLabel htmlFor="category">视频分类：</InputLabel>
                   </Grid>
                   <Grid item xs={9}>
                     <Se
@@ -306,7 +337,7 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="title">文章标题：</InputLabel>
+                    <InputLabel htmlFor="title">视频标题：</InputLabel>
                   </Grid>
                   <Grid item xs={9}>
                     <Field
@@ -320,7 +351,7 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="title">文章摘要：</InputLabel>
+                    <InputLabel htmlFor="title">视频介绍：</InputLabel>
                   </Grid>
 
                   <Grid item xs={9}>
@@ -335,27 +366,67 @@ function Editor(props) {
                     ></Field>
                   </Grid>
 
+                  <Grid item style={{ marginTop: 8 }}>
+                    <InputLabel htmlFor="video_upload">视频上传:</InputLabel>
+                  </Grid>
+                  <Grid item xs={4} style={{ marginTop: 8 }}>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={selectVideo}
+                      id="video_upload_d"
+                      className={classes.input}
+                    />
+
+                    <label htmlFor="video_upload_d">
+                      <Button
+                        variant="contained"
+                        className={classes.button}
+                        component="span"
+                        color="primary"
+                        startIcon={<CloudUpload />}
+                      >
+                        Upload
+                      </Button>
+                    </label>
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Typography
+                      variant="body2"
+                      align="center"
+                      color="textSecondary"
+                    >
+                      {Number(progress) < 100
+                        ? progress + '%'
+                        : '恭喜你上传成功!'}
+                    </Typography>
+                    <ProgressUI progress={progress}>
+                      <div className="child"></div>
+                    </ProgressUI>
+                  </Grid>
+                  {videoUrl && Number(progress) >= '100' && (
+                    <Grid item xs={11}>
+                      <Card className={classes.root}>
+                        <CardMedia
+                          className={classes.video}
+                          src={videoUrl}
+                          title="Live from space album cover"
+                          component="video"
+                          controls="controls"
+                          preload="true"
+                          playsInline={true}
+                          x5-video-player-type="h5-page"
+                          webkit-playsinline="true"
+                        />
+                      </Card>
+                    </Grid>
+                  )}
                   {/* {isSubmitting && <LinearProgress />} */}
                 </Grid>
               </Form>
             </>
           )}
         </Formik>
-      </Grid>
-      <Grid
-        container
-        direction="column"
-        wrap="nowrap"
-        className={classes.editor}
-      >
-        <div ref={textRef}></div>
-        <Grid item>
-          <ImagePicker
-            style={{ opacity: 0 }}
-            id="contained-button-file"
-            onPick={imgPick}
-          />
-        </Grid>
       </Grid>
     </Slider>
   );

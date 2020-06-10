@@ -38,6 +38,10 @@ const useStyles = makeStyles(theme => ({
   info: {
     marginTop: theme.spacing(3)
   },
+  avatar: {
+    width: theme.spacing(10),
+    height: theme.spacing(10)
+  },
   model: {
     padding: `${vw(15)} ${vw(22.5)}`,
     fontSize: vw(30),
@@ -295,7 +299,7 @@ export default function MediaControlCard() {
                   )}
                   <Grid item xs={3}>
                     <Avatar
-                      style={{ width: '100%', height: 'auto' }}
+                      className={classes.avatar}
                       src={user_info.avatar || defaultAvatar}
                     ></Avatar>
                   </Grid>
@@ -380,7 +384,7 @@ export default function MediaControlCard() {
                   color="textSecondary"
                   align="center"
                 >
-                  已经到底啦
+                  没有更多啦
                 </Typography>
               </Paper>
             </InfiniteScroll>

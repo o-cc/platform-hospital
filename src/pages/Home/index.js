@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing(7),
+    minHeight: 'calc(100vh - 100px)',
     '& .swiper-button-next, & .swiper-button-prev': {
       color: '#fff'
     },

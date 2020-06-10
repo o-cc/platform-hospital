@@ -143,7 +143,7 @@ export default props => {
           ))}
           {!hasMore && (
             <Typography align="center" variant="body2" color="textSecondary">
-              已经到底啦
+              没有更多啦
             </Typography>
           )}
         </InfiniteScroll>

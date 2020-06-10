@@ -29,7 +29,7 @@ import Exchange from './components/Order';
 import UserLists from './components/UserLists';
 import { defaultAvatar } from 'configs';
 import Editor from './components/MyArticle/Editor';
-
+import Video from './components/Video';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
@@ -86,7 +86,9 @@ const types = {
   record: 'record',
   info: 'info',
   followers: 'followers',
-  fans: 'fans'
+  fans: 'fans',
+  video: 'video',
+  text: 'text'
 };
 
 const menuList = [
@@ -103,7 +105,7 @@ export default withRouter(props => {
   const [modal, setModal] = useState('');
   const [userInfo, setUserInfo] = useState({});
   const { setError } = AppCont.useContainer();
-  const [editor, setEditorModal] = useState(false);
+  const [editor, setEditorModal] = useState('');
   const toggleDrawer = item => {
     setModal(item.type || '');
   };
@@ -238,7 +240,7 @@ export default withRouter(props => {
             <ListItem
               button
               onClick={() => {
-                setEditorModal(true);
+                setEditorModal(types.text);
                 setDrawer(false);
               }}
             >
@@ -247,7 +249,13 @@ export default withRouter(props => {
               </ListItemIcon>
               <ListItemText primary={'写文章'} />
             </ListItem>
-            <ListItem button>
+            <ListItem
+              button
+              onClick={() => {
+                setEditorModal(types.video);
+                setDrawer(false);
+              }}
+            >
               <ListItemIcon>
                 <Inbox />
               </ListItemIcon>
@@ -256,6 +264,7 @@ export default withRouter(props => {
           </List>
         </div>
       </Drawer>
+
       <Info
         open={modal === types.info}
         userInfo={userInfo}
@@ -272,7 +281,8 @@ export default withRouter(props => {
         type={modal}
         onClose={onClose}
       />
-      <Editor open={editor} onClose={() => setEditorModal(false)} />
+      <Editor open={editor === types.text} onClose={() => setEditorModal('')} />
+      <Video open={editor === types.video} onClose={() => setEditorModal('')} />
     </Grid>
   );
 });

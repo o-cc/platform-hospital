@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Editor from './Editor';
 import Quill from 'quill';
 import { editorContent } from '@/configs/test_data';
+import AppCont from 'container';
 
 const useStyles = makeStyles(theme => ({
   release: {
@@ -25,6 +26,7 @@ export default props => {
   const [editorModal, setEditorModal] = useState(false);
   const editorRef = useRef(null);
   const quillRef = useRef(null);
+  const { setError } = AppCont.useContainer();
   useEffect(() => {
     if (!props.open) return;
 
@@ -63,7 +65,8 @@ export default props => {
         size="large"
         color="secondary"
         onClick={() => {
-          setEditorModal(true);
+          setError('此页面是测试页面，暂不可编辑', 'warning');
+          // setEditorModal(true);
         }}
       >
         编辑

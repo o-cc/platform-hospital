@@ -251,6 +251,9 @@ const api = {
       content,
       digest
     });
+  },
+  getQiNiuToken() {
+    return this.instance.get('/qiniu/tokens/');
   }
 };
 export default api;

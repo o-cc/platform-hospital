@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
 const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
   width: '100%',
   maxWidth: '200px',
-  height: 'auto'
+  height: 'auto',
+  maxHeight: '100px'
 });
 
 export default withRouter(function ListItem({ list = [], ...props }) {
