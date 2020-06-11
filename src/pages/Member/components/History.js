@@ -4,6 +4,7 @@ import Slider from 'pages/components/Slider';
 import BackHeader from '@/pages/components/BackHeader';
 import { requestApi } from '@/utils';
 import AppCont from 'container';
+import { Typography } from '@material-ui/core';
 
 export default props => {
   const { setError } = AppCont.useContainer();
@@ -23,9 +24,13 @@ export default props => {
 
   return (
     <Slider open={props.open}>
-      <BackHeader back={props.onClose} title="历史阅读" withoutHome={true} />
-
-      <ItemList list={news} />
+      <div style={{ width: '100%', height: '100%', overflowX: 'hidden' }}>
+        <BackHeader back={props.onClose} title="历史阅读" withoutHome={true} />
+        <ItemList list={news} />
+        <Typography variant="body2" align="center" color="textSecondary">
+          没有更多啦
+        </Typography>
+      </div>
     </Slider>
   );
 };
