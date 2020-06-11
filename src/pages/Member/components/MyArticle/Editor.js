@@ -67,8 +67,9 @@ function Editor(props) {
   const [subCateIdx, setSubCateIdx] = useState('');
   const [endCateIdx, setEndCateIdx] = useState('');
   const [currSelectCate, setCurrSelect] = useState({});
-  const [selectImgName, setImgName] = useState('');
+  // const [selectImgName, setImgName] = useState('');
   const [imgUrl, setImgUrl] = useState('');
+
   useEffect(() => {
     if (!props.open) return;
 
@@ -119,7 +120,6 @@ function Editor(props) {
   const release = useRunning(async values => {
     const quill = quillRef.current;
     let inner = quill.container.firstChild.innerHTML;
-    console.log(inner);
     if (!currSelectCate.id && !currSelectCate.sub_id)
       return setError('请选择文章分类', 'warning');
     if (!posterName) return setError('请先上传文章封面', 'warning');
@@ -183,6 +183,17 @@ function Editor(props) {
                   spacing={1}
                   className={classes.inputWrap}
                 >
+                  <Grid item xs={11}>
+                    <span
+                      style={{
+                        lineHeight: '40px',
+                        fontSize: 14,
+                        color: '#888'
+                      }}
+                    >
+                      温馨提示：选择2:1的图片作为封面最合适噢
+                    </span>
+                  </Grid>
                   {imgUrl && (
                     <Grid
                       item
@@ -194,7 +205,9 @@ function Editor(props) {
                   )}
 
                   <Grid item style={{ lineHeight: '40px' }}>
-                    <InputLabel htmlFor="file">选择封面：</InputLabel>
+                    <InputLabel htmlFor="file" style={{ fontSize: 14 }}>
+                      选择封面：
+                    </InputLabel>
                   </Grid>
                   <Grid item>
                     <ImagePicker
@@ -202,7 +215,6 @@ function Editor(props) {
                       id="poster"
                       onPick={(canvas, data, file) => {
                         uploadPoster(canvas, data, file);
-                        setImgName(file.name);
                       }}
                     />
                     <label htmlFor="poster">
@@ -229,7 +241,9 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="category">文章分类：</InputLabel>
+                    <InputLabel htmlFor="category" style={{ fontSize: 14 }}>
+                      文章分类：
+                    </InputLabel>
                   </Grid>
                   <Grid item xs={9}>
                     <Se
@@ -306,7 +320,9 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="title">文章标题：</InputLabel>
+                    <InputLabel htmlFor="title" style={{ fontSize: 14 }}>
+                      文章标题：
+                    </InputLabel>
                   </Grid>
                   <Grid item xs={9}>
                     <Field
@@ -320,7 +336,9 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="title">文章摘要：</InputLabel>
+                    <InputLabel htmlFor="desc" style={{ fontSize: 14 }}>
+                      文章摘要：
+                    </InputLabel>
                   </Grid>
 
                   <Grid item xs={9}>

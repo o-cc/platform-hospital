@@ -82,11 +82,11 @@ function Editor(props) {
   const [subCateIdx, setSubCateIdx] = useState('');
   const [endCateIdx, setEndCateIdx] = useState('');
   const [currSelectCate, setCurrSelect] = useState({});
-  const [selectImgName, setImgName] = useState('');
   const [imgUrl, setImgUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [progress, setProgress] = useState(0);
   const [videoInfo, setVideoInfo] = useState({});
+  const [isComplete, setIsComplete] = useState({});
   useEffect(() => {
     async function getCategory() {
       let { result, error } = await requestApi('getCategories');
@@ -115,7 +115,7 @@ function Editor(props) {
       return setError('视频分类要求选择二级以上', 'warning');
 
     if (!videoInfo.key) return setError('请先上传视频', 'warning');
-    if (Number(progress) < 100)
+    if (Number(progress) < 100 && Number(progress) > 0)
       return setError('请等待视频上传完成噢', 'warning');
 
     let { error } = await requestApi('postNews', {
@@ -133,6 +133,7 @@ function Editor(props) {
 
   const uploadPoster = async (canvas, data, file) => {
     let result = await uploadImg(file);
+    if (!result) return;
     setPosterName(result.image_name);
     setImgUrl(result.image_url);
   };
@@ -148,22 +149,21 @@ function Editor(props) {
   };
   const observer = {
     next(res) {
-      console.log('observer:next:', res);
       if (res.total && res.total.percent) {
         setProgress(Math.floor(res.total.percent * 100) / 100);
       }
     },
     error(err) {
-      console.log('error', err);
+      setError('上传失败，请重试');
     },
     complete(res) {
-      console.log('complete', res);
+      setIsComplete(true);
     }
   };
 
   const selectVideo = async e => {
     let file = e.target.files[0];
-    console.log('file', file);
+    if (!file) return setError('未获取到视频文件！', 'warning');
     let { result, error } = await requestApi('getQiNiuToken');
     if (error) return setError(error);
     let { token, key, video_url } = result || {};
@@ -172,12 +172,13 @@ function Editor(props) {
     }
     setVideoInfo(result);
     setVideoUrl(video_url);
+    setIsComplete(false);
+    setProgress(0);
     var observable = qiniu.upload(file, key, token, putExtra, config);
     var subscription = observable.subscribe(observer);
     console.log('subscription: ', subscription);
   };
 
-  console.log(currSelectCate);
   return (
     <Slider open={props.open}>
       <Grid container className={classes.inputs}>
@@ -214,6 +215,17 @@ function Editor(props) {
                   spacing={1}
                   className={classes.inputWrap}
                 >
+                  <Grid item xs={11}>
+                    <span
+                      style={{
+                        lineHeight: '40px',
+                        fontSize: 14,
+                        color: '#888'
+                      }}
+                    >
+                      温馨提示：选择2:1的图片作为封面最合适噢
+                    </span>
+                  </Grid>
                   {imgUrl && (
                     <Grid
                       item
@@ -225,7 +237,9 @@ function Editor(props) {
                   )}
 
                   <Grid item style={{ lineHeight: '40px' }}>
-                    <InputLabel htmlFor="file">选择封面：</InputLabel>
+                    <InputLabel htmlFor="file" style={{ fontSize: 14 }}>
+                      选择封面：
+                    </InputLabel>
                   </Grid>
                   <Grid item>
                     <ImagePicker
@@ -233,7 +247,6 @@ function Editor(props) {
                       id="poster"
                       onPick={(canvas, data, file) => {
                         uploadPoster(canvas, data, file);
-                        setImgName(file.name);
                       }}
                     />
                     <label htmlFor="poster">
@@ -255,12 +268,14 @@ function Editor(props) {
                         color: '#888'
                       }}
                     >
-                      {selectImgName && '上传成功'}
+                      {imgUrl && '上传成功'}
                     </span>
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="category">视频分类：</InputLabel>
+                    <InputLabel htmlFor="category" style={{ fontSize: 14 }}>
+                      视频分类：
+                    </InputLabel>
                   </Grid>
                   <Grid item xs={9}>
                     <Se
@@ -337,7 +352,9 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="title">视频标题：</InputLabel>
+                    <InputLabel htmlFor="title" style={{ fontSize: 14 }}>
+                      视频标题：
+                    </InputLabel>
                   </Grid>
                   <Grid item xs={9}>
                     <Field
@@ -351,7 +368,9 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item>
-                    <InputLabel htmlFor="title">视频介绍：</InputLabel>
+                    <InputLabel htmlFor="desc" style={{ fontSize: 14 }}>
+                      视频介绍：
+                    </InputLabel>
                   </Grid>
 
                   <Grid item xs={9}>
@@ -367,9 +386,18 @@ function Editor(props) {
                   </Grid>
 
                   <Grid item style={{ marginTop: 8 }}>
-                    <InputLabel htmlFor="video_upload">视频上传:</InputLabel>
+                    <InputLabel htmlFor="video_upload" style={{ fontSize: 14 }}>
+                      视频上传:
+                    </InputLabel>
                   </Grid>
-                  <Grid item xs={4} style={{ marginTop: 8 }}>
+                  <Grid
+                    item
+                    xs={4}
+                    style={{
+                      marginTop: 8,
+                      pointerEvents: !isComplete ? 'none' : null
+                    }}
+                  >
                     <input
                       type="file"
                       accept="video/*"
@@ -384,6 +412,7 @@ function Editor(props) {
                         className={classes.button}
                         component="span"
                         color="primary"
+                        disabled={!isComplete}
                         startIcon={<CloudUpload />}
                       >
                         Upload
@@ -391,20 +420,24 @@ function Editor(props) {
                     </label>
                   </Grid>
                   <Grid item xs={5}>
-                    <Typography
-                      variant="body2"
-                      align="center"
-                      color="textSecondary"
-                    >
-                      {Number(progress) < 100
-                        ? progress + '%'
-                        : '恭喜你上传成功!'}
-                    </Typography>
-                    <ProgressUI progress={progress}>
-                      <div className="child"></div>
-                    </ProgressUI>
+                    {Number(progress) > 0 && (
+                      <>
+                        <Typography
+                          variant="body2"
+                          align="center"
+                          color="textSecondary"
+                        >
+                          {Number(progress) < 100
+                            ? progress + '%'
+                            : '恭喜你上传成功!'}
+                        </Typography>
+                        <ProgressUI progress={progress}>
+                          <div className="child"></div>
+                        </ProgressUI>
+                      </>
+                    )}
                   </Grid>
-                  {videoUrl && Number(progress) >= '100' && (
+                  {videoUrl && isComplete && (
                     <Grid item xs={11}>
                       <Card className={classes.root}>
                         <CardMedia
