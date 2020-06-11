@@ -63,7 +63,7 @@ export default withRouter(props => {
     <Slider open={show}>
       <Grid container justify="center" alignItems="center">
         <BackHeader title={goodsItem.name} back={props.onClose} />
-        <Grid item xs={8} style={{ padding: 8 }}>
+        <Grid item xs={12} style={{ padding: 8 }}>
           <Swiper {...params}>
             {goodsItem.images &&
               goodsItem.images.map(item => <MyDiv key={item} src={item} />)}

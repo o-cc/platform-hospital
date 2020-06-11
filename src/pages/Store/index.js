@@ -78,7 +78,6 @@ export default withRouter(function SimpleCard(props) {
     async page => {
       let { result, error } = await requestApi('getGoods', { page });
       if (error) return setError();
-      console.log(result);
       if (page) {
         setGoods(goods => ({
           ...goods,
@@ -139,7 +138,7 @@ export default withRouter(function SimpleCard(props) {
           useWindow={false}
           getScrollParent={() => scrollRef.current}
         >
-          <Grid container>
+          <Grid container style={{ width: '100vw' }}>
             {goods.results.map(item => (
               <Grid item xs={6} key={item.id} sm={4} md={3}>
                 <Card
@@ -151,7 +150,9 @@ export default withRouter(function SimpleCard(props) {
                   <CardActionArea>
                     <CardMedia
                       className={classes.media}
-                      image={item.images[0]}
+                      image={
+                        item.images[0] || require('assets/imgs/test_books.jpg')
+                      }
                       title={item.name}
                     />
                     <CardContent>

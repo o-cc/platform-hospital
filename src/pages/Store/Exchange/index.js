@@ -64,6 +64,7 @@ export default withRouter(props => {
   const { setError } = AppCont.useContainer();
   const [isSubmit, setSubmit] = useState();
   const [submitConfirm, setConfirm] = useState(false);
+  const [addressInfo, setAddressInfo] = useState({});
   useEffect(() => {
     async function getAddresses() {
       let { result, error } = await requestApi('getAddress');
@@ -72,6 +73,7 @@ export default withRouter(props => {
       if (defaultId) {
         setCurrAddress(getObjInArrayByKey(result.addresses, 'id', defaultId));
       }
+      setAddressInfo(result);
     }
     if (props.open) {
       getAddresses();
@@ -225,6 +227,7 @@ export default withRouter(props => {
               setEditorModal(false);
             }}
             initValue={currAddress}
+            isDefault={addressInfo.default_address_id === currAddress.id}
             onSubmit={values => {
               setEditorModal(false);
               console.log(values);
