@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Grid, Button, makeStyles, Divider } from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import Slider from '@/pages/components/Slider';
@@ -26,16 +26,16 @@ export default function Address(props) {
   const [address, setAddress] = useState({});
   const [deleteDialog, setDeleteDialog] = useState(false);
   const { setError } = AppCont.useContainer();
-  useEffect(() => {
-    async function getAddress() {
-      let { result, error } = await requestApi('getAddress');
-      if (error) return setError(error);
-      setAddressList(result);
-    }
-    if (!props.open) return;
 
+  const getAddress = useCallback(async () => {
+    let { result, error } = await requestApi('getAddress');
+    if (error) return setError(error);
+    setAddressList(result);
+  }, [setError]);
+  useEffect(() => {
+    if (!props.open) return;
     getAddress();
-  }, [setError, props.open]);
+  }, [getAddress, props.open]);
   const addAddress = useRunning(async values => {
     let { result, error } = await requestApi('postAddress', values);
     if (error) return setError(error);
@@ -46,23 +46,12 @@ export default function Address(props) {
   });
 
   const modifiedAddress = useRunning(async values => {
-    let { result, error } = await requestApi('putAddress', {
+    let { error } = await requestApi('putAddress', {
       address_id: address.id,
       ...values
     });
     if (error) return setError(error);
-    setAddressList(lists => ({
-      ...lists,
-      addresses: lists.addresses.map(item => {
-        if (item.id === result.id) {
-          return {
-            ...item,
-            ...result
-          };
-        }
-        return item;
-      })
-    }));
+    getAddress();
   });
 
   const deleteAddress = useRunning(async list => {
@@ -141,7 +130,7 @@ export default function Address(props) {
       </Grid>
       <Dialog
         open={deleteDialog}
-        text="删除后无法回复，确定吗？"
+        text="删除后无法恢复，确定吗？"
         onClose={() => setDeleteDialog(false)}
       ></Dialog>
     </Slider>
