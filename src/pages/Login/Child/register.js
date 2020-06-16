@@ -30,8 +30,9 @@ export default withRouter(({ ...props }) => {
     if (error) return setError(error);
     if (!result.token) return setError('登录异常，请重新登录');
     window.localStorage.setItem(storageKeys.token, result.token);
+
     setTimeout(() => {
-      props.history && props.history.push('/login');
+      props.history && props.history.go(-1);
     }, 100);
   });
   const { downCount, getCode } = useGetCode();
@@ -73,11 +74,7 @@ export default withRouter(({ ...props }) => {
       >
         {({ submitForm, isSubmitting, values }) => (
           <Form className={classes.form}>
-            <Grid
-              container
-              spacing={1}
-              justify='center'
-            >
+            <Grid container spacing={1} justify="center">
               <Grid item xs={11} sm={6} md={3}>
                 <Field
                   variant="outlined"

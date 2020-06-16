@@ -17,6 +17,7 @@ import Slider from 'pages/components/Slider';
 import Register from './Child/register';
 import Forgot from './Child/forgot';
 import BackHeader from 'pages/components/BackHeader';
+import { withRouter } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -58,7 +59,7 @@ const MAP = {
   register: Register,
   forgot: Forgot
 };
-export default function SignIn(props) {
+export default withRouter(function SignIn(props) {
   const classes = useStyles();
   const [tabIdx, setTabIdx] = useState(0);
   const [modal, setModal] = useState({ show: false, type: 'register' });
@@ -71,7 +72,12 @@ export default function SignIn(props) {
 
   return (
     <>
-      <BackHeader title="" withoutHome={true} bgColor={'none'} />
+      <BackHeader
+        title=""
+        back={() => props.history.push('/')}
+        withoutHome={true}
+        bgColor={'none'}
+      />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -108,4 +114,4 @@ export default function SignIn(props) {
       </Container>
     </>
   );
-}
+});
