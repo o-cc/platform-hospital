@@ -7,7 +7,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Drawer from '../Drawer';
 import SearchIcon from '@material-ui/icons/Search';
-import { vw } from 'utils';
+import { vw, requestApi } from 'utils';
+import useRunning from '@/hooks/useRunning';
+import useInput from '@/hooks/useInput';
+import container from '@/container';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,9 +56,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function CustomizedInputBase(props) {
+export default withRouter(function CustomizedInputBase(props) {
   const classes = useStyles();
-
+  const { value, onChange } = useInput();
+  const { setError, setSearchData } = container.useContainer();
+  const search = useRunning(async e => {
+    e.preventDefault();
+    if (!value) {
+      return;
+    }
+    let { result, error } = await requestApi('getSearch', { search: value });
+    if (error) {
+      return setError(error);
+    }
+    setSearchData(result);
+    setTimeout(() => {
+      props.history && props.history.push('/search');
+    }, 100);
+  });
   return (
     <Paper component="form" className={classes.root}>
       <Button aria-label="menu">
@@ -64,12 +83,15 @@ export default function CustomizedInputBase(props) {
       <InputBase
         className={classes.input}
         placeholder="搜索热门文章/作者"
+        value={value}
+        onChange={onChange}
         inputProps={{ 'aria-label': '搜索热门文章/作者' }}
       />
       <IconButton
         type="submit"
         className={classes.iconButton}
         aria-label="search"
+        onClick={search}
       >
         <SearchIcon />
       </IconButton>
@@ -85,4 +107,4 @@ export default function CustomizedInputBase(props) {
       <Drawer {...props} />
     </Paper>
   );
-}
+});

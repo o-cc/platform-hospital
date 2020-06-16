@@ -74,7 +74,11 @@ function Other() {
       console.log(result);
       setLists(result);
     }
-    getList();
+
+    if (id) {
+      getList();
+    }
+
     return () => {
       setValue(0);
     };

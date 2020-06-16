@@ -254,6 +254,14 @@ const api = {
   },
   getQiNiuToken() {
     return this.instance.get('/qiniu/tokens/');
+  },
+  getSearch({ search, page = 1 }) {
+    return this.instance.get('/search/news/', {
+      params: {
+        search,
+        page
+      }
+    });
   }
 };
 export default api;

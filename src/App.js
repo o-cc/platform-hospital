@@ -12,7 +12,7 @@ import PageTemplate from './pages/components/PageTemplate';
 import Store from '@/pages/Store';
 import Member from '@/pages/Member';
 import 'tools/vconsole';
-
+import Search from 'pages/Search';
 import Error from 'pages/Error';
 function OtherWrap() {
   return (
@@ -36,6 +36,7 @@ const Root = withRouter(props => {
       <Route exact path={`/video/detail/:id`} component={VideoDetail}></Route>
       <Route exact path={`/store`} component={Store}></Route>
       <Route path={`/member/`} component={Member}></Route>
+      <Route path={'/search'} component={Search}></Route>
     </>
   );
 });
