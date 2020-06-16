@@ -7,7 +7,8 @@ import {
   IconButton,
   Grid,
   InputLabel,
-  Button
+  Button,
+  Typography
 } from '@material-ui/core';
 import BackHeader from 'pages/components/BackHeader';
 import ImagePicker from '@/tools/ImagePicker';
@@ -27,7 +28,7 @@ const useStyles = makeStyles(t => ({
     color: '#666'
   },
   form: {
-    width: '95%'
+    width: '100%'
   },
   inputs: {
     margin: t.spacing(0, 0, 3, 0),
@@ -183,7 +184,7 @@ function Editor(props) {
                   spacing={1}
                   className={classes.inputWrap}
                 >
-                  <Grid item xs={11}>
+                  <Grid item xs={12}>
                     <span
                       style={{
                         lineHeight: '40px',
@@ -194,6 +195,7 @@ function Editor(props) {
                       温馨提示：选择2:1的图片作为封面最合适噢
                     </span>
                   </Grid>
+
                   {imgUrl && (
                     <Grid
                       item
@@ -204,155 +206,173 @@ function Editor(props) {
                     </Grid>
                   )}
 
-                  <Grid item style={{ lineHeight: '40px' }}>
-                    <InputLabel htmlFor="file" style={{ fontSize: 14 }}>
-                      选择封面：
-                    </InputLabel>
-                  </Grid>
-                  <Grid item>
-                    <ImagePicker
-                      className={classes.input}
-                      id="poster"
-                      onPick={(canvas, data, file) => {
-                        uploadPoster(canvas, data, file);
-                      }}
-                    />
-                    <label htmlFor="poster">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        component="span"
-                      >
-                        Upload
-                      </Button>
-                    </label>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <span
-                      style={{
-                        lineHeight: '40px',
-                        fontSize: 15,
-                        paddingLeft: 15,
-                        color: '#888'
-                      }}
-                    >
-                      {imgUrl && '上传成功'}
-                    </span>
-                  </Grid>
-
-                  <Grid item>
-                    <InputLabel htmlFor="category" style={{ fontSize: 14 }}>
-                      文章分类：
-                    </InputLabel>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Se
-                      style={{ width: '30%', marginRight: 8 }}
-                      value={topCateIdx}
-                      onChange={e => setTopCateIdx(e.target.value)}
-                      id="grouped-select"
-                    >
-                      {categoryData.map((item, idx) => (
-                        <MenuItem key={item.id} value={idx}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                    </Se>
-                    {categoryData[topCateIdx] && (
-                      <>
-                        <Se
-                          style={{ width: '30%', marginRight: 8 }}
-                          value={subCateIdx}
-                          onChange={e => {
-                            let idx = e.target.value;
-                            setSubCateIdx(idx);
-                            setCurrSelect(
-                              categoryData[topCateIdx].sub_categories[idx]
-                            );
+                  <Grid item xs={12}>
+                    <Grid container alignItems="center">
+                      <Grid item style={{ lineHeight: '40px' }}>
+                        <InputLabel htmlFor="file" style={{ fontSize: 14 }}>
+                          选择封面：
+                        </InputLabel>
+                      </Grid>
+                      <Grid item>
+                        <ImagePicker
+                          className={classes.input}
+                          id="poster"
+                          onPick={(canvas, data, file) => {
+                            uploadPoster(canvas, data, file);
                           }}
-                          id="grouped-select-1"
+                        />
+                        <label htmlFor="poster">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            component="span"
+                          >
+                            Upload
+                          </Button>
+                        </label>
+                      </Grid>
+                      <Grid item>
+                        <span
+                          style={{
+                            lineHeight: '40px',
+                            fontSize: 15,
+                            paddingLeft: 15,
+                            color: '#888'
+                          }}
                         >
-                          {categoryData[topCateIdx].sub_categories.map(
-                            (item, idx) => (
+                          {imgUrl && '上传成功'}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid container alignItems="center">
+                      <Grid item xs={2}>
+                        <InputLabel
+                          htmlFor="category"
+                          style={{ fontSize: 12, whiteSpace: 'nowrap' }}
+                        >
+                          文章分类：
+                        </InputLabel>
+                      </Grid>
+                      <Grid item xs={10}>
+                        <Grid container justify="flex-start">
+                          <Se
+                            style={{ width: '28%', marginLeft: 8 }}
+                            value={topCateIdx}
+                            onChange={e => setTopCateIdx(e.target.value)}
+                            id="grouped-select"
+                          >
+                            {categoryData.map((item, idx) => (
                               <MenuItem key={item.id} value={idx}>
                                 {item.name}
                               </MenuItem>
-                            )
-                          )}
-                        </Se>
-                        <Se
-                          style={{ width: '30%', marginRight: 8 }}
-                          value={endCateIdx}
-                          onChange={e => {
-                            let idx = e.target.value;
-                            setEndCateIdx(idx);
-                            if (idx === '') {
-                              //恢复到2级
-                              return setCurrSelect(
-                                categoryData[topCateIdx].sub_categories[
-                                  subCateIdx
-                                ]
-                              );
-                            }
-                            setCurrSelect(
-                              categoryData[topCateIdx].sub_categories[
-                                subCateIdx
-                              ].sub_categories[idx]
-                            );
-                          }}
-                          id="grouped-select-2"
-                        >
-                          <MenuItem value="">None</MenuItem>
-
-                          {categoryData[topCateIdx].sub_categories[
-                            subCateIdx
-                          ] &&
-                            categoryData[topCateIdx].sub_categories[
-                              subCateIdx
-                            ].sub_categories.map((item, idx) => (
-                              <MenuItem key={item.sub_id} value={idx}>
-                                {item.name}
-                              </MenuItem>
                             ))}
-                        </Se>
-                      </>
-                    )}
+                          </Se>
+                          {categoryData[topCateIdx] && (
+                            <>
+                              <Se
+                                style={{ width: '28%', marginLeft: 8 }}
+                                value={subCateIdx}
+                                onChange={e => {
+                                  let idx = e.target.value;
+                                  setSubCateIdx(idx);
+                                  setCurrSelect(
+                                    categoryData[topCateIdx].sub_categories[idx]
+                                  );
+                                }}
+                                id="grouped-select-1"
+                              >
+                                {categoryData[topCateIdx].sub_categories.map(
+                                  (item, idx) => (
+                                    <MenuItem key={item.id} value={idx}>
+                                      {item.name}
+                                    </MenuItem>
+                                  )
+                                )}
+                              </Se>
+                              <Se
+                                style={{ width: '28%', marginLeft: 8 }}
+                                value={endCateIdx}
+                                onChange={e => {
+                                  let idx = e.target.value;
+                                  setEndCateIdx(idx);
+                                  if (idx === '') {
+                                    //恢复到2级
+                                    return setCurrSelect(
+                                      categoryData[topCateIdx].sub_categories[
+                                        subCateIdx
+                                      ]
+                                    );
+                                  }
+                                  setCurrSelect(
+                                    categoryData[topCateIdx].sub_categories[
+                                      subCateIdx
+                                    ].sub_categories[idx]
+                                  );
+                                }}
+                                id="grouped-select-2"
+                              >
+                                <MenuItem value="">None</MenuItem>
+
+                                {categoryData[topCateIdx].sub_categories[
+                                  subCateIdx
+                                ] &&
+                                  categoryData[topCateIdx].sub_categories[
+                                    subCateIdx
+                                  ].sub_categories.map((item, idx) => (
+                                    <MenuItem key={item.sub_id} value={idx}>
+                                      {item.name}
+                                    </MenuItem>
+                                  ))}
+                              </Se>
+                            </>
+                          )}
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
 
-                  <Grid item>
-                    <InputLabel htmlFor="title" style={{ fontSize: 14 }}>
-                      文章标题：
-                    </InputLabel>
+                  <Grid item xs={12}>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <InputLabel htmlFor="title" style={{ fontSize: 14 }}>
+                          文章标题：
+                        </InputLabel>
+                      </Grid>
+                      <Grid item xs={9}>
+                        <Field
+                          component={TextField}
+                          name="title"
+                          style={{ width: '93%', marginLeft: 8 }}
+                          inputProps={{
+                            id: 'title'
+                          }}
+                        ></Field>
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={9}>
-                    <Field
-                      component={TextField}
-                      name="title"
-                      style={{ width: '93%', marginLeft: 8 }}
-                      inputProps={{
-                        id: 'title'
-                      }}
-                    ></Field>
-                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <InputLabel htmlFor="desc" style={{ fontSize: 14 }}>
+                          文章摘要：
+                        </InputLabel>
+                      </Grid>
 
-                  <Grid item>
-                    <InputLabel htmlFor="desc" style={{ fontSize: 14 }}>
-                      文章摘要：
-                    </InputLabel>
+                      <Grid item xs={9}>
+                        <Field
+                          component={TextField}
+                          name="desc"
+                          multiline={true}
+                          style={{ width: '93%', marginLeft: 8 }}
+                          inputProps={{
+                            id: 'desc'
+                          }}
+                        ></Field>
+                      </Grid>
+                    </Grid>
                   </Grid>
-
-                  <Grid item xs={9}>
-                    <Field
-                      component={TextField}
-                      name="desc"
-                      multiline={true}
-                      style={{ width: '93%', marginLeft: 8 }}
-                      inputProps={{
-                        id: 'desc'
-                      }}
-                    ></Field>
-                  </Grid>
-
                   {/* {isSubmitting && <LinearProgress />} */}
                 </Grid>
               </Form>
@@ -366,6 +386,9 @@ function Editor(props) {
         wrap="nowrap"
         className={classes.editor}
       >
+        <Typography variant="body2" color="textSecondary">
+          文章内容：
+        </Typography>
         <div ref={textRef}></div>
         <Grid item>
           <ImagePicker
