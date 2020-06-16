@@ -17,7 +17,6 @@ import Back from 'pages/components/BackHeader';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import AppCont from 'container';
-import { format } from 'date-fns';
 import { defaultAvatar } from 'configs';
 import InfiniteScroll from 'react-infinite-scroller';
 import useRunning from '@/hooks/useRunning';
@@ -45,10 +44,12 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.spacing(2),
     fontFamily: 'arial',
     paddingBottom: theme.spacing(1),
-    lineHeight: '25px',
     '& img': {
       maxWidth: '100%!important',
       height: 'auto!important'
+    },
+    '& h1': {
+      lineHeight: 1.3
     }
   },
   button: {
@@ -249,10 +250,14 @@ function Detail(props) {
             onClick={() => props.history.push('/user/' + user_info.user_id)}
           >
             <Avatar alt="avatar" src={user_info.avatar || defaultAvatar} />
-            <Grid style={{ marginLeft: 8 }} container direction="column">
+            <Grid
+              style={{ marginLeft: 8, lineHeight: 1.3 }}
+              container
+              direction="column"
+            >
               <span className="user">{user_info.username}</span>
               <Grid item className="date">
-                {create_time && format(new Date(create_time), 'yyyy-MM-dd')}
+                {create_time && create_time}
               </Grid>
             </Grid>
           </div>

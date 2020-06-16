@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PageTemplate from 'pages/components/PageTemplate';
-import { requestApi } from 'utils';
+import { requestApi, vw } from 'utils';
 import AppCont from 'container';
 import Swiper from 'react-id-swiper';
 import { makeStyles, styled } from '@material-ui/core/styles';
@@ -28,7 +28,7 @@ const MyDiv = styled(({ ...other }) => <div {...other} />)({
   border: 0,
   color: 'white',
   width: '100vw',
-  height: '200px',
+  height: vw(350),
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-end'

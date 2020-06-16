@@ -3,7 +3,6 @@ import { Grid, Avatar } from '@material-ui/core';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { vw } from '@/utils';
-import { format } from 'date-fns';
 import { withRouter } from 'react-router-dom';
 import { defaultAvatar } from 'configs';
 
@@ -112,7 +111,7 @@ function List({ list, idx = 0, ...props }) {
       </Grid>
 
       <Grid item xs={11} className={classes.prompt}>
-        {list.create_time && format(new Date(list.create_time), 'yyyy-MM-dd')}
+        {list.create_time && list.create_time}
         {props.reply && list.sub_comment_count ? (
           <div className={classes.reply}>{list.sub_comment_count}回复</div>
         ) : null}
