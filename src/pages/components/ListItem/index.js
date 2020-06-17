@@ -1,12 +1,21 @@
 import React, { Fragment } from 'react';
-import { Grid, Paper, makeStyles, styled, Divider } from '@material-ui/core';
+import {
+  Grid,
+  Paper,
+  makeStyles,
+  styled,
+  Divider,
+  Typography
+} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
+import PlayCircleFilledWhiteRoundedIcon from '@material-ui/icons/PlayCircleFilledWhiteRounded';
 const useStyles = makeStyles(theme => ({
   imgItem: {
     height: theme.spacing(18),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    position: 'relative'
   },
   gridWrap: {
     paddingBottom: theme.spacing(2),
@@ -19,6 +28,27 @@ const useStyles = makeStyles(theme => ({
     paddingRight: 0,
     paddingBottom: 0,
     color: theme.palette.text.secondary
+  },
+  poster: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  videoLong: {
+    position: 'absolute',
+    right: 0,
+    bottom: theme.spacing(0.5),
+    padding: theme.spacing(0.1, 1),
+    background: 'rgba(23,23,23, 0.5)',
+    color: '#fff',
+    fontSize: 10,
+    borderRadius: 8
   }
 }));
 
@@ -66,7 +96,24 @@ export default withRouter(function ListItem({ list = [], ...props }) {
               className={classes.imgItem}
               style={{ paddingLeft: 0 }}
             >
-              <Img bg={item.index_image_url}></Img>
+              <div style={{ position: 'relative' }}>
+                <Img bg={item.index_image_url}></Img>
+                {item.news_type === 'Video' && (
+                  <div className={classes.poster}>
+                    <PlayCircleFilledWhiteRoundedIcon
+                      style={{ fontSize: '3rem' }}
+                      color="action"
+                    />
+                    <Typography
+                      color="textSecondary"
+                      component="span"
+                      className={classes.videoLong}
+                    >
+                      13：22
+                    </Typography>
+                  </div>
+                )}
+              </div>
             </Grid>
           </Grid>
           <Divider />
