@@ -11,6 +11,7 @@ import ItemList from 'pages/components/ListItem';
 import { vw, requestApi } from '@/utils';
 import InfiniteScroll from 'react-infinite-scroller';
 import qs from 'qs';
+import SwiperWrap from 'pages/components/Swiper';
 
 function TabPanel(props) {
   const { children, value, index, next, ...other } = props;
@@ -57,6 +58,12 @@ const useStyles = makeStyles(theme => ({
     borderBottom: '1px solid #ddd'
   }
 }));
+function formatArray2Obj(contents) {
+  return contents.reduce((prev, next) => {
+    prev[next.key] = next;
+    return prev;
+  }, {});
+}
 
 function Other() {
   let { id } = useParams();
@@ -116,6 +123,9 @@ function Other() {
   };
 
   const hasMore = lists[value] && lists[value].next;
+  const { contents = [] } = lists[value] || [];
+  const { contents: swiperList = [] } =
+    formatArray2Obj(contents)['index-banner'] || {};
   return (
     <div className={classes.root}>
       <Tabs
@@ -152,6 +162,7 @@ function Other() {
         >
           {lists.map((sub, idx) => (
             <TabPanel value={value} index={idx} next={sub.next} key={idx}>
+              <SwiperWrap swiperList={swiperList}></SwiperWrap>
               <ItemList list={sub.news} />
             </TabPanel>
           ))}

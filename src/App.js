@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import 'swiper/css/swiper.css';
 import { HashRouter as Router, Route, withRouter } from 'react-router-dom';
 import Login from 'pages/Login';
 import Home from 'pages/Home';
