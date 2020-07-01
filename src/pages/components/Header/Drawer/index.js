@@ -12,15 +12,13 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { isIOS } from 'utils';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import { vw, requestApi } from 'utils';
-import { withRouter } from 'react-router-dom';
+import { vw } from 'utils';
 import PermContactCalendarOutlinedIcon from '@material-ui/icons/PermContactCalendarOutlined';
 import PersonIcon from '@material-ui/icons/Person';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { Collapse } from '@material-ui/core';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
-import AppCont from 'container';
 import { storageKeys } from 'configs';
 import StoreMallDirectoryOutlined from '@material-ui/icons/StoreMallDirectoryOutlined';
 
@@ -60,12 +58,14 @@ function getRouterType(type, index) {
   return res;
 }
 
-function SwipeableTemporaryDrawer(props) {
+function SwipeableTemporaryDrawer({ menuData, ...props }) {
   const classes = useStyles();
   const [state, setState] = React.useState({ left: false });
   const [subActive, setSubActive] = React.useState([]);
-  const { setError } = AppCont.useContainer();
-  const [menuData, setMenuData] = React.useState([]);
+
+  useEffect(() => {
+    setSubActive(new Array(menuData.length).fill(true));
+  }, [menuData.length]);
 
   const toggleDrawer = (anchor, open) => event => {
     if (
@@ -77,18 +77,6 @@ function SwipeableTemporaryDrawer(props) {
     }
     setState({ ...state, [anchor]: open });
   };
-
-  useEffect(() => {
-    async function getMenuData() {
-      let { result, error } = await requestApi('getMenu');
-      if (error) {
-        return setError(error);
-      }
-      setMenuData(result);
-      setSubActive(result.map(() => true));
-    }
-    getMenuData();
-  }, [setError]);
 
   const clickMenu = (type, index) => {
     props.history && props.history.push(getRouterType(type, index));
@@ -107,6 +95,7 @@ function SwipeableTemporaryDrawer(props) {
   const list = anchor => {
     const menu = menuData;
     const token = window.localStorage.getItem(storageKeys.token);
+
     return (
       <div className={classes.list} role="presentation">
         <List>
@@ -234,4 +223,4 @@ SwipeableTemporaryDrawer.defaultProps = {
   menuData: []
 };
 
-export default withRouter(SwipeableTemporaryDrawer);
+export default SwipeableTemporaryDrawer;

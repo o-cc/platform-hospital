@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -12,6 +12,9 @@ import useRunning from '@/hooks/useRunning';
 import useInput from '@/hooks/useInput';
 import container from '@/container';
 import { withRouter } from 'react-router-dom';
+import Hidden from '@material-ui/core/Hidden';
+import withWidth from '@material-ui/core/withWidth';
+import PC from './PC';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -56,55 +59,70 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default withRouter(function CustomizedInputBase(props) {
-  const classes = useStyles();
-  const { value, onChange } = useInput();
-  const { setError, setSearchData } = container.useContainer();
-  const search = useRunning(async e => {
-    e.preventDefault();
-    if (!value) {
-      return;
-    }
-    let { result, error } = await requestApi('getSearch', { search: value });
-    if (error) {
-      return setError(error);
-    }
-    setSearchData(result);
-    setTimeout(() => {
-      props.history && props.history.push('/search');
-    }, 100);
-  });
-  return (
-    <Paper component="form" className={classes.root}>
-      <Button aria-label="menu">
-        <div className={classes.logo}>logo</div>
-      </Button>
+export default withWidth()(
+  withRouter(function CustomizedInputBase(props) {
+    const classes = useStyles();
+    const { value, onChange } = useInput();
+    const { setError, setSearchData } = container.useContainer();
+    const [menuData, setMenuData] = React.useState([]);
 
-      <InputBase
-        className={classes.input}
-        placeholder="搜索热门文章/作者"
-        value={value}
-        onChange={onChange}
-        inputProps={{ 'aria-label': '搜索热门文章/作者' }}
-      />
-      <IconButton
-        type="submit"
-        className={classes.iconButton}
-        aria-label="search"
-        onClick={search}
-      >
-        <SearchIcon />
-      </IconButton>
-      <Divider className={classes.divider} orientation="vertical" />
-      {/* <Button
-        color="primary"
-        className={classes.iconButton}
-        aria-label="directions"
-        onClick={props.login}
-      >
-        注册或登录
-      </Button> */}
-      <Drawer {...props} />
-    </Paper>
-  );
-});
+    const search = useRunning(async e => {
+      e.preventDefault();
+      if (!value) {
+        return;
+      }
+      let { result, error } = await requestApi('getSearch', { search: value });
+      if (error) {
+        return setError(error);
+      }
+      setSearchData(result);
+      setTimeout(() => {
+        props.history && props.history.push('/search');
+      }, 100);
+    });
+
+    useEffect(() => {
+      async function getMenuData() {
+        let { result, error } = await requestApi('getMenu');
+        if (error) {
+          return setError(error);
+        }
+        setMenuData(result);
+      }
+      getMenuData();
+    }, [setError]);
+
+    return (
+      <>
+        <Hidden smUp>
+          <Paper component="form" className={classes.root}>
+            <Button aria-label="menu">
+              <div className={classes.logo}>logo</div>
+            </Button>
+
+            <InputBase
+              className={classes.input}
+              placeholder="搜索热门文章/作者"
+              value={value}
+              onChange={onChange}
+              inputProps={{ 'aria-label': '搜索热门文章/作者' }}
+            />
+            <IconButton
+              type="submit"
+              className={classes.iconButton}
+              aria-label="search"
+              onClick={search}
+            >
+              <SearchIcon />
+            </IconButton>
+            <Divider className={classes.divider} orientation="vertical" />
+            <Drawer menuData={menuData} {...props} />
+          </Paper>
+        </Hidden>
+        <Hidden xsDown>
+          <PC menuData={menuData} />
+        </Hidden>
+      </>
+    );
+  })
+);
