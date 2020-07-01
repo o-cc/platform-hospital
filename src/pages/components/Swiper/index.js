@@ -23,7 +23,8 @@ const MyDiv = styled(({ ...other }) => <div {...other} />)({
   height: vw(350),
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'flex-end'
+  alignItems: 'flex-end',
+  paddingBottom: '10px'
 });
 
 let params = {

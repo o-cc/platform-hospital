@@ -8,6 +8,7 @@ import Recommend from './Child/Recommend';
 import ListsWithTitle from './Child/ListsWithTitle';
 import Loading from 'pages/components/Loading';
 import SwiperWrap from 'pages/components/Swiper';
+import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -52,12 +53,16 @@ export default props => {
   const { contents: commendList = [] } =
     formatArray2Obj(contents)['index-list'] || {};
 
+  const width = useWidth();
   return (
     <PageTemplate>
       {loading ? (
         <Loading />
       ) : (
-        <div className={classes.root}>
+        <div
+          className={classes.root}
+          style={{ marginTop: width === 'xs' ? undefined : '82px' }}
+        >
           <SwiperWrap swiperList={swiperList} />
           {/* 热门推荐 */}
           <Recommend list={commendList} />

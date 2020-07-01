@@ -12,6 +12,7 @@ import { vw, requestApi } from '@/utils';
 import InfiniteScroll from 'react-infinite-scroller';
 import qs from 'qs';
 import SwiperWrap from 'pages/components/Swiper';
+import useWidth from '@/hooks/useWidth';
 
 function TabPanel(props) {
   const { children, value, index, next, ...other } = props;
@@ -126,8 +127,14 @@ function Other() {
   const { contents = [] } = lists[value] || [];
   const { contents: swiperList = [] } =
     formatArray2Obj(contents)['index-banner'] || {};
+
+  const width = useWidth();
+
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      style={{ marginTop: width === 'xs' ? undefined : '82px' }}
+    >
       <Tabs
         value={value}
         onChange={handleChange}

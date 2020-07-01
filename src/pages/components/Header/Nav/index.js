@@ -66,12 +66,12 @@ export default withWidth()(
     const { setError, setSearchData } = container.useContainer();
     const [menuData, setMenuData] = React.useState([]);
 
-    const search = useRunning(async e => {
+    const search = useRunning(async (e, val) => {
       e.preventDefault();
-      if (!value) {
+      if (!val) {
         return;
       }
-      let { result, error } = await requestApi('getSearch', { search: value });
+      let { result, error } = await requestApi('getSearch', { search: val });
       if (error) {
         return setError(error);
       }
@@ -91,7 +91,7 @@ export default withWidth()(
       }
       getMenuData();
     }, [setError]);
-
+    
     return (
       <>
         <Hidden smUp>
@@ -111,7 +111,7 @@ export default withWidth()(
               type="submit"
               className={classes.iconButton}
               aria-label="search"
-              onClick={search}
+              onClick={e => search(e, value)}
             >
               <SearchIcon />
             </IconButton>
@@ -120,7 +120,7 @@ export default withWidth()(
           </Paper>
         </Hidden>
         <Hidden xsDown>
-          <PC menuData={menuData} />
+          <PC menuData={menuData} search={search} />
         </Hidden>
       </>
     );

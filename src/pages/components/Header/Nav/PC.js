@@ -50,7 +50,8 @@ const useStyles = makeStyles(theme => ({
     border: `1px solid #ccc`
   },
   central: {
-    width: '1002px',
+    width: '100%',
+    maxWidth: '1300px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -74,12 +75,12 @@ const useStyles = makeStyles(theme => ({
   },
   subList: {
     position: 'absolute',
-    top: '90%',
+    top: '95%',
     left: 0,
     border: '1px solid #555',
     background: '#fff',
-    width: '100%',
-    borderRadius: theme.spacing(1)
+    width: '95%',
+    borderRadius: theme.spacing(0.5)
   },
   input: {
     marginLeft: theme.spacing(2),
@@ -98,11 +99,7 @@ const useStyles = makeStyles(theme => ({
   },
   listRoot: {
     display: 'flex',
-    flex: 1,
-
-    '&>div': {
-      maxWidth: theme.spacing(18)
-    }
+    whiteSpace: 'nowrap'
   }
 }));
 
@@ -114,6 +111,11 @@ function NavInPC({ menuData, ...props }) {
     setDown(menuData.map(item => false));
   }, [menuData]);
 
+  const toOther = idx => {
+    setTimeout(() => {
+      props.history && props.history.push('/other/' + idx);
+    }, 10);
+  };
   return (
     <>
       <Paper elevation={2} className={classes.root}>
@@ -156,12 +158,14 @@ function NavInPC({ menuData, ...props }) {
                   }}
                   onClick={() => {
                     //如果有下一级就不跳转
+                    if (item.sub_categories.length > 0) return;
+                    toOther(item.id);
                   }}
                 >
                   <ListItemText align="center" primary={item.name} />
                   {item.sub_categories && item.sub_categories.length > 0 && (
                     <>
-                      <Arrow down={down[idx]} />
+                      <Arrow down={down[idx]} style={{marginLeft: '10px'}} />
                       <List
                         className={classes.subList}
                         style={{ display: !down[idx] ? 'none' : undefined }}
@@ -169,7 +173,9 @@ function NavInPC({ menuData, ...props }) {
                         {item.sub_categories && item.sub_categories.length > 0 && (
                           <>
                             {item.sub_categories.map(subItem => (
-                              <ListItem button key={subItem.sub_id}>
+                              <ListItem button key={subItem.sub_id} onClick={() => {
+                                toOther(subItem.sub_id);
+                              }}>
                                 <ListItemText primary={subItem.name} />
                               </ListItem>
                             ))}
@@ -193,7 +199,9 @@ function NavInPC({ menuData, ...props }) {
             type="submit"
             className={classes.iconButton}
             aria-label="search"
-            onClick={() => {}}
+            onClick={e => {
+              props.search(e, value);
+            }}
           >
             <Search style={{ color: '#888' }} />
           </IconButton>
@@ -205,6 +213,7 @@ function NavInPC({ menuData, ...props }) {
 }
 
 NavInPC.defaultProps = {
-  menuData: []
+  menuData: [],
+  search: () => {}
 };
 export default withRouter(NavInPC);
