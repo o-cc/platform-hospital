@@ -32,7 +32,7 @@ export default {
             title: '从你的全世界路过',
             url: 'http://www.baidu.com',
             image:
-              'http://qb2ljz0fe.bkt.clouddn.com/FhsAoQyZV6ep-BdCLmen3Emi33vi',
+              'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
             text: ''
           },
           {
@@ -40,7 +40,7 @@ export default {
             title: '测试广告',
             url: 'http://www.baidu.com',
             image:
-              'http://qb2ljz0fe.bkt.clouddn.com/FqF5ZWsuR4gfxQQu3pTixE9XrTmi',
+              'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
             text: ''
           }
         ]
@@ -77,7 +77,7 @@ export default {
             title: '2001：太空漫游',
             username: 'admin',
             create_time: '2020/05/30',
-            index_image_url: 'http://qb2ljz0fe.bkt.clouddn.com/ix.jpg',
+            index_image_url: 'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
             news_type: 'Video',
             video_long: '18:26'
           },
@@ -86,7 +86,7 @@ export default {
             title: '人个人',
             username: 'admin',
             create_time: '2020/05/30',
-            index_image_url: 'http://qb2ljz0fe.bkt.clouddn.com/ix.jpg',
+            index_image_url: 'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
             news_type: 'Video',
             video_long: '18:30'
           },
@@ -95,7 +95,7 @@ export default {
             title: '金合欢花或',
             username: 'admin',
             create_time: '2020/05/30',
-            index_image_url: 'http://qb2ljz0fe.bkt.clouddn.com/ix.jpg',
+            index_image_url: 'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
             news_type: 'Video',
             video_long: '00:07'
           }
@@ -136,7 +136,7 @@ export default {
           username: 'admin',
           create_time: '2020/05/30',
           index_image_url:
-            'http://qb2ljz0fe.bkt.clouddn.com/FsD7HjnTT723g2zPhoYpN5e5oJrP',
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
           news_type: 'GraphText'
         }
       ]
@@ -150,7 +150,7 @@ export default {
           title: '2001：太空漫游',
           username: 'admin',
           create_time: '2020/05/30',
-          index_image_url: 'http://qb2ljz0fe.bkt.clouddn.com/ix.jpg',
+          index_image_url: 'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
           news_type: 'Video',
           video_long: '18:26'
         }
@@ -169,7 +169,7 @@ export default {
         username: 'admin',
         create_time: '2020/05/30',
         index_image_url:
-          'http://qb2ljz0fe.bkt.clouddn.com/FsD7HjnTT723g2zPhoYpN5e5oJrP',
+          'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
         news_type: 'GraphText'
       }
     ]
@@ -289,7 +289,7 @@ export default {
         title: '金合欢花或',
         username: 'admin',
         create_time: '2020/05/30',
-        index_image_url: 'http://qb2ljz0fe.bkt.clouddn.com/ix.jpg',
+        index_image_url: 'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
         news_type: 'Video',
         video_long: '00:07'
       },
@@ -299,7 +299,7 @@ export default {
         username: 'huang',
         create_time: '2020/06/01',
         index_image_url:
-          'http://qb2ljz0fe.bkt.clouddn.com/FqF5ZWsuR4gfxQQu3pTixE9XrTmi',
+          'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
         news_type: 'GraphText'
       }
     ]

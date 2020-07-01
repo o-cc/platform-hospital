@@ -262,6 +262,12 @@ const api = {
         page
       }
     });
+  },
+  getCategoriesAd({ categoriesId }) {
+    return this.instance.get(`/categories/${categoriesId}/contents/`);
+  },
+  postSignIn() {
+    return this.instance.post('/users/signin/');
   }
 };
 export default api;

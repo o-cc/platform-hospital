@@ -30,6 +30,7 @@ import UserLists from './components/UserLists';
 import { defaultAvatar } from 'configs';
 import Editor from './components/MyArticle/Editor';
 import Video from './components/Video';
+import useRunning from '@/hooks/useRunning';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%'
@@ -106,6 +107,8 @@ export default withRouter(props => {
   const [userInfo, setUserInfo] = useState({});
   const { setError } = AppCont.useContainer();
   const [editor, setEditorModal] = useState('');
+  const [signState, setSignState] = useState(false);
+  const [score, setScore] = useState(0);
   const toggleDrawer = item => {
     setModal(item.type || '');
   };
@@ -115,6 +118,8 @@ export default withRouter(props => {
       let { result, error } = await requestApi('getUserInfo');
       if (error) return setError(error);
       setUserInfo(result);
+      result.score && setScore(result.score);
+      result.is_signin && setSignState(result.is_signin)
     }
     getUser();
   }, [setError]);
@@ -129,6 +134,15 @@ export default withRouter(props => {
     if (!userInfo.user_id) return;
     toggleDrawer({ type });
   };
+
+  const signIn = useRunning(async () => {
+    let { result, error } = await requestApi('postSignIn');
+    if (error) return setError(error);
+    if (result.integral) {
+      setScore(score => score + result.integral )
+    }
+    setSignState(true);
+  });
 
   return (
     <Grid container className={classes.root}>
@@ -178,7 +192,7 @@ export default withRouter(props => {
               <Grid container alignItems="center">
                 <PaymentIcon className={classes.payment} />
                 <Typography variant="subtitle2">
-                  我的积分：<span className={classes.large}>0.00</span>
+                  我的积分：<span className={classes.large}>{score}</span>
                 </Typography>
               </Grid>
             </Grid>
@@ -186,13 +200,9 @@ export default withRouter(props => {
             <Grid item>
               <Grid container alignItems="center">
                 <Grid item>
-                  <Typography
-                    variant="subtitle2"
-                    color="textSecondary"
-                    style={{ marginRight: 5 }}
-                  >
-                    签到
-                  </Typography>
+                  <Button disabled={signState} style={{color: signState ? '#888': '#f90'}} size="small" onClick={signIn}>
+                    {signState ? '已签到' : '签到'}
+                  </Button>
                 </Grid>
                 <Grid item>
                   <ArrowForwardIosIcon className={classes.arrow} />
