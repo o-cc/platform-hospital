@@ -101,15 +101,14 @@ export default withRouter(function ListItem({ list = [], ...props }) {
                 {item.news_type === 'Video' && (
                   <div className={classes.poster}>
                     <PlayCircleFilledWhiteRoundedIcon
-                      style={{ fontSize: '3rem' }}
-                      color="action"
+                      style={{ fontSize: '3rem', color: '#fff' }}
                     />
                     <Typography
                       color="textSecondary"
                       component="span"
                       className={classes.videoLong}
                     >
-                      13：22
+                      {item.video_long}
                     </Typography>
                   </div>
                 )}

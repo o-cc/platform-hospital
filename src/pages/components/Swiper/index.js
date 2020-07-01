@@ -21,6 +21,7 @@ const MyDiv = styled(({ ...other }) => <div {...other} />)({
   color: 'white',
   width: '100vw',
   height: vw(350),
+  maxHeight: '400px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-end',

@@ -13,6 +13,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     width: '100%',
+    maxWidth: '1300px',
+    margin: 'auto',
     minHeight: 'calc(100vh - 100px)',
     marginTop: theme.spacing(6)
   },

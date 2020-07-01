@@ -52,7 +52,9 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     width: '100%',
     minHeight: 'calc(100vh - 100px)',
-    marginTop: theme.spacing(6)
+    marginTop: theme.spacing(6),
+    maxWidth: '1300px',
+    margin: 'auto',
   },
   tabs: {
     justifyContent: 'space-around',

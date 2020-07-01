@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { Grid, Divider, Link } from '@material-ui/core';
-import { vw } from '@/utils';
 import ItemList from 'pages/components/ListItem';
 import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
@@ -30,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   more: {
     color: '#a6a6a6',
     paddingRight: theme.spacing(2),
-    fontSize: vw(25)
+    fontSize: theme.spacing(2)
   }
 }));
 
