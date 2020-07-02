@@ -15,11 +15,11 @@ import {
 import { defaultAvatar } from '@/configs';
 import useInput from '@/hooks/useInput';
 import { vw } from 'utils';
-import { Search, ArrowDownward } from '@material-ui/icons';
+import { Search, ExpandMore } from '@material-ui/icons';
 import { withRouter } from 'react-router-dom';
 
 const Arrow = styled(({ down, ...other }) => (
-  <ArrowDownward {...other} fontSize="inherit" />
+  <ExpandMore {...other} fontSize="inherit" />
 ))(({ theme, down }) => {
   let angle;
   if (down) {
@@ -165,7 +165,7 @@ function NavInPC({ menuData, ...props }) {
                   <ListItemText align="center" primary={item.name} />
                   {item.sub_categories && item.sub_categories.length > 0 && (
                     <>
-                      <Arrow down={down[idx]} style={{marginLeft: '10px'}} />
+                      <Arrow down={down[idx]} style={{ marginLeft: '10px' }} />
                       <List
                         className={classes.subList}
                         style={{ display: !down[idx] ? 'none' : undefined }}
@@ -173,9 +173,13 @@ function NavInPC({ menuData, ...props }) {
                         {item.sub_categories && item.sub_categories.length > 0 && (
                           <>
                             {item.sub_categories.map(subItem => (
-                              <ListItem button key={subItem.sub_id} onClick={() => {
-                                toOther(subItem.sub_id);
-                              }}>
+                              <ListItem
+                                button
+                                key={subItem.sub_id}
+                                onClick={() => {
+                                  toOther(subItem.sub_id);
+                                }}
+                              >
                                 <ListItemText primary={subItem.name} />
                               </ListItem>
                             ))}
