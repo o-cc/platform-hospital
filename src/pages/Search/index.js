@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    maxWidth: '1300px',
+    maxWidth: '1200px',
     margin: 'auto',
     minHeight: 'calc(100vh - 100px)',
     marginTop: theme.spacing(6)
@@ -70,7 +70,11 @@ function Other() {
             <ItemList list={results} />
           </Box>
           {results.length <= 0 && (
-            <Typography variant="subtitle2" color="textSecondary" align='center'>
+            <Typography
+              variant="subtitle2"
+              color="textSecondary"
+              align="center"
+            >
               暂时没有数据~
             </Typography>
           )}

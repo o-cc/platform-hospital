@@ -13,7 +13,7 @@ import useWidth from '@/hooks/useWidth';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    maxWidth: '1300px',
+    maxWidth: '1200px',
     margin: 'auto',
     marginTop: theme.spacing(7),
     minHeight: 'calc(100vh - 100px)'

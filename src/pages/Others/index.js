@@ -53,8 +53,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     minHeight: 'calc(100vh - 100px)',
     marginTop: theme.spacing(6),
-    maxWidth: '1300px',
-    margin: 'auto',
+    maxWidth: '1200px',
+    margin: 'auto'
   },
   tabs: {
     justifyContent: 'space-around',

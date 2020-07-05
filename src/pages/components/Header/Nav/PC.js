@@ -45,13 +45,13 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 0,
     boxShadow: 'none',
-    background: '#fafafa',
+    background: '#fff',
     zIndex: 2,
     border: `1px solid #ccc`
   },
   central: {
     width: '100%',
-    maxWidth: '1300px',
+    maxWidth: '1200px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -77,10 +77,10 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     top: '95%',
     left: 0,
-    border: '1px solid #555',
+    border: '1px solid #ccc',
     background: '#fff',
-    width: '95%',
-    borderRadius: theme.spacing(0.5)
+    minWidth: '110%',
+    borderRadius: theme.spacing(0.4)
   },
   input: {
     marginLeft: theme.spacing(2),
@@ -90,7 +90,8 @@ const useStyles = makeStyles(theme => ({
     padding: '0 16px',
     textAlign: 'center',
     fontSize: theme.spacing(1.5),
-    width: theme.spacing(30)
+    width: theme.spacing(30),
+    paddingRight: theme.spacing(1)
   },
   iconButton: {
     padding: 10,

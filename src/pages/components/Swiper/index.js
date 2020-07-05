@@ -2,7 +2,7 @@ import React from 'react';
 import { vw } from 'utils';
 import Swiper from 'react-id-swiper';
 import { makeStyles, styled } from '@material-ui/core/styles';
-
+import { defaultSwiper } from 'configs';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -16,11 +16,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const MyDiv = styled(({ ...other }) => <div {...other} />)({
-  background: ({ image }) => `url(${image}) no-repeat center/auto 100%`,
+  background: ({ image }) =>
+    `url(${image || defaultSwiper}) no-repeat center/auto 100%`,
   border: 0,
   color: 'white',
   width: '100vw',
-  height: vw(350),
+  height: vw(250),
   maxHeight: '400px',
   display: 'flex',
   justifyContent: 'center',
