@@ -13,6 +13,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 import qs from 'qs';
 import SwiperWrap from 'pages/components/Swiper';
 import useWidth from '@/hooks/useWidth';
+import Hidden from '@material-ui/core/Hidden';
+import PC from './PC';
 
 function TabPanel(props) {
   const { children, value, index, next, ...other } = props;
@@ -51,7 +53,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    minHeight: 'calc(100vh - 100px)',
+    minHeight: 'calc(100vh - 108px)',
     marginTop: theme.spacing(6),
     maxWidth: '1200px',
     margin: 'auto'
@@ -137,46 +139,52 @@ function Other() {
       className={classes.root}
       style={{ marginTop: width === 'xs' ? undefined : '82px' }}
     >
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        variant="scrollable"
-        scrollButtons="auto"
-        classes={{
-          flexContainer: classes.tabs
-        }}
-        aria-label="scrollable auto tabs"
-      >
-        {lists.map((sub, idx) => (
-          <Tab key={sub.id} label={sub.name} {...a11yProps(idx)} />
-        ))}
-      </Tabs>
-
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={loadFunc}
-        hasMore={!!hasMore}
-        loader={
-          <div style={{ textAlign: 'center' }} key={0}>
-            正在加载...
-          </div>
-        }
-      >
-        <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={value}
-          onChangeIndex={idx => handleChange(undefined, idx)}
+      <Hidden smUp>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="scrollable"
+          scrollButtons="auto"
+          classes={{
+            flexContainer: classes.tabs
+          }}
+          aria-label="scrollable auto tabs"
         >
           {lists.map((sub, idx) => (
-            <TabPanel value={value} index={idx} next={sub.next} key={idx}>
-              <SwiperWrap swiperList={swiperList}></SwiperWrap>
-              <ItemList list={sub.news} />
-            </TabPanel>
+            <Tab key={sub.id} label={sub.name} {...a11yProps(idx)} />
           ))}
-        </SwipeableViews>
-      </InfiniteScroll>
+        </Tabs>
+
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadFunc}
+          hasMore={!!hasMore}
+          loader={
+            <div style={{ textAlign: 'center' }} key={0}>
+              正在加载...
+            </div>
+          }
+        >
+          <SwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={value}
+            onChangeIndex={idx => handleChange(undefined, idx)}
+          >
+            {lists.map((sub, idx) => (
+              <TabPanel value={value} index={idx} next={sub.next} key={idx}>
+                <SwiperWrap swiperList={swiperList}></SwiperWrap>
+                <ItemList list={sub.news} />
+              </TabPanel>
+            ))}
+          </SwipeableViews>
+        </InfiniteScroll>
+      </Hidden>
+
+      <Hidden xsDown>
+        <PC />
+      </Hidden>
     </div>
   );
 }
