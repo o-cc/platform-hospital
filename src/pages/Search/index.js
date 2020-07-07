@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     maxWidth: '1200px',
     margin: 'auto',
-    minHeight: 'calc(100vh - 100px)',
+    minHeight: 'calc(100vh - 108px)',
     marginTop: theme.spacing(6)
   },
   tabs: {

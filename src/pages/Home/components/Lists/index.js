@@ -23,7 +23,12 @@ export default withRouter(function ListDividers(props) {
   const classes = useStyles();
   const { lists } = props;
   return (
-    <List component="nav" className={classes.root} aria-label="mailbox folders">
+    <List
+      component="nav"
+      className={classes.root}
+      style={{ paddingBottom: 0 }}
+      aria-label="mailbox folders"
+    >
       {lists.map((item, idx) => (
         <Fragment key={idx}>
           <ListItem

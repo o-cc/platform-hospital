@@ -8,19 +8,19 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    marginBottom: theme.spacing(1.5),
+    margin: theme.spacing(1.5, 0),
     '& > *': {
-      margin: theme.spacing(0.5),
-      width: theme.spacing(16)
+      width: '100%',
+      borderRadius: 0
     },
-
     '& .MuiGrid-grid-xs-8': {
       paddingRight: 0
     }
   },
   paper: {
     width: '100%',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    background: 'none'
   },
   subTitle: {
     color: 'rgba(198,40, 40, 0.9)',
@@ -38,8 +38,13 @@ function SimplePaper({ listItem, ...props }) {
 
   return (
     <div className={classes.root}>
-      <Paper elevation={2} className={classes.paper}>
-        <Grid container justify="space-between" alignItems="center">
+      <Paper variant="outlined" className={classes.paper}>
+        <Grid
+          container
+          justify="space-between"
+          alignItems="center"
+          style={{ background: '#fff' }}
+        >
           <h4 className={classes.subTitle}>{listItem.name}</h4>
           <Link
             href="#"

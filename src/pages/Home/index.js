@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     maxWidth: '1200px',
     margin: 'auto',
     marginTop: theme.spacing(7),
-    minHeight: 'calc(100vh - 100px)'
+    minHeight: 'calc(100vh - 108px)'
   }
 }));
 

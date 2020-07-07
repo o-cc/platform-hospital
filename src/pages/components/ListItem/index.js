@@ -11,23 +11,34 @@ import { withRouter } from 'react-router-dom';
 import PlayCircleFilledWhiteRoundedIcon from '@material-ui/icons/PlayCircleFilledWhiteRounded';
 const useStyles = makeStyles(theme => ({
   imgItem: {
-    height: theme.spacing(18),
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    position: 'relative'
+    position: 'relative',
+    height: '100%'
   },
   gridWrap: {
-    paddingBottom: theme.spacing(2),
-    paddingTop: theme.spacing(2),
     alignItems: 'center',
-    paddingRight: theme.spacing(1)
+    paddingRight: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    background: '#fff',
+    '&>div': {
+      minHeight: theme.spacing(13)
+    }
   },
   gridItem: {
-    padding: theme.spacing(2),
-    paddingRight: 0,
-    paddingBottom: 0,
-    color: theme.palette.text.secondary
+    fontSize: 15,
+    color: theme.palette.text.secondary,
+    display: 'flex',
+    minHeight: theme.spacing(13),
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    '&>h5': {
+      margin: theme.spacing(1)
+    }
+  },
+  textFlow: {
+    padding: theme.spacing(1)
   },
   poster: {
     width: '100%',
@@ -55,6 +66,7 @@ const useStyles = makeStyles(theme => ({
 const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
   width: '100%',
   maxWidth: '200px',
+  borderRadius: 5,
   height: 'auto',
   maxHeight: '100px'
 });
@@ -68,8 +80,8 @@ export default withRouter(function ListItem({ list = [], ...props }) {
         <Fragment key={idx}>
           <Grid
             container
-            spacing={3}
             className={classes.gridWrap}
+            style={{ marginTop: idx === 0 && 0 }}
             onClick={() => {
               if (props.onClick) return props.onClick(item.news_id);
 
@@ -83,7 +95,7 @@ export default withRouter(function ListItem({ list = [], ...props }) {
           >
             <Grid item xs={8}>
               <Paper elevation={0} className={classes.gridItem}>
-                {item.title}
+                <div className={classes.textFlow}>{item.title}</div>
                 <h5>
                   {item.create_time} {item.username}
                 </h5>
