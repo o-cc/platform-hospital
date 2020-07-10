@@ -4,7 +4,6 @@ import { requestApi } from 'utils';
 import AppCont from 'container';
 import { makeStyles } from '@material-ui/core/styles';
 import 'swiper/css/swiper.css';
-import Recommend from './Child/Recommend';
 import ListsWithTitle from './Child/ListsWithTitle';
 import Loading from 'pages/components/Loading';
 import SwiperWrap from 'pages/components/Swiper';
@@ -65,9 +64,8 @@ export default props => {
           className={classes.root}
           style={{ marginTop: width === 'xs' ? undefined : '82px' }}
         >
-          <SwiperWrap swiperList={swiperList} />
+          <SwiperWrap swiperList={swiperList} commendList={commendList} />
           {/* 热门推荐 */}
-          <Recommend list={commendList} />
 
           {/* 信息面板 */}
           {news.map((item, idx) => (

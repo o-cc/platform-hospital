@@ -3,6 +3,8 @@ import { vw } from 'utils';
 import Swiper from 'react-id-swiper';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import { defaultSwiper } from 'configs';
+import Recommend from 'pages/Home/Child/Recommend';
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -43,24 +45,27 @@ let params = {
   }
 };
 
-export default ({ swiperList = [], ...props }) => {
+export default ({ swiperList = [], commendList = [], ...props }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Swiper {...params}>
-        {swiperList.map(item => (
-          <MyDiv
-            key={item.content_id}
-            image={item.image}
-            onClick={() => {
-              if (item.url) window.location.href = item.url;
-            }}
-          >
-            {item.title}
-          </MyDiv>
-        ))}
-      </Swiper>
-    </div>
+    <>
+      <div className={classes.root}>
+        <Swiper {...params}>
+          {swiperList.map(item => (
+            <MyDiv
+              key={item.content_id}
+              image={item.image}
+              onClick={() => {
+                if (item.url) window.location.href = item.url;
+              }}
+            >
+              {item.title}
+            </MyDiv>
+          ))}
+        </Swiper>
+      </div>
+      <Recommend list={commendList} />
+    </>
   );
 };

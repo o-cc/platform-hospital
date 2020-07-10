@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import AppCont from 'container';
 import PropTypes from 'prop-types';
@@ -15,6 +15,7 @@ import SwiperWrap from 'pages/components/Swiper';
 import useWidth from '@/hooks/useWidth';
 import Hidden from '@material-ui/core/Hidden';
 import PC from './PC';
+import { Divider } from '@material-ui/core';
 
 function TabPanel(props) {
   const { children, value, index, next, ...other } = props;
@@ -28,7 +29,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box style={{ padding: `0 ${vw(30)}`, overflowY: 'hidden' }} p={3}>
+        <Box style={{ padding: `${vw(7.5)} 0`, overflowY: 'hidden' }} p={3}>
           {children}
         </Box>
       )}
@@ -58,10 +59,7 @@ const useStyles = makeStyles(theme => ({
     maxWidth: '1200px',
     margin: 'auto'
   },
-  tabs: {
-    justifyContent: 'space-around',
-    borderBottom: '1px solid #ddd'
-  }
+  tabs: {}
 }));
 function formatArray2Obj(contents) {
   return contents.reduce((prev, next) => {
@@ -77,6 +75,8 @@ function Other() {
   const theme = useTheme();
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const [adList, setAdList] = useState([]);
+
   useEffect(() => {
     async function getList() {
       const { result, error } = await requestApi('getCategoriesById', { id });
@@ -95,6 +95,25 @@ function Other() {
       setValue(0);
     };
   }, [id, setError]);
+
+  const getCategoriesAdById = useCallback(
+    async tabId => {
+      if (!lists[tabId]) {
+        return;
+      }
+      const id = lists[tabId].id;
+      const { result, error } = await requestApi('getCategoriesAdById', { id });
+      if (error) {
+        return setError(error);
+      }
+      setAdList(result);
+    },
+    [setError, lists]
+  );
+
+  useEffect(() => {
+    getCategoriesAdById(value);
+  }, [getCategoriesAdById, value]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -128,10 +147,10 @@ function Other() {
   };
 
   const hasMore = lists[value] && lists[value].next;
-  const { contents = [] } = lists[value] || [];
   const { contents: swiperList = [] } =
-    formatArray2Obj(contents)['index-banner'] || {};
-
+    formatArray2Obj(adList)['zpgg-banner'] || {};
+  const { contents: commendList = [] } =
+    formatArray2Obj(adList)['zpgg-list'] || {};
   const width = useWidth();
 
   return (
@@ -153,9 +172,15 @@ function Other() {
           aria-label="scrollable auto tabs"
         >
           {lists.map((sub, idx) => (
-            <Tab key={sub.id} label={sub.name} {...a11yProps(idx)} />
+            <Tab
+              size="small"
+              key={sub.id}
+              label={sub.name}
+              {...a11yProps(idx)}
+            />
           ))}
         </Tabs>
+        <Divider />
 
         <InfiniteScroll
           pageStart={0}
@@ -174,7 +199,10 @@ function Other() {
           >
             {lists.map((sub, idx) => (
               <TabPanel value={value} index={idx} next={sub.next} key={idx}>
-                <SwiperWrap swiperList={swiperList}></SwiperWrap>
+                <SwiperWrap
+                  swiperList={swiperList}
+                  commendList={commendList}
+                ></SwiperWrap>
                 <ItemList list={sub.news} />
               </TabPanel>
             ))}

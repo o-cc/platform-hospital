@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { ThemeContext } from 'styled-components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -9,7 +8,7 @@ const useStyles = makeStyles(theme => ({
     background: '#fff',
     display: 'flex',
     alignItems: 'flex-start',
-    padding: ThemeContext.spacing(0, 2),
+    padding: theme.spacing(0, 2),
     margin: '10px auto'
   },
   mainColumn: {

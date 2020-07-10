@@ -263,7 +263,7 @@ const api = {
       }
     });
   },
-  getCategoriesAd({ categoriesId }) {
+  getCategoriesAdById({ id: categoriesId }) {
     return this.instance.get(`/categories/${categoriesId}/contents/`);
   },
   postSignIn() {

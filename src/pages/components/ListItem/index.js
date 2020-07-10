@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   gridWrap: {
     alignItems: 'center',
     paddingRight: theme.spacing(1),
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(0.8),
     background: '#fff',
     '&>div': {
       minHeight: theme.spacing(13)
