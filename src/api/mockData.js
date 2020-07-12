@@ -131,10 +131,86 @@ export default {
   [`onGet:${/\/categories\/\d+\/$/}`]: [
     {
       id: 2,
-      name: '测试类别2',
+      name: '类别2',
       news: [
         {
+          detail:
+            '我想要带你去了浪漫的土耳其然后去东京和巴黎 巴黎巴黎等等防霜冻房东身房东身发事短发事短发但是发第三方沙雕防霜冻防霜冻发第三方第三方是地方的放松地方微软委任为但是防霜冻放松大士大夫沙雕房东身夫士大夫事短发沙雕',
+          news_id: 2,
+          title: '我思故我在小弟地方为人发射点发生地方事短发是的发射点放松房东',
+          username: 'admin',
+          create_time: '2020/05/30',
+          // index_image_url:
+          //   'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
+          news_id: 3,
+          title: '我思故我在',
+          username: 'admin',
+          detail:
+            '我想要带你去了浪漫的土耳其然后去东京和巴黎 巴黎巴黎等等防霜冻房东身房东身发事短发事短发但是发第三方沙雕防霜冻防霜冻发第三方第三方是地方的放松地方微软委任为但是防霜冻放松大士大夫沙雕房东身夫士大夫事短发沙雕',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
           news_id: 4,
+          title: '我思故我在',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
+          news_id: 5,
+          title: '我思故我在',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
+          news_id: 6,
+          title: '我思故我在',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
+          news_id: 7,
+          title: '我思故我在',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
+          news_id: 8,
+          title: '我思故我在',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
+          news_id: 9,
+          title: '我思故我在',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'GraphText'
+        },
+        {
+          news_id: 10,
           title: '我思故我在',
           username: 'admin',
           create_time: '2020/05/30',
@@ -146,7 +222,94 @@ export default {
     },
     {
       id: 3,
+      name: '类别1',
+      news: [
+        {
+          news_id: 3,
+          title: '2001：太空漫游',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'Video',
+          video_long: '18:26',
+          detail:
+            '我想要带你去了浪漫的土耳其然后去东京和巴黎 巴黎巴黎等等防霜冻房东身房东身发事短发事短发但是发第三方沙雕防霜冻防霜冻发第三方第三方是地方的放松地方微软委任为但是防霜冻放松大士大夫沙雕房东身夫士大夫事短发沙雕'
+        }
+      ],
+      next: 'http://192.168.1.105:8001/api/categories/3/news/?page=2'
+    },
+    {
+      id: 0,
+      name: '类别3',
+      news: [
+        {
+          news_id: 3,
+          title: '2001：太空漫游',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'Video',
+          video_long: '18:26'
+        }
+      ],
+      next: 'http://192.168.1.105:8001/api/categories/3/news/?page=2'
+    },
+    {
+      id: 4,
       name: '测试类别3',
+      news: [
+        {
+          news_id: 3,
+          title: '2001：太空漫游',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'Video',
+          video_long: '18:26'
+        }
+      ],
+      next: 'http://192.168.1.105:8001/api/categories/3/news/?page=2'
+    },
+    {
+      id: 6,
+      name: '测试类别3',
+      news: [
+        {
+          news_id: 3,
+          title: '2001：太空漫游',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'Video',
+          video_long: '18:26'
+        }
+      ],
+      next: 'http://192.168.1.105:8001/api/categories/3/news/?page=2'
+    },
+    {
+      id: 7,
+      name: '测试类别7',
+      news: [
+        {
+          news_id: 3,
+          title: '2001：太空漫游',
+          username: 'admin',
+          create_time: '2020/05/30',
+          index_image_url:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          news_type: 'Video',
+          video_long: '18:26'
+        }
+      ],
+      next: 'http://192.168.1.105:8001/api/categories/3/news/?page=2'
+    },
+    {
+      id: 9,
+      name: '测试类别7',
       news: [
         {
           news_id: 3,
@@ -393,5 +556,45 @@ export default {
     address: '广东省广州市天河区青云里彗星百货',
     status: '待发货',
     create_time: '2020-06-05 01:30'
-  }
+  },
+  [`onGet:${/\/categories\/\d+\/contents\/$/}`]: [
+    {
+      id: 3,
+      name: '招牌干锅-轮播图',
+      key: 'zpgg-banner',
+      contents: [
+        {
+          content_id: 6,
+          title: '2020 年河北心血管病年会',
+          url: 'https://www.baidu.com',
+          image:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          text: ''
+        },
+        {
+          content_id: 5,
+          title: '2020 年河北心血管病年会',
+          url: 'https://www.baidu.com',
+          image:
+            'https://s5.51cto.com/oss/202006/05/b35f795d8c12a38ac498f21aebe9d28e.jpg-wh_651x-s_1147064972.jpg',
+          text: 'xxxx'
+        }
+      ]
+    },
+    {
+      id: 4,
+      name: '招牌干锅-列表',
+      key: 'zpgg-list',
+      contents: [
+        {
+          content_id: 7,
+          title: 'xxxx',
+          url: 'https://www.baidu.com',
+          image:
+            'http://qb2ljz0fe.bkt.clouddn.com/Fo26sAJ2ZfjjTsXybU4_rg4VRu27',
+          text: 'aaa'
+        }
+      ]
+    }
+  ]
 };

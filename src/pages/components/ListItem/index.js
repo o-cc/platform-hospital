@@ -19,12 +19,9 @@ const useStyles = makeStyles(theme => ({
   },
   gridWrap: {
     alignItems: 'center',
-    paddingRight: theme.spacing(1),
+    padding: theme.spacing(1, 1, 1.5, 1),
     marginTop: theme.spacing(0.8),
-    background: '#fff',
-    '&>div': {
-      minHeight: theme.spacing(13)
-    }
+    background: '#fff'
   },
   gridItem: {
     fontSize: 15,
@@ -38,7 +35,9 @@ const useStyles = makeStyles(theme => ({
     }
   },
   textFlow: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(0.5, 0),
+    color: '#000',
+    fontSize: '16px'
   },
   poster: {
     width: '100%',
@@ -60,6 +59,14 @@ const useStyles = makeStyles(theme => ({
     color: '#fff',
     fontSize: 10,
     borderRadius: 8
+  },
+  detail: {
+    overflow: 'hidden',
+    'text-overflow': 'ellipsis',
+    display: '-webkit-box',
+    '-webkit-line-clamp': 2,
+    '-webkit-box-orient': 'vertical',
+    marginBottom: theme.spacing(1)
   }
 }));
 
@@ -81,6 +88,7 @@ export default withRouter(function ListItem({ list = [], ...props }) {
           <Grid
             container
             className={classes.gridWrap}
+            justify="space-between"
             style={{ marginTop: idx === 0 && 0 }}
             onClick={() => {
               if (props.onClick) return props.onClick(item.news_id);
@@ -93,38 +101,57 @@ export default withRouter(function ListItem({ list = [], ...props }) {
               }
             }}
           >
-            <Grid item xs={8}>
-              <Paper elevation={0} className={classes.gridItem}>
-                <div className={classes.textFlow}>{item.title}</div>
-                <h5>
-                  {item.create_time} {item.username}
-                </h5>
-              </Paper>
+            <Grid item xs={12}>
+              {/* <Paper elevation={0} className={classes.gridItem}> */}
+              <div className={classes.textFlow}>{item.title}</div>
+              {/* </Paper> */}
             </Grid>
 
-            <Grid
-              item
-              xs={4}
-              className={classes.imgItem}
-              style={{ paddingLeft: 0 }}
-            >
-              <div style={{ position: 'relative' }}>
-                <Img bg={item.index_image_url}></Img>
-                {item.news_type === 'Video' && (
-                  <div className={classes.poster}>
-                    <PlayCircleFilledWhiteRoundedIcon
-                      style={{ fontSize: '3rem', color: '#fff' }}
-                    />
-                    <Typography
-                      color="textSecondary"
-                      component="span"
-                      className={classes.videoLong}
-                    >
-                      {item.video_long}
+            <Grid container>
+              <Grid item xs={item.index_image_url ? 8 : 12}>
+                <Grid
+                  container
+                  direction="column"
+                  style={{ height: '100%' }}
+                  justify="flex-end"
+                >
+                  <div className={classes.detail}>
+                    <Typography variant="body2" color="textSecondary">
+                      {item.detail}
                     </Typography>
                   </div>
-                )}
-              </div>
+                  <Typography variant="body2" color="textSecondary">
+                    {item.create_time} {item.username}
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              {item.index_image_url && (
+                <Grid
+                  item
+                  xs={4}
+                  className={classes.imgItem}
+                  style={{ paddingLeft: 0 }}
+                >
+                  <div style={{ position: 'relative' }}>
+                    <Img bg={item.index_image_url}></Img>
+                    {item.news_type === 'Video' && (
+                      <div className={classes.poster}>
+                        <PlayCircleFilledWhiteRoundedIcon
+                          style={{ fontSize: '3rem', color: '#fff' }}
+                        />
+                        <Typography
+                          color="textSecondary"
+                          component="span"
+                          className={classes.videoLong}
+                        >
+                          {item.video_long}
+                        </Typography>
+                      </div>
+                    )}
+                  </div>
+                </Grid>
+              )}
             </Grid>
           </Grid>
           <Divider />
