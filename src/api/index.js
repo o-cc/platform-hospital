@@ -18,6 +18,9 @@ const api = {
     // timeout: 10000,
     withCredentials: true
   }),
+  setBaseUrl(iCode) {
+    this.instance.defaults.baseURL = `${baseURL}/${iCode}`;
+  },
 
   forgot({ phone, pwd: password, code: sms_code, re_pwd: re_password }) {
     return this.instance.put(`/users/retrieves/${phone}/`, {
@@ -264,10 +267,18 @@ const api = {
     });
   },
   getCategoriesAdById({ id: categoriesId }) {
-    return this.instance.get(`/categories/${categoriesId}/contents/`);
+    return this.instance.get(`/categories/${categoriesId}/contents/`, {
+      cache: true
+    });
   },
   postSignIn() {
     return this.instance.post('/users/signin/');
+  },
+  getTest({ id }) {
+    return this.instance.get('/questions/' + id + '/');
+  },
+  postTestAnswers(data) {
+    return this.instance.post('/commit/questions/', data);
   }
 };
 export default api;
@@ -276,15 +287,21 @@ export default api;
 api.instance.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
-    // console.log(config);
     const token = window.localStorage.getItem(storageKeys.token);
-    if (!token) {
-      return config;
-    }
+
     config.headers = {
       ...config.headers,
       Authorization: `JWT ${token}`
     };
+    if (config.cache) {
+      let source = axios.CancelToken.source();
+      config.cancelToken = source.token;
+      let data = JSON.parse(sessionStorage.getItem(config.url));
+      console.log(data);
+      if (data) {
+        source.cancel(data);
+      }
+    }
     return config;
   },
   function (error) {
@@ -295,12 +312,19 @@ api.instance.interceptors.request.use(
 
 // 添加响应拦截器
 api.instance.interceptors.response.use(
-  function (response) {
+  function (config) {
     // 对响应数据做点什么
-    return response;
+    if (config.config.method === 'get' && config.config.cache) {
+      sessionStorage.setItem(config.config.url, JSON.stringify(config));
+    }
+    return config;
   },
   function (error) {
     // 对响应错误做点什么
+    if (axios.isCancel(error)) {
+      return Promise.resolve(error.message);
+    }
+
     if (error.response && error.response.status === 401) {
       window.localStorage.setItem(storageKeys.token, '');
 
@@ -308,6 +332,7 @@ api.instance.interceptors.response.use(
         window.location.href = `${window.location.origin}${window.location.pathname}${window.location.search}#/login`;
       }, 100);
     }
+
     return Promise.reject(error);
   }
 );
