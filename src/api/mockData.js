@@ -596,5 +596,73 @@ export default {
         }
       ]
     }
-  ]
+  ],
+  [`onGet:${/\/questions\/\d+\//}`]: {
+    id: 1,
+    name: '招牌干锅系列',
+    desc: 'rreg',
+    questions: [
+      { qid: 2, content: 'dfbdf', type: 'write' },
+      {
+        qid: 3,
+        content: 'hrth',
+        answers: [
+          { A: 'tehmnrknh' },
+          { B: 'tenknrtk' },
+          { C: 'eregre' },
+          { D: 'ngjne' },
+          { E: 'rgethr' },
+          { F: 'erbgjebt' }
+        ],
+        type: 'multiple_choice'
+      },
+      {
+        qid: 1,
+        content: 'hrth',
+        answers: [
+          { A: 'egrerg' },
+          { B: 'thrtht' },
+          { C: 'egerg' },
+          { D: 'ethehe' }
+        ],
+        type: 'single_choice'
+      }
+    ]
+  },
+  'onPost:/commit/questions/': {
+    questions: [
+      {
+        qid: 2,
+        integral: 1.0,
+        standard_write: 'ergergreg',
+        user_write: 'ergergreg'
+      },
+      {
+        qid: 1,
+        answers: [
+          { A: 'egrerg' },
+          { B: 'thrtht' },
+          { C: 'ethehe' },
+          { D: 'egerg' }
+        ],
+        integral: 0,
+        standard_choices: ['B'],
+        user_choices: ['C']
+      },
+      {
+        qid: 3,
+        answers: [
+          { A: 'tehmnrknh' },
+          { B: 'tenknrtk' },
+          { C: 'eregre' },
+          { D: 'ngjne' },
+          { E: 'rgethr' },
+          { F: 'erbgjebt' }
+        ],
+        integral: 0,
+        standard_choices: ['C', 'E', 'F'],
+        user_choices: ['C', 'A']
+      }
+    ]
+  }
 };
