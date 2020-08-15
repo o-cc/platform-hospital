@@ -4,7 +4,6 @@ import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
 import Drawer from '../Drawer';
 import SearchIcon from '@material-ui/icons/Search';
 import { vw, requestApi } from 'utils';
@@ -91,14 +90,14 @@ export default withWidth()(
       }
       getMenuData();
     }, [setError]);
-    
+
     return (
       <>
         <Hidden smUp>
           <Paper component="form" className={classes.root}>
-            <Button aria-label="menu">
+            {/* <Button aria-label="menu">
               <div className={classes.logo}>logo</div>
-            </Button>
+            </Button> */}
 
             <InputBase
               className={classes.input}

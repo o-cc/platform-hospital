@@ -33,9 +33,11 @@ export default function TransitionAlerts({ ...props }) {
       clearTimeout(timer);
     };
   }, [error.timeout, error.type, setError]);
+  console.log(error.error);
+  let errMsg = Array.isArray(error.error) ? error.error[0] : error.error;
   return (
     <div className={classes.root}>
-      <Collapse in={!!error.error}>
+      <Collapse in={!!errMsg}>
         <Alert
           severity={error.type || 'error'}
           variant="filled"
@@ -55,7 +57,7 @@ export default function TransitionAlerts({ ...props }) {
           {error.type === 'error' ? (
             <AlertTitle>诶呀堵车了：</AlertTitle>
           ) : null}
-          {error.error}
+          {errMsg}
         </Alert>
       </Collapse>
     </div>

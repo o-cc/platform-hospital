@@ -30,6 +30,12 @@ const useStyles = makeStyles(theme => ({
     lineHeight: '25px',
     paddingBottom: theme.spacing(6)
   },
+
+  outer: {
+    width: '100%',
+    height: '100%',
+    background: '#fff'
+  },
   date: {
     alignSelf: 'center',
     fontSize: vw(25),
@@ -223,7 +229,7 @@ function Detail(props) {
   const hasMore = comments.next;
 
   return (
-    <>
+    <div className={classes.outer}>
       <Grid
         container
         className={classes.root}
@@ -327,7 +333,7 @@ function Detail(props) {
         open={dialog.show}
         onClose={() => setDialog(stat => ({ ...stat, show: false }))}
       ></Dialog>
-    </>
+    </div>
   );
 }
 

@@ -145,7 +145,7 @@ function SwipeableTemporaryDrawer({ menuData, ...props }) {
                       }}
                     >
                       <ListItemIcon>
-                        <SubdirectoryArrowRightIcon />
+                        {/* <SubdirectoryArrowRightIcon /> */}
                       </ListItemIcon>
                       <ListItemText primary={sub.name} />
                     </ListItem>

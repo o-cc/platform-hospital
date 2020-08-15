@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import {
   Grid,
-  Paper,
   makeStyles,
   styled,
   Divider,
@@ -20,7 +19,7 @@ const useStyles = makeStyles(theme => ({
   gridWrap: {
     alignItems: 'center',
     padding: theme.spacing(1, 1, 1.5, 1),
-    marginTop: theme.spacing(0.8),
+    // marginTop: theme.spacing(0.8),
     background: '#fff'
   },
   gridItem: {
@@ -66,6 +65,7 @@ const useStyles = makeStyles(theme => ({
     display: '-webkit-box',
     '-webkit-line-clamp': 2,
     '-webkit-box-orient': 'vertical',
+    minHeight: '60px',
     marginBottom: theme.spacing(1)
   }
 }));
@@ -81,6 +81,18 @@ const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
 export default withRouter(function ListItem({ list = [], ...props }) {
   const classes = useStyles();
 
+  if (list.length <= 0) {
+    return (
+      <Typography
+        variant="body2"
+        style={{ background: '#fff' }}
+        color="textSecondary"
+        align="center"
+      >
+        没有更多了~
+      </Typography>
+    );
+  }
   return (
     <>
       {list.map((item, idx) => (

@@ -10,11 +10,11 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     marginTop: 'auto',
     backgroundColor: '#606060',
-    color: '#fff',
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    left: 0
+    color: '#fff'
+    // position: 'absolute',
+    // bottom: 0,
+    // right: 0,
+    // left: 0
   }
 }));
 
@@ -26,7 +26,7 @@ export default props => {
       <Nav {...props}></Nav>
       {props.children}
       {/* footer */}
-      <div style={{ width: '100%', height: '60px' }}></div>
+      <div style={{ width: '100%', height: '8px' }}></div>
       <footer className={classes.footer}>
         <Container maxWidth="sm">
           <Typography variant="body2" align="center">

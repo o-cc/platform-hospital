@@ -23,7 +23,12 @@ export const requestApi = async (name, params = {}) => {
   } catch (e) {
     if (e.response && typeof e.response.data === 'object') {
       let key = getObjKey(e.response.data, 0);
-      res.error = JSON.stringify(e.response.data[key]);
+
+      if (Array.isArray(e.response.data[key])) {
+        res.error = e.response.data[key][0];
+      } else {
+        res.error = JSON.stringify(e.response.data[key]);
+      }
     } else {
       res.error = e.message;
     }

@@ -14,12 +14,12 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     maxWidth: '1200px',
     margin: 'auto',
-    marginTop: theme.spacing(7),
+    marginTop: theme.spacing(6),
     minHeight: 'calc(100vh - 108px)'
   }
 }));
 
-function formatArray2Obj(contents) {
+function formatArray2Obj(contents = []) {
   return contents.reduce((prev, next) => {
     prev[next.key] = next;
     return prev;

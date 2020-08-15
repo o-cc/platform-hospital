@@ -6,7 +6,6 @@ import ItemList from 'pages/components/ListItem';
 import { vw, requestApi, getQueryKey } from '@/utils';
 import InfiniteScroll from 'react-infinite-scroller';
 import PageTemplate from '../components/PageTemplate';
-import { Typography } from '@material-ui/core';
 import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => ({
@@ -69,15 +68,6 @@ function Other() {
           <Box style={{ padding: `0 ${vw(30)}`, overflowY: 'hidden' }} p={3}>
             <ItemList list={results} />
           </Box>
-          {results.length <= 0 && (
-            <Typography
-              variant="subtitle2"
-              color="textSecondary"
-              align="center"
-            >
-              暂时没有数据~
-            </Typography>
-          )}
         </InfiniteScroll>
       </div>
     </PageTemplate>

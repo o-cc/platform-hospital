@@ -19,12 +19,12 @@ const useStyles = makeStyles(theme => ({
 
 const MyDiv = styled(({ ...other }) => <div {...other} />)({
   background: ({ image }) =>
-    `url(${image || defaultSwiper}) no-repeat center/auto 100%`,
+    `url(${image || defaultSwiper}) no-repeat center/100% 100%`,
   border: 0,
   color: 'white',
   width: '100vw',
-  height: vw(250),
-  maxHeight: '400px',
+  height: vw(350),
+  maxHeight: '450px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-end',

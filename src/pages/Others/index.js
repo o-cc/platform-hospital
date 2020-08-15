@@ -15,7 +15,7 @@ import SwiperWrap from 'pages/components/Swiper';
 import useWidth from '@/hooks/useWidth';
 import Hidden from '@material-ui/core/Hidden';
 import PC from './PC';
-import { Divider } from '@material-ui/core';
+import { Divider, Typography } from '@material-ui/core';
 
 function TabPanel(props) {
   const { children, value, index, next, ...other } = props;
@@ -26,10 +26,17 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`scrollable-auto-tabpanel-${index}`}
       aria-labelledby={`scrollable-auto-tab-${index}`}
+      style={{ minHeight: 'calc(83vh - 48px)' }}
       {...other}
     >
       {value === index && (
-        <Box style={{ padding: `${vw(7.5)} 0`, overflowY: 'hidden' }} p={3}>
+        <Box
+          style={{
+            padding: `${vw(7.5)} 0`,
+            overflowY: 'hidden'
+          }}
+          p={3}
+        >
           {children}
         </Box>
       )}
@@ -58,12 +65,12 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(6),
     maxWidth: '1200px',
     margin: 'auto'
-  },
-  tabs: {}
+  }
 }));
 function formatArray2Obj(contents) {
   return contents.reduce((prev, next) => {
-    prev[next.key] = next;
+    let key = next.key.split('-')[1];
+    prev[key] = next;
     return prev;
   }, {});
 }
@@ -147,10 +154,8 @@ function Other() {
   };
 
   const hasMore = lists[value] && lists[value].next;
-  const { contents: swiperList = [] } =
-    formatArray2Obj(adList)['zpgg-banner'] || {};
-  const { contents: commendList = [] } =
-    formatArray2Obj(adList)['zpgg-list'] || {};
+  const { contents: swiperList = [] } = formatArray2Obj(adList)['banner'] || {};
+  const { contents: commendList = [] } = formatArray2Obj(adList)['list'] || {};
   const width = useWidth();
 
   return (
@@ -159,55 +164,69 @@ function Other() {
       style={{ marginTop: width === 'xs' ? undefined : '82px' }}
     >
       <Hidden smUp>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-          classes={{
-            flexContainer: classes.tabs
-          }}
-          aria-label="scrollable auto tabs"
-        >
-          {lists.map((sub, idx) => (
-            <Tab
-              size="small"
-              key={sub.id}
-              label={sub.name}
-              {...a11yProps(idx)}
-            />
-          ))}
-        </Tabs>
-        <Divider />
-
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={loadFunc}
-          hasMore={!!hasMore}
-          loader={
-            <div style={{ textAlign: 'center' }} key={0}>
-              正在加载...
-            </div>
-          }
-        >
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={value}
-            onChangeIndex={idx => handleChange(undefined, idx)}
+        {lists.length > 0 ? (
+          <>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="secondary"
+              variant="scrollable"
+              scrollButtons="auto"
+              style={{ background: '#fff' }}
+              aria-label="scrollable auto tabs"
+            >
+              {lists.map((sub, idx) => (
+                <Tab
+                  size="small"
+                  key={sub.id}
+                  label={sub.name}
+                  {...a11yProps(idx)}
+                />
+              ))}
+            </Tabs>
+            <Divider />
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={loadFunc}
+              hasMore={!!hasMore}
+              loader={
+                <div style={{ textAlign: 'center' }} key={0}>
+                  正在加载...
+                </div>
+              }
+            >
+              <SwipeableViews
+                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                index={value}
+                onChangeIndex={idx => handleChange(undefined, idx)}
+              >
+                {lists.map((sub, idx) => (
+                  <TabPanel value={value} index={idx} next={sub.next} key={idx}>
+                    <SwiperWrap
+                      swiperList={swiperList}
+                      commendList={commendList}
+                    ></SwiperWrap>
+                    <ItemList list={sub.news} />
+                  </TabPanel>
+                ))}
+              </SwipeableViews>
+            </InfiniteScroll>
+          </>
+        ) : (
+          <Typography
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              right: 0
+            }}
+            variant="body2"
+            align="center"
+            color="textSecondary"
           >
-            {lists.map((sub, idx) => (
-              <TabPanel value={value} index={idx} next={sub.next} key={idx}>
-                <SwiperWrap
-                  swiperList={swiperList}
-                  commendList={commendList}
-                ></SwiperWrap>
-                <ItemList list={sub.news} />
-              </TabPanel>
-            ))}
-          </SwipeableViews>
-        </InfiniteScroll>
+            没有更多了~
+          </Typography>
+        )}
       </Hidden>
 
       <Hidden xsDown>

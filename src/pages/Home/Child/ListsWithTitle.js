@@ -1,14 +1,14 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import { Grid, Divider, Link } from '@material-ui/core';
+import { Grid, Link } from '@material-ui/core';
 import ItemList from 'pages/components/ListItem';
 import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    margin: theme.spacing(1.5, 0),
+    margin: theme.spacing(0.5, 0),
     '& > *': {
       width: '100%',
       borderRadius: 0
@@ -23,12 +23,13 @@ const useStyles = makeStyles(theme => ({
     background: 'none'
   },
   subTitle: {
-    color: 'rgba(198,40, 40, 0.9)',
-    margin: theme.spacing(2)
+    color: '#111',
+    fontSize: theme.spacing(2.2),
+    margin: theme.spacing(2, 1)
   },
   more: {
     color: '#a6a6a6',
-    paddingRight: theme.spacing(2),
+    paddingRight: theme.spacing(1),
     fontSize: theme.spacing(2)
   }
 }));
@@ -57,7 +58,7 @@ function SimplePaper({ listItem, ...props }) {
             查看更多
           </Link>
         </Grid>
-        <Divider />
+        {/* <Divider /> */}
         <ItemList list={listItem.news} />
       </Paper>
     </div>

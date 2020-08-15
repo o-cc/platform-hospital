@@ -1,7 +1,6 @@
 import React from 'react';
 import { vw } from 'utils';
 import styled, { keyframes } from 'styled-components';
-import Modal from '@material-ui/core/Modal';
 const loadingAni = keyframes`
   0% {
     transform: rotate(0deg);
@@ -34,7 +33,7 @@ export const LoadingP = styled.div`
     border: 5px solid #fff;
     border-radius: 50%;
     animation: ${loadingAni} 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #fff transparent transparent transparent;
+    border-color: #f90 transparent transparent transparent;
   }
   > div:nth-child(1) {
     animation-delay: -0.45s;
@@ -46,11 +45,17 @@ export const LoadingP = styled.div`
     animation-delay: -0.15s;
   }
 `;
+const Modal = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+`;
 
 export default () => {
   return (
     <Modal
-      open={true}
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
     >

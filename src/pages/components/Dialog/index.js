@@ -32,9 +32,11 @@ export default function AlertDialogSlide(props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onClose} color="primary">
-            取消
-          </Button>
+          {!props.isCancel && (
+            <Button onClick={props.onClose} color="primary">
+              取消
+            </Button>
+          )}
           <Button onClick={props.handleOk} color="primary">
             确定
           </Button>
