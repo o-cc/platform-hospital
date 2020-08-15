@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import './App.css';
 import 'swiper/css/swiper.css';
 import { HashRouter as Router, Route, withRouter } from 'react-router-dom';
-import Login from 'pages/Login';
-import Home from 'pages/Home';
 import AppCont from 'container';
-import Detail from 'pages/Detail';
-import User from 'pages/User';
-import Other from '@/pages/Others';
-import VideoDetail from '@/pages/VideoDetail';
-import PageTemplate from './pages/components/PageTemplate';
-import Store from '@/pages/Store';
-import Member from '@/pages/Member';
 import 'tools/vconsole';
-import Search from 'pages/Search';
-import Error from 'pages/Error';
+import Loading from 'pages/components/Loading';
+
+const Home = lazy(() => import('pages/Home'));
+const Detail = lazy(() => import('pages/Detail'));
+const Login = lazy(() => import('pages/Login'));
+const User = lazy(() => import('pages/User'));
+const VideoDetail = lazy(() => import('pages/VideoDetail'));
+const Other = lazy(() => import('pages/Others'));
+const Store = lazy(() => import('pages/Store'));
+const PageTemplate = lazy(() => import('pages/components/PageTemplate'));
+const Member = lazy(() => import('pages/Member'));
+const Search = lazy(() => import('pages/Search'));
+const Collect = lazy(() => import('pages/Collect'));
+const Error = lazy(() => import('pages/Error'));
 function OtherWrap() {
   return (
     <PageTemplate>
@@ -27,17 +30,19 @@ const Root = withRouter(props => {
   const { error } = appCont;
   return (
     <>
-      {error.error && <Error info={error} />}
-
-      <Route path="/login" component={Login}></Route>
-      <Route exact path="/" component={Home}></Route>
-      <Route path="/detail/:id" component={Detail}></Route>
-      <Route path="/user/:id" component={User}></Route>
-      <Route exact path={`/other/:id`} component={OtherWrap}></Route>
-      <Route exact path={`/video/detail/:id`} component={VideoDetail}></Route>
-      <Route exact path={`/store`} component={Store}></Route>
-      <Route path={`/member/`} component={Member}></Route>
-      <Route path={'/search'} component={Search}></Route>
+      <Suspense fallback={<Loading></Loading>}>
+        {error.error && <Error info={error} />}
+        <Route path="/login" component={Login}></Route>
+        <Route exact path="/" component={Home}></Route>
+        <Route path="/detail/:id" component={Detail}></Route>
+        <Route path="/user/:id" component={User}></Route>
+        <Route exact path={`/other/:id`} component={OtherWrap}></Route>
+        <Route exact path={`/video/detail/:id`} component={VideoDetail}></Route>
+        <Route exact path={`/store`} component={Store}></Route>
+        <Route path={`/member/`} component={Member}></Route>
+        <Route path={'/search'} component={Search}></Route>
+        <Route path={'/collect/:id'} component={Collect}></Route>
+      </Suspense>
     </>
   );
 });
