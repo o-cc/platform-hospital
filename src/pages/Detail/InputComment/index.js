@@ -14,10 +14,14 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 0,
     background: '#fff',
-    margin: 'auto',
     borderTop: '1px solid #ccc',
-    padding: theme.spacing(2),
-    fontSize: vw(30)
+
+    '&>div': {
+      maxWidth: 1000,
+      margin: 'auto',
+      padding: theme.spacing(2),
+      fontSize: 16
+    }
   },
   textarea: {
     display: 'block',
@@ -40,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.spacing(2),
     background: 'rgba(120,120,120, 0.1)',
     padding: `${vw(7)} ${vw(15)}`,
-    fontSize: vw(25),
+    fontSize: 15,
     alignItems: 'center',
     justifyConent: 'center'
   },
@@ -66,36 +70,33 @@ function In({
         onClickOutside && onClickOutside();
       }}
     >
-      <Grid
-        container
-        alignItems="flex-end"
-        justify="space-between"
-        className={classes.root}
-      >
-        <Grid item xs={10}>
-          <Input
-            autoFocus
-            className={classes.textarea}
-            disableUnderline
-            multiline
-            aria-label="maximum height"
-            placeholder={holder || '说点什么吧...'}
-            fullWidth
-            value={value}
-            onChange={onChange}
-          />
+      <div className={classes.root}>
+        <Grid container alignItems="flex-end" justify="space-between">
+          <Grid item xs={10}>
+            <Input
+              autoFocus
+              className={classes.textarea}
+              disableUnderline
+              multiline
+              aria-label="maximum height"
+              placeholder={holder || '说点什么吧...'}
+              fullWidth
+              value={value}
+              onChange={onChange}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button
+              variant="text"
+              color="primary"
+              className={classes.push}
+              onClick={() => release()}
+            >
+              发布
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Button
-            variant="text"
-            color="primary"
-            className={classes.push}
-            onClick={() => release()}
-          >
-            发布
-          </Button>
-        </Grid>
-      </Grid>
+      </div>
     </ClickOutside>
   );
 }
@@ -109,44 +110,54 @@ function Default({
   ...props
 }) {
   return (
-    <Grid container justify="space-between" className={classes.root}>
-      <Grid item xs={!isDetail ? 8 : 12}>
-        <Grid
-          item
-          xs={12}
-          className={classes.write}
-          onClick={() => changeComp('In')}
-        >
-          <BorderColorIcon
-            color="primary"
-            fontSize="small"
-            className={classes.icon}
-          />
-          <div>写评论....</div>
-        </Grid>
-      </Grid>
-      {!isDetail && (
-        <>
-          <Grid item>
-            <Badge
-              //点击跑到评论这里
-              // onClick={() => {}}
-              badgeContent={count}
-              max={999}
-              color="secondary"
-              children={<ChatBubbleOutlineIcon fontSize="small" />}
+    <div className={classes.root}>
+      <Grid container justify="space-between">
+        <Grid item xs={!isDetail ? 8 : 12}>
+          <Grid
+            item
+            xs={12}
+            className={classes.write}
+            onClick={() => changeComp('In')}
+          >
+            <BorderColorIcon
+              color="primary"
+              fontSize="small"
+              className={classes.icon}
             />
+            <div>写评论....</div>
           </Grid>
-          <Grid item style={{ marginRight: 20 }}>
-            {collected ? (
-              <StarRoundedIcon color="secondary" onClick={props.onCollect} />
-            ) : (
-              <StarBorderRoundedIcon color="action" onClick={props.onCollect} />
-            )}
-          </Grid>
-        </>
-      )}
-    </Grid>
+        </Grid>
+        {!isDetail && (
+          <>
+            <Grid item>
+              <Grid container alignItems="center" style={{ height: '100%' }}>
+                <Badge
+                  badgeContent={count}
+                  max={999}
+                  color="secondary"
+                  children={<ChatBubbleOutlineIcon fontSize="small" />}
+                />
+              </Grid>
+            </Grid>
+            <Grid item style={{ marginRight: 20 }}>
+              <Grid container alignItems="center" style={{ height: '100%' }}>
+                {collected ? (
+                  <StarRoundedIcon
+                    color="secondary"
+                    onClick={props.onCollect}
+                  />
+                ) : (
+                  <StarBorderRoundedIcon
+                    color="action"
+                    onClick={props.onCollect}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          </>
+        )}
+      </Grid>
+    </div>
   );
 }
 

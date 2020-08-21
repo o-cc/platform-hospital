@@ -9,7 +9,7 @@ import {
   Grid,
   Avatar,
   Button,
-  OutlinedInput,
+  TextField,
   IconButton,
   Typography
 } from '@material-ui/core';
@@ -22,6 +22,8 @@ import { StarTwoTone } from '@material-ui/icons';
 import useRunning from '@/hooks/useRunning';
 import InfiniteScroll from 'react-infinite-scroller';
 import { defaultAvatar } from 'configs';
+import PCTemplate from '../components/PCTemplate';
+import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => ({
   wrap: {
@@ -32,8 +34,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex'
   },
   video: {
-    width: '100vw',
-    height: vw(420)
+    width: '100%',
+    height: vw(420),
+    maxHeight: 380
   },
   info: {
     marginTop: theme.spacing(3)
@@ -44,12 +47,12 @@ const useStyles = makeStyles(theme => ({
   },
   model: {
     padding: `${vw(15)} ${vw(22.5)}`,
-    fontSize: vw(30),
+    fontSize: 16,
     marginTop: theme.spacing(1)
   },
   introduce: {
     padding: `${vw(22.5)} ${vw(22.5)} ${vw(35)}`,
-    fontSize: vw(25),
+    fontSize: 14,
     marginTop: theme.spacing(1),
     lineHeight: 1.5,
     '& p': {
@@ -57,11 +60,11 @@ const useStyles = makeStyles(theme => ({
     }
   },
   sizeSmall: {
-    fontSize: vw(23),
+    fontSize: 16,
     color: '#666'
   },
   sizeNormal: {
-    lineHeight: vw(45)
+    lineHeight: 1.5
   },
   comment: {
     borderBottom: '1px solid #ccc',
@@ -73,11 +76,12 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     right: 0,
     background: '#fff',
-    padding: `${vw(7.5)} 0`
+    padding: theme.spacing(1, 0)
+    // maxHeight: 49
   },
   input: {
     '& .MuiOutlinedInput-input': {
-      padding: vw(22.5)
+      // padding: vw(22.5)
     }
   },
   flexCenter: {
@@ -104,7 +108,7 @@ function TabPanel(props) {
 
 const Text = styled(({ text, ...other }) => <p {...other}>{text}</p>)({
   fontSize: props => {
-    return props.size === 'large' ? vw(30) : vw(25);
+    return props.size === 'large' ? 16 : 14;
   },
   fontWeight: props => {
     return props.size === 'large' ? 'bold' : '';
@@ -195,11 +199,12 @@ export default function MediaControlCard() {
       content: commentVal
     });
     if (error) return setError(error);
-    setError('评论成功', 'success', 1000);
+    // setError('评论成功', 'success', 1000);
     setComments(state => ({
       ...state,
       results: state.results.concat([{ ...result, content: commentVal }])
     }));
+    setCommentVal('');
   });
 
   const {
@@ -214,6 +219,7 @@ export default function MediaControlCard() {
     is_followed
   } = videoInfo;
   const hasMore = comments.next;
+  const width = useWidth();
   return (
     <>
       <BackHeader
@@ -229,186 +235,201 @@ export default function MediaControlCard() {
           </IconButton>
         )}
       />
-      <div className={classes.wrap}>
-        <Card className={classes.root}>
-          <CardMedia
-            className={classes.video}
-            src={video_url}
-            title="Live from space album cover"
-            component="video"
-            controls="controls"
-            preload="true"
-            playsInline={true}
-            x5-video-player-type="h5-page"
-            webkit-playsinline="true"
-          />
-        </Card>
-        <Tabs
-          value={tabVal}
-          onChange={(e, val) => {
-            setTabVal(val);
-          }}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-        >
-          <Tab label="视频详情" />
-        </Tabs>
-
-        <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={tabVal}
-          onChangeIndex={idx => setTabVal(idx)}
-        >
-          <TabPanel
+      <PCTemplate screen={width}>
+        <div className={classes.wrap}>
+          <Card className={classes.root}>
+            <CardMedia
+              className={classes.video}
+              src={video_url}
+              title="Live from space album cover"
+              component="video"
+              controls="controls"
+              preload="true"
+              playsInline={true}
+              x5-video-player-type="h5-page"
+              webkit-playsinline="true"
+            />
+          </Card>
+          <Tabs
             value={tabVal}
-            index={0}
-            dir={theme.direction}
-            style={{ background: '#f5f5f5' }}
+            onChange={(e, val) => {
+              setTabVal(val);
+            }}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
           >
-            <InfiniteScroll
-              pageStart={0}
-              loadMore={loadFunc}
-              hasMore={!!hasMore}
-              loader={
-                <div style={{ textAlign: 'center' }} key={'0dd'}>
-                  正在加载...
-                </div>
-              }
+            <Tab label="视频详情" />
+          </Tabs>
+
+          <SwipeableViews
+            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+            index={tabVal}
+            onChangeIndex={idx => setTabVal(idx)}
+          >
+            <TabPanel
+              value={tabVal}
+              index={0}
+              dir={theme.direction}
+              style={{ background: '#f5f5f5' }}
             >
-              <Paper className={classes.model} elevation={0}>
-                <Text size="large" text={title}></Text>
-                <Text text={video_desc}></Text>
-                <Text text={`视频时长：${video_long}`}></Text>
-              </Paper>
-
-              <Paper className={classes.model} elevation={0}>
-                <Grid container justify="space-around">
-                  {has_follow && (
-                    <Grid item xs={12}>
-                      <Typography
-                        color="secondary"
-                        variant="body2"
-                        align="right"
-                      >
-                        <span onClick={clickFollow}>
-                          {is_followed ? '取消关注' : '+关注'}
-                        </span>
-                      </Typography>
-                    </Grid>
-                  )}
-                  <Grid item xs={3}>
-                    <Avatar
-                      className={classes.avatar}
-                      src={user_info.avatar || defaultAvatar}
-                    ></Avatar>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Grid
-                      container
-                      direction="column"
-                      style={{ height: '100%' }}
-                      justify="space-around"
-                    >
-                      <Grid item>
-                        <Text
-                          style={{ margin: 0, color: '#000' }}
-                          size="large"
-                          text={user_info.username}
-                        />
-                      </Grid>
-                      <Grid item>
-                        {user_info.intro && (
-                          <Text style={{ margin: 0 }} text={user_info.intro} />
-                        )}
-                      </Grid>
-                      <Grid item>
-                        <Text
-                          style={{ margin: 0 }}
-                          text={user_info.company + ' ' + user_info.departments}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Paper>
-              {/* 全部评论 */}
-              <Paper
-                className={classes.model}
-                elevation={0}
-                style={{
-                  paddingBottom: '8vh'
-                }}
+              <InfiniteScroll
+                pageStart={0}
+                loadMore={loadFunc}
+                hasMore={!!hasMore}
+                loader={
+                  <div style={{ textAlign: 'center' }} key={'0dd'}>
+                    正在加载...
+                  </div>
+                }
               >
-                <Grid container justify="space-between">
-                  <Text size="large" text="全部评论" />
-                  {comment_count ? (
-                    <Text
-                      size="small"
-                      text={`+${comment_count}`}
-                      style={{ color: '#f30' }}
-                    />
-                  ) : null}
-                </Grid>
+                <Paper className={classes.model} elevation={0}>
+                  <Text size="large" text={title}></Text>
+                  <Text text={video_desc}></Text>
+                  <Text text={`视频时长：${video_long}`}></Text>
+                </Paper>
 
-                {comments.results.map(item => (
-                  <Paper
-                    elevation={0}
-                    key={item.id}
-                    className={classes.comment}
-                  >
-                    <Grid
-                      container
-                      justify="space-around"
-                      alignItems="flex-start"
-                      style={{ padding: 10 }}
-                    >
-                      <Grid item>
-                        <Avatar src={item.avatar || defaultAvatar} />
-                      </Grid>
-                      <Grid item xs={10}>
-                        <p
-                          className={classes.sizeSmall}
-                          style={{ marginTop: '0' }}
+                <Paper className={classes.model} elevation={0}>
+                  <Grid container justify="space-around">
+                    {has_follow && (
+                      <Grid item xs={12}>
+                        <Typography
+                          color="secondary"
+                          variant="body2"
+                          align="right"
                         >
-                          {item.username}
-                        </p>
-                        <p className={classes.sizeNormal}>{item.content}</p>
-                        <p className={classes.sizeSmall}>{item.create_time}</p>
+                          <span onClick={clickFollow}>
+                            {is_followed ? '取消关注' : '+关注'}
+                          </span>
+                        </Typography>
+                      </Grid>
+                    )}
+                    <Grid item xs={3}>
+                      <Avatar
+                        className={classes.avatar}
+                        src={user_info.avatar || defaultAvatar}
+                      ></Avatar>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Grid
+                        container
+                        direction="column"
+                        style={{ height: '100%' }}
+                        justify="space-around"
+                      >
+                        <Grid item>
+                          <Text
+                            style={{ margin: 0, color: '#000' }}
+                            size="large"
+                            text={user_info.username}
+                          />
+                        </Grid>
+                        <Grid item>
+                          {user_info.intro && (
+                            <Text
+                              style={{ margin: 0 }}
+                              text={user_info.intro}
+                            />
+                          )}
+                        </Grid>
+                        <Grid item>
+                          <Text
+                            style={{ margin: 0 }}
+                            text={
+                              user_info.company + ' ' + user_info.departments
+                            }
+                          />
+                        </Grid>
                       </Grid>
                     </Grid>
-                  </Paper>
-                ))}
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  align="center"
+                  </Grid>
+                </Paper>
+                {/* 全部评论 */}
+                <Paper
+                  className={classes.model}
+                  elevation={0}
+                  style={{
+                    marginBottom: 60
+                  }}
                 >
-                  没有更多啦
-                </Typography>
-              </Paper>
-            </InfiniteScroll>
-          </TabPanel>
-        </SwipeableViews>
-        <Paper elevation={4} className={classes.inputWrap}>
-          <Grid container>
-            <Grid item xs={10}>
-              <OutlinedInput
-                fullWidth
-                className={classes.input}
-                placeholder="说点什么吧"
-                value={commentVal}
-                onChange={e => {
-                  setCommentVal(e.target.value);
-                }}
-              />
+                  <Grid container justify="space-between">
+                    <Text size="large" text="全部评论" />
+                    {comment_count ? (
+                      <Text
+                        size="small"
+                        text={`+${comment_count}`}
+                        style={{ color: '#f30' }}
+                      />
+                    ) : null}
+                  </Grid>
+
+                  {comments.results.map(item => (
+                    <Paper
+                      elevation={0}
+                      key={item.id}
+                      className={classes.comment}
+                    >
+                      <Grid
+                        container
+                        justify="space-around"
+                        alignItems="flex-start"
+                        style={{ padding: 10 }}
+                      >
+                        <Grid item>
+                          <Avatar src={item.avatar || defaultAvatar} />
+                        </Grid>
+                        <Grid item xs={10}>
+                          <p
+                            className={classes.sizeSmall}
+                            style={{ marginTop: '0' }}
+                          >
+                            {item.username}
+                          </p>
+                          <p className={classes.sizeNormal}>{item.content}</p>
+                          <p className={classes.sizeSmall}>
+                            {item.create_time}
+                          </p>
+                        </Grid>
+                      </Grid>
+                    </Paper>
+                  ))}
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    align="center"
+                  >
+                    没有更多啦
+                  </Typography>
+                </Paper>
+              </InfiniteScroll>
+            </TabPanel>
+          </SwipeableViews>
+          {/* <Hidden xsUp> */}
+          <Paper elevation={4} className={classes.inputWrap}>
+            <Grid container style={{ maxWidth: 1000, margin: 'auto' }}>
+              <Grid item xs={10}>
+                <TextField
+                  fullWidth
+                  className={classes.input}
+                  placeholder="说点什么吧"
+                  value={commentVal}
+                  size="small"
+                  variant="outlined"
+                  onChange={e => {
+                    setCommentVal(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={2} className={classes.flexCenter}>
+                <Button variant="outlined" onClick={submitComment}>
+                  评论
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={2} className={classes.flexCenter}>
-              <Button onClick={submitComment}>评论</Button>
-            </Grid>
-          </Grid>
-        </Paper>
-      </div>
+          </Paper>
+          {/* </Hidden> */}
+        </div>
+      </PCTemplate>
     </>
   );
 }

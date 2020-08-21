@@ -1,4 +1,4 @@
-export const defaultAvatar = require('assets/imgs/test_avatar.jpg');
+export const defaultAvatar = '';
 export const storageKeys = {
   token: 'token_1'
 };

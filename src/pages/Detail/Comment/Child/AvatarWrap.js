@@ -18,14 +18,14 @@ const useStyles = makeStyles(theme => {
       }
     },
     comment: {
-      margin: `${vw(15)} auto ${vw(10)}`,
+      margin: '8px auto 8px',
       whiteSpace: 'pre-wrap'
     },
     prompt: {
       display: 'flex',
       justifyContent: 'left',
       alignItems: 'center',
-      fontSize: vw(20),
+      fontSize: 14,
       margin: `0 auto ${vw(30)}`
     },
     colorRed: {
@@ -106,7 +106,7 @@ function List({ list, idx = 0, ...props }) {
           <span
             className={classes.colorBlue}
             onClick={clickUser}
-          >{`// @${list.replay_username}`}</span>
+          >{` @${list.replay_username}`}</span>
         )}
       </Grid>
 

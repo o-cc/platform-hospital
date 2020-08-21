@@ -13,6 +13,7 @@ import useRunning from '@/hooks/useRunning';
 import { useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import Dialog from 'pages/components/Dialog';
+import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => ({
   modal: {
@@ -37,8 +38,8 @@ const useStyles = makeStyles(theme => ({
     height: 100
   },
   info: {
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    height: '100%',
     outline: 'none'
   },
   title: {
@@ -47,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: vw(15)
   },
   allComment: {
-    fontSize: vw(20),
+    fontSize: 14,
     textAlign: 'left',
     padding: `${vw(30)} ${vw(15)}`
   }
@@ -166,7 +167,17 @@ export default function TransitionsModal({ list, ...props }) {
     }));
   };
   const hasMore = detailComments.next;
-
+  const width = useWidth();
+  function paperProps() {
+    if (width === 'xs') {
+      return {};
+    } else {
+      return {
+        width: '60%',
+        height: '80%'
+      };
+    }
+  }
   return (
     <div>
       <Modal
@@ -188,7 +199,11 @@ export default function TransitionsModal({ list, ...props }) {
           unmountOnExit
           timeout={300}
         >
-          <Paper elevation={4} className={classes.info}>
+          <Paper
+            elevation={4}
+            className={classes.info}
+            style={{ ...paperProps() }}
+          >
             <InfiniteScroll
               pageStart={0}
               loadMore={loadFunc}

@@ -10,7 +10,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import Comment from 'pages/Detail/Comment';
-import { vw, requestApi, getQueryKey } from '@/utils';
+import { requestApi, getQueryKey } from '@/utils';
 import { withRouter } from 'react-router-dom';
 import InputComment from '@/pages/Detail/InputComment';
 import Back from 'pages/components/BackHeader';
@@ -25,8 +25,10 @@ import Dialog from 'pages/components/Dialog';
 const useStyles = makeStyles(theme => ({
   root: {
     fontFamily: 'Microsoft Yahei',
-    fontSize: vw(30),
+    fontSize: 16,
     color: '#000000',
+    maxWidth: 1000,
+    margin: 'auto',
     lineHeight: '25px',
     paddingBottom: theme.spacing(6)
   },
@@ -38,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   },
   date: {
     alignSelf: 'center',
-    fontSize: vw(25),
+    fontSize: 14,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -230,6 +232,8 @@ function Detail(props) {
 
   return (
     <div className={classes.outer}>
+      <Back title="" />
+
       <Grid
         container
         className={classes.root}
@@ -237,7 +241,6 @@ function Detail(props) {
         direction="column"
         alignItems="center"
       >
-        <Back title="" />
         <Grid item xs={11}>
           <Typography
             variant="subtitle1"

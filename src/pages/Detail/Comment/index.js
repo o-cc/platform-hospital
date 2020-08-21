@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import CommentDetail from './Child/CommentDetail';
 import { vw } from '@/utils';
 import ListItem from './Child/AvatarWrap';
@@ -12,8 +12,11 @@ const useStyles = makeStyles(theme => {
   return {
     root: {
       marginTop: theme.spacing(2),
-      fontSize: vw(25),
-      lineHeight: vw(35)
+      fontSize: 16,
+      lineHeight: 1.5,
+      maxWidth: 1000,
+      marginLeft: 'auto',
+      marginRight: 'auto'
     },
     avatar: {
       display: 'flex',
@@ -32,7 +35,7 @@ const useStyles = makeStyles(theme => {
       display: 'flex',
       justifyContent: 'left',
       alignItems: 'center',
-      fontSize: vw(20),
+      fontSize: 14,
       margin: `0 auto ${vw(30)}`
     },
     colorRed: {
@@ -87,8 +90,11 @@ export default props => {
             deleteComment={props.deleteComment}
           />
         ))}
-
-        <Grid item>没有更多了</Grid>
+        <Grid item xs={12}>
+          <Typography align="center" variant="body2" color="textSecondary">
+            没有更多了
+          </Typography>
+        </Grid>
       </Grid>
       {/* 评论详情 */}
       {reply.show && (
