@@ -23,8 +23,8 @@ const MyDiv = styled(({ ...other }) => <div {...other} />)({
   border: 0,
   color: 'white',
   width: '100vw',
-  height: vw(350),
-  maxHeight: '450px',
+  height: ({ height }) => (height ? height + 'px' : vw(350)),
+  maxHeight: '400px',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'flex-end',
@@ -56,6 +56,7 @@ export default ({ swiperList = [], commendList = [], ...props }) => {
             <MyDiv
               key={item.content_id}
               image={item.image}
+              {...props}
               onClick={() => {
                 if (item.url) window.location.href = item.url;
               }}

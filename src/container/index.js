@@ -2,7 +2,8 @@ import { useState, useRef, useCallback } from 'react';
 import { createContainer } from 'unstated-next';
 
 const INIT_STATE = {
-  searchData: {}
+  searchData: {},
+  homeData: null
 };
 
 function useCounter() {
@@ -16,10 +17,17 @@ function useCounter() {
     });
     return stateRef.current;
   }
+
   const setMenuLists = useCallback(data => {
     merge(state => ({
       ...state,
       menuLists: data
+    }));
+  }, []);
+  const setHomeData = useCallback(data => {
+    merge(state => ({
+      ...state,
+      homeData: data
     }));
   }, []);
 
@@ -38,7 +46,14 @@ function useCounter() {
     }));
   }, []);
 
-  return { state, setMenuLists, setError, error, setSearchData };
+  return {
+    state,
+    setMenuLists,
+    setError,
+    error,
+    setSearchData,
+    setHomeData
+  };
 }
 
 export default createContainer(useCounter);

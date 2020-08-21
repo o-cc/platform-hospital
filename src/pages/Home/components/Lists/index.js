@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 export default withRouter(function ListDividers(props) {
   const classes = useStyles();
-  const { lists } = props;
+  const { lists = [] } = props;
   return (
     <List
       component="nav"

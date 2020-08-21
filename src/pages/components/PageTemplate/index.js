@@ -4,6 +4,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
+import { Hidden } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   footer: {
@@ -26,19 +27,21 @@ export default props => {
       <Nav {...props}></Nav>
       {props.children}
       {/* footer */}
-      <div style={{ width: '100%', height: '8px' }}></div>
-      <footer className={classes.footer}>
-        <Container maxWidth="sm">
-          <Typography variant="body2" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="#">
-              Company Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
-        </Container>
-      </footer>
+      <div style={{ width: '100%', height: '5px' }}></div>
+      <Hidden smUp>
+        <footer className={classes.footer}>
+          <Container maxWidth="sm">
+            <Typography variant="body2" align="center">
+              {'Copyright © '}
+              <Link color="inherit" href="#">
+                Company Website
+              </Link>{' '}
+              {new Date().getFullYear()}
+              {'.'}
+            </Typography>
+          </Container>
+        </footer>
+      </Hidden>
     </>
   );
 };

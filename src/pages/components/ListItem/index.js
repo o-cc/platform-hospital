@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
 
 const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
   width: '100%',
-  maxWidth: '200px',
+  maxWidth: '165px',
   borderRadius: 5,
   height: 'auto',
   maxHeight: '100px'
@@ -166,7 +166,7 @@ export default withRouter(function ListItem({ list = [], ...props }) {
               )}
             </Grid>
           </Grid>
-          <Divider />
+          {list.length > idx + 1 && <Divider />}
         </Fragment>
       ))}
     </>

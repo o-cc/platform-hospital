@@ -4,7 +4,6 @@ import {
   makeStyles,
   IconButton,
   Grid,
-  InputLabel,
   Button,
   Card,
   CardMedia,
@@ -32,7 +31,8 @@ const useStyles = makeStyles(t => ({
     color: '#666'
   },
   form: {
-    width: '95%'
+    width: '95%',
+    margin: 'auto'
   },
   inputs: {
     margin: t.spacing(0, 0, 3, 0),
@@ -50,8 +50,16 @@ const useStyles = makeStyles(t => ({
     height: t.spacing(25)
   },
   img: {
-    maxWidth: '100%',
+    width: t.spacing(12),
     height: 'auto'
+  },
+  button: {
+    margin: t.spacing(0, 1)
+  },
+  label: {
+    lineHeight: '40px',
+    fontSize: 15,
+    color: '#888'
   }
 }));
 const ProgressUI = styled(({ progress, ...other }) => <div {...other} />)({
@@ -226,220 +234,202 @@ function Editor(props) {
                       温馨提示：选择2:1的图片作为封面最合适噢
                     </span>
                   </Grid>
+
                   {imgUrl && (
-                    <Grid
-                      item
-                      xs={11}
-                      style={{ height: '25vh', overflow: 'auto' }}
-                    >
+                    <Grid item xs={11}>
                       <img className={classes.img} src={imgUrl} alt="封面" />
                     </Grid>
                   )}
-
-                  <Grid item style={{ lineHeight: '40px' }}>
-                    <InputLabel htmlFor="file" style={{ fontSize: 14 }}>
-                      选择封面：
-                    </InputLabel>
-                  </Grid>
-                  <Grid item>
-                    <ImagePicker
-                      className={classes.input}
-                      id="poster"
-                      onPick={(canvas, data, file) => {
-                        uploadPoster(canvas, data, file);
-                      }}
-                    />
-                    <label htmlFor="poster">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        component="span"
-                      >
-                        Upload
-                      </Button>
-                    </label>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <span
-                      style={{
-                        lineHeight: '40px',
-                        fontSize: 15,
-                        paddingLeft: 15,
-                        color: '#888'
-                      }}
-                    >
-                      {imgUrl && '上传成功'}
-                    </span>
-                  </Grid>
-
-                  <Grid item>
-                    <InputLabel htmlFor="category" style={{ fontSize: 14 }}>
-                      视频分类：
-                    </InputLabel>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Se
-                      style={{ width: '30%', marginRight: 8 }}
-                      value={topCateIdx}
-                      onChange={e => setTopCateIdx(e.target.value)}
-                      id="grouped-select"
-                    >
-                      {categoryData.map((item, idx) => (
-                        <MenuItem key={item.id} value={idx}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                    </Se>
-                    {categoryData[topCateIdx] && (
-                      <>
-                        <Se
-                          style={{ width: '30%', marginRight: 8 }}
-                          value={subCateIdx}
-                          onChange={e => {
-                            let idx = e.target.value;
-                            setSubCateIdx(idx);
-                            setCurrSelect(
-                              categoryData[topCateIdx].sub_categories[idx]
-                            );
+                  <Grid item xs={11}>
+                    <Grid container>
+                      <span className={classes.label}>选择封面：</span>
+                      <div>
+                        <ImagePicker
+                          className={classes.input}
+                          id="poster"
+                          onPick={(canvas, data, file) => {
+                            uploadPoster(canvas, data, file);
                           }}
-                          id="grouped-select-1"
-                        >
-                          {categoryData[topCateIdx].sub_categories.map(
-                            (item, idx) => (
-                              <MenuItem key={item.id} value={idx}>
-                                {item.name}
-                              </MenuItem>
-                            )
-                          )}
-                        </Se>
-                        <Se
-                          style={{ width: '30%', marginRight: 8 }}
-                          value={endCateIdx}
-                          onChange={e => {
-                            let idx = e.target.value;
-                            setEndCateIdx(idx);
-                            if (idx === '') {
-                              //恢复到2级
-                              return setCurrSelect(
+                        />
+                        <label htmlFor="poster">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            component="span"
+                          >
+                            Upload
+                          </Button>
+                        </label>
+                      </div>
+                      <span
+                        className={classes.label}
+                        style={{
+                          paddingLeft: 15,
+                          color: '#4ebc7c'
+                        }}
+                      >
+                        {imgUrl && '上传成功'}
+                      </span>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={6}></Grid>
+
+                  <Grid item xs={11}>
+                    <Grid container>
+                      <span className={classes.label}>视频分类：</span>
+                      <Se
+                        style={{ width: '30%', marginRight: 8 }}
+                        value={topCateIdx}
+                        onChange={e => setTopCateIdx(e.target.value)}
+                        id="grouped-select"
+                      >
+                        {categoryData.map((item, idx) => (
+                          <MenuItem key={item.id} value={idx}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Se>
+                      {categoryData[topCateIdx] && (
+                        <>
+                          <Se
+                            style={{ width: '30%', marginRight: 8 }}
+                            value={subCateIdx}
+                            onChange={e => {
+                              let idx = e.target.value;
+                              setSubCateIdx(idx);
+                              setCurrSelect(
+                                categoryData[topCateIdx].sub_categories[idx]
+                              );
+                            }}
+                            id="grouped-select-1"
+                          >
+                            {categoryData[topCateIdx].sub_categories.map(
+                              (item, idx) => (
+                                <MenuItem key={item.id} value={idx}>
+                                  {item.name}
+                                </MenuItem>
+                              )
+                            )}
+                          </Se>
+                          <Se
+                            style={{ width: '30%', marginRight: 8 }}
+                            value={endCateIdx}
+                            onChange={e => {
+                              let idx = e.target.value;
+                              setEndCateIdx(idx);
+                              if (idx === '') {
+                                //恢复到2级
+                                return setCurrSelect(
+                                  categoryData[topCateIdx].sub_categories[
+                                    subCateIdx
+                                  ]
+                                );
+                              }
+                              setCurrSelect(
                                 categoryData[topCateIdx].sub_categories[
                                   subCateIdx
-                                ]
+                                ].sub_categories[idx]
                               );
-                            }
-                            setCurrSelect(
+                            }}
+                            id="grouped-select-2"
+                          >
+                            <MenuItem value="">None</MenuItem>
+
+                            {categoryData[topCateIdx].sub_categories[
+                              subCateIdx
+                            ] &&
                               categoryData[topCateIdx].sub_categories[
                                 subCateIdx
-                              ].sub_categories[idx]
-                            );
-                          }}
-                          id="grouped-select-2"
-                        >
-                          <MenuItem value="">None</MenuItem>
-
-                          {categoryData[topCateIdx].sub_categories[
-                            subCateIdx
-                          ] &&
-                            categoryData[topCateIdx].sub_categories[
-                              subCateIdx
-                            ].sub_categories.map((item, idx) => (
-                              <MenuItem key={item.sub_id} value={idx}>
-                                {item.name}
-                              </MenuItem>
-                            ))}
-                        </Se>
-                      </>
-                    )}
+                              ].sub_categories.map((item, idx) => (
+                                <MenuItem key={item.sub_id} value={idx}>
+                                  {item.name}
+                                </MenuItem>
+                              ))}
+                          </Se>
+                        </>
+                      )}
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={11}>
+                    <Grid container>
+                      <span className={classes.label}>视频标题：</span>
+                      <Field
+                        component={TextField}
+                        name="title"
+                        style={{ width: '93%', marginLeft: 8 }}
+                        inputProps={{
+                          id: 'title'
+                        }}
+                      ></Field>
+                    </Grid>
                   </Grid>
 
-                  <Grid item>
-                    <InputLabel htmlFor="title" style={{ fontSize: 14 }}>
-                      视频标题：
-                    </InputLabel>
-                  </Grid>
-                  <Grid item xs={9}>
-                    <Field
-                      component={TextField}
-                      name="title"
-                      style={{ width: '93%', marginLeft: 8 }}
-                      inputProps={{
-                        id: 'title'
-                      }}
-                    ></Field>
-                  </Grid>
-
-                  <Grid item>
-                    <InputLabel htmlFor="desc" style={{ fontSize: 14 }}>
-                      视频介绍：
-                    </InputLabel>
-                  </Grid>
-
-                  <Grid item xs={9}>
-                    <Field
-                      component={TextField}
-                      name="desc"
-                      multiline={true}
-                      style={{ width: '93%', marginLeft: 8 }}
-                      inputProps={{
-                        id: 'desc'
-                      }}
-                    ></Field>
-                  </Grid>
-
-                  <Grid item style={{ marginTop: 8 }}>
-                    <InputLabel htmlFor="video_upload" style={{ fontSize: 14 }}>
-                      视频上传:
-                    </InputLabel>
+                  <Grid item xs={11}>
+                    <Grid container>
+                      <span className={classes.label}>视频介绍：</span>
+                      <Field
+                        component={TextField}
+                        name="desc"
+                        multiline={true}
+                        style={{ width: '93%', marginLeft: 8 }}
+                        inputProps={{
+                          id: 'desc'
+                        }}
+                      ></Field>
+                    </Grid>
                   </Grid>
                   <Grid
                     item
-                    xs={4}
+                    xs={11}
                     style={{
                       marginTop: 8,
                       pointerEvents: !isComplete ? 'none' : null
                     }}
                   >
-                    <input
-                      type="file"
-                      accept="video/*"
-                      onChange={selectVideo}
-                      id="video_upload_d"
-                      className={classes.input}
-                    />
+                    <Grid container>
+                      <span className={classes.label}>视频上传:</span>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        onChange={selectVideo}
+                        id="video_upload_d"
+                        className={classes.input}
+                      />
 
-                    <label htmlFor="video_upload_d">
-                      <Button
-                        variant="contained"
-                        className={classes.button}
-                        component="span"
-                        color="primary"
-                        disabled={!isComplete}
-                        startIcon={<CloudUpload />}
-                      >
-                        Upload
-                      </Button>
-                    </label>
-                  </Grid>
-                  <Grid item xs={5}>
-                    {Number(progress) > 0 && (
-                      <>
-                        <Typography
-                          variant="body2"
-                          align="center"
-                          color="textSecondary"
+                      <label htmlFor="video_upload_d">
+                        <Button
+                          variant="contained"
+                          className={classes.button}
+                          component="span"
+                          color="primary"
+                          disabled={!isComplete}
+                          startIcon={<CloudUpload />}
                         >
-                          {Number(progress) < 100
-                            ? progress + '%'
-                            : '恭喜你上传成功!'}
-                        </Typography>
-                        <ProgressUI progress={progress}>
-                          <div className="child"></div>
-                        </ProgressUI>
-                      </>
-                    )}
+                          Upload
+                        </Button>
+                      </label>
+                      {Number(progress) > 0 && (
+                        <>
+                          <Typography
+                            variant="body2"
+                            align="center"
+                            color="textSecondary"
+                          >
+                            {Number(progress) < 100
+                              ? progress + '%'
+                              : '恭喜你上传成功!'}
+                          </Typography>
+                          <ProgressUI progress={progress}>
+                            <div className="child"></div>
+                          </ProgressUI>
+                        </>
+                      )}
+                    </Grid>
                   </Grid>
+
                   {videoUrl && isComplete && (
                     <Grid item xs={11}>
-                      <Card className={classes.root}>
+                      <Card>
                         <CardMedia
                           className={classes.video}
                           src={videoUrl}

@@ -18,7 +18,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { Collapse } from '@material-ui/core';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+// import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import { storageKeys } from 'configs';
 import StoreMallDirectoryOutlined from '@material-ui/icons/StoreMallDirectoryOutlined';
 

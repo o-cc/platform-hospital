@@ -1,34 +1,79 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
+import SwiperWrap from 'pages/components/Swiper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import TabPanel from './TabPanel.js';
+import ItemList from 'pages/components/ListItem';
+import { Divider, Typography } from '@material-ui/core';
+import PCTemplate from '../components/PCTemplate/index.js';
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    height: '100%',
-    background: '#fff',
-    display: 'flex',
-    alignItems: 'flex-start',
-    padding: theme.spacing(0, 2),
-    margin: '10px auto'
-  },
-  mainColumn: {
-    width: '694px',
-    flexShrink: 0,
-    marginRight: '10px',
-    marginBottom: 0
-  },
-  sideBar: {
-    flex: '1 1',
-    fontSize: '14px'
+  tabs: {
+    color: '#000',
+
+    '& .Mui-selected': {
+      fontWeight: 'bold'
+    },
+    '& .MuiTabs-indicator': {
+      backgroundColor: '#fff'
+    }
   }
 }));
-function InPc() {
+function InPc(props) {
   const classes = useStyles();
+  const {
+    lists = [],
+    a11yProps,
+    swiperList,
+    commendList,
+    value,
+    handleChange,
+    loadMoreFun
+  } = props;
+
   return (
-    <div className={classes.root}>
-      <div className={classes.mainColumn}></div>
-      <div className={classes.sideBar}></div>
-    </div>
+    <PCTemplate>
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        className={classes.tabs}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="scrollable auto tabs"
+      >
+        {lists.map((sub, idx) => (
+          <Tab size="small" key={sub.id} label={sub.name} {...a11yProps(idx)} />
+        ))}
+      </Tabs>
+      <Divider />
+      {lists.map((sub, idx) => (
+        <TabPanel
+          value={value}
+          index={idx}
+          next={sub.next}
+          key={idx}
+          style={{ padding: `0 20px` }}
+        >
+          <SwiperWrap
+            swiperList={swiperList}
+            commendList={commendList}
+            height={280}
+          ></SwiperWrap>
+          <ItemList list={sub.news} />
+          {sub.next && (
+            <Typography
+              onClick={loadMoreFun}
+              variant="body1"
+              align="center"
+              color="textSecondary"
+              style={{ marginTop: 8, cursor: 'pointer' }}
+            >
+              点击加载更多
+            </Typography>
+          )}
+        </TabPanel>
+      ))}
+    </PCTemplate>
   );
 }
 export default InPc;

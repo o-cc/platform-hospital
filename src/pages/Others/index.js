@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import AppCont from 'container';
-import PropTypes from 'prop-types';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
 import SwipeableViews from 'react-swipeable-views';
 import ItemList from 'pages/components/ListItem';
-import { vw, requestApi } from '@/utils';
+import { requestApi } from '@/utils';
 import InfiniteScroll from 'react-infinite-scroller';
 import qs from 'qs';
 import SwiperWrap from 'pages/components/Swiper';
@@ -16,40 +14,7 @@ import useWidth from '@/hooks/useWidth';
 import Hidden from '@material-ui/core/Hidden';
 import PC from './PC';
 import { Divider, Typography } from '@material-ui/core';
-
-function TabPanel(props) {
-  const { children, value, index, next, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-auto-tabpanel-${index}`}
-      aria-labelledby={`scrollable-auto-tab-${index}`}
-      style={{ minHeight: 'calc(83vh - 48px)' }}
-      {...other}
-    >
-      {value === index && (
-        <Box
-          style={{
-            padding: `${vw(7.5)} 0`,
-            overflowY: 'hidden'
-          }}
-          p={3}
-        >
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
-};
-
+import TabPanel from './TabPanel.js';
 function a11yProps(index) {
   return {
     id: `scrollable-auto-tab-${index}`,
@@ -60,11 +25,17 @@ function a11yProps(index) {
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    width: '100%',
-    minHeight: 'calc(100vh - 108px)',
     marginTop: theme.spacing(6),
-    maxWidth: '1200px',
     margin: 'auto'
+  },
+  tabs: {
+    color: '#000',
+    '& .Mui-selected': {
+      fontWeight: 'bold'
+    },
+    '& .MuiTabs-indicator': {
+      backgroundColor: '#fff'
+    }
   }
 }));
 function formatArray2Obj(contents) {
@@ -130,10 +101,10 @@ function Other() {
     if (!lists[value]) return;
     const id = lists[value].id;
     const next = lists[value].next || '';
-    const page = qs.parse(next.slice(next.lastIndexOf('?') + 1)).page;
+    const pages = qs.parse(next.slice(next.lastIndexOf('?') + 1));
     let { result, error } = await requestApi('getCategoriesDetail', {
       id,
-      page
+      page: pages.page ? pages.page : 1
     });
     if (error) {
       return setError(error);
@@ -159,17 +130,14 @@ function Other() {
   const width = useWidth();
 
   return (
-    <div
-      className={classes.root}
-      style={{ marginTop: width === 'xs' ? undefined : '82px' }}
-    >
+    <div className={width !== 'xs' ? '' : classes.root}>
       <Hidden smUp>
         {lists.length > 0 ? (
           <>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor="secondary"
+              className={classes.tabs}
               variant="scrollable"
               scrollButtons="auto"
               style={{ background: '#fff' }}
@@ -230,7 +198,15 @@ function Other() {
       </Hidden>
 
       <Hidden xsDown>
-        <PC />
+        <PC
+          lists={lists}
+          a11yProps={a11yProps}
+          swiperList={swiperList}
+          commendList={commendList}
+          value={value}
+          handleChange={handleChange}
+          loadMoreFun={loadFunc}
+        />
       </Hidden>
     </div>
   );

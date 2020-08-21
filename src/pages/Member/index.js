@@ -96,7 +96,7 @@ const menuList = [
   { id: 0, title: '收货地址', type: types.address },
   { id: 1, title: '兑换记录', type: types['exchange'] },
   { id: 2, title: '任务中心', type: types['task'] },
-  { id: 3, title: '我的文章', type: types['myArticle'] },
+  // { id: 3, title: '我的文章', type: types['myArticle'] },
   { id: 4, title: '浏览记录', type: types['record'] }
 ];
 
@@ -119,7 +119,7 @@ export default withRouter(props => {
       if (error) return setError(error);
       setUserInfo(result);
       result.score && setScore(result.score);
-      result.is_signin && setSignState(result.is_signin)
+      result.is_signin && setSignState(result.is_signin);
     }
     getUser();
   }, [setError]);
@@ -139,7 +139,7 @@ export default withRouter(props => {
     let { result, error } = await requestApi('postSignIn');
     if (error) return setError(error);
     if (result.integral) {
-      setScore(score => score + result.integral )
+      setScore(score => score + result.integral);
     }
     setSignState(true);
   });
@@ -147,7 +147,7 @@ export default withRouter(props => {
   return (
     <Grid container className={classes.root}>
       <Grid item xs={12}>
-        <BackHeader withoutHome={true} title="" />
+        <BackHeader withoutHome={true} title="" bgColor="none" />
       </Grid>
       <Grid item xs={12}>
         <Grid
@@ -200,7 +200,12 @@ export default withRouter(props => {
             <Grid item>
               <Grid container alignItems="center">
                 <Grid item>
-                  <Button disabled={signState} style={{color: signState ? '#888': '#f90'}} size="small" onClick={signIn}>
+                  <Button
+                    disabled={signState}
+                    style={{ color: signState ? '#888' : '#f90' }}
+                    size="small"
+                    onClick={signIn}
+                  >
                     {signState ? '已签到' : '签到'}
                   </Button>
                 </Grid>

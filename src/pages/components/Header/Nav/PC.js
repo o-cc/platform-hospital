@@ -36,22 +36,18 @@ const Arrow = styled(({ down, ...other }) => (
 const useStyles = makeStyles(theme => ({
   root: {
     padding: '2px 4px',
-    minHeight: theme.spacing(8),
+    minHeight: theme.spacing(6),
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
     boxShadow: 'none',
     background: '#fff',
     zIndex: 2,
-    border: `1px solid #ccc`
+    border: `1px solid #ccc`,
+    minWidth: '1000px'
   },
   central: {
     width: '100%',
-    maxWidth: '1200px',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -68,7 +64,8 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     width: theme.spacing(6),
     height: theme.spacing(6),
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   nav: {
     paddingLeft: theme.spacing(2)
@@ -80,7 +77,8 @@ const useStyles = makeStyles(theme => ({
     border: '1px solid #ccc',
     background: '#fff',
     minWidth: '110%',
-    borderRadius: theme.spacing(0.4)
+    borderRadius: theme.spacing(0.4),
+    zIndex: 10
   },
   input: {
     marginLeft: theme.spacing(2),
@@ -100,7 +98,8 @@ const useStyles = makeStyles(theme => ({
   },
   listRoot: {
     display: 'flex',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    padding: theme.spacing(0.5, 0)
   }
 }));
 
@@ -116,6 +115,10 @@ function NavInPC({ menuData, ...props }) {
     setTimeout(() => {
       props.history && props.history.push('/other/' + idx);
     }, 10);
+  };
+
+  const clickAvatar = () => {
+    props.history.push('/member');
   };
   return (
     <>
@@ -210,7 +213,11 @@ function NavInPC({ menuData, ...props }) {
           >
             <Search style={{ color: '#888' }} />
           </IconButton>
-          <Avatar src={defaultAvatar} className={classes.avatar} />
+          <Avatar
+            onClick={clickAvatar}
+            src={defaultAvatar}
+            className={classes.avatar}
+          />
         </nav>
       </Paper>
     </>

@@ -12,7 +12,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    maxWidth: '1200px',
+    maxWidth: '1000px',
+    padding: theme.spacing(0, 2),
+
     margin: 'auto',
     minHeight: 'calc(100vh - 108px)',
     marginTop: theme.spacing(6)

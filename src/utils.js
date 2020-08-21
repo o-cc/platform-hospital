@@ -16,6 +16,13 @@ export const getObjKey = (obj, index) => {
   return Object.keys(obj)[index];
 };
 
+export function formatArray2Obj(contents = []) {
+  return contents.reduce((prev, next) => {
+    prev[next.key] = next;
+    return prev;
+  }, {});
+}
+
 export const requestApi = async (name, params = {}) => {
   let res = {};
   try {
