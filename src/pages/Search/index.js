@@ -7,16 +7,15 @@ import { vw, requestApi, getQueryKey } from '@/utils';
 import InfiniteScroll from 'react-infinite-scroller';
 import PageTemplate from '../components/PageTemplate';
 import useWidth from '@/hooks/useWidth';
+import { Typography } from '@material-ui/core';
+import PCTemplate from '../components/PCTemplate';
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     width: '100%',
-    maxWidth: '1000px',
-    padding: theme.spacing(0, 2),
-
     margin: 'auto',
-    minHeight: 'calc(100vh - 108px)',
+    minHeight: 'calc(100vh - 105px)',
     marginTop: theme.spacing(6)
   },
   tabs: {
@@ -53,24 +52,36 @@ function Other() {
   const width = useWidth();
   return (
     <PageTemplate>
-      <div
-        className={classes.root}
-        style={{ marginTop: width === 'xs' ? undefined : '82px' }}
-      >
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={loadFunc}
-          hasMore={!!hasMore}
-          loader={
-            <div style={{ textAlign: 'center' }} key={0}>
-              正在加载...
-            </div>
-          }
-        >
-          <Box style={{ padding: `0 ${vw(30)}`, overflowY: 'hidden' }} p={3}>
-            <ItemList list={results} />
-          </Box>
-        </InfiniteScroll>
+      <div className={width !== 'xs' ? '' : classes.root}>
+        <PCTemplate screen={width}>
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={loadFunc}
+            hasMore={!!hasMore}
+            loader={
+              <div style={{ textAlign: 'center' }} key={0}>
+                正在加载...
+              </div>
+            }
+          >
+            <Box
+              style={{ padding: `${vw(15)} ${vw(30)} 0`, overflowY: 'hidden' }}
+              p={3}
+            >
+              <ItemList list={results} />
+              {searchData.next && (
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  align="center"
+                  onClick={loadFunc}
+                >
+                  点击查看更多
+                </Typography>
+              )}
+            </Box>
+          </InfiniteScroll>
+        </PCTemplate>
       </div>
     </PageTemplate>
   );

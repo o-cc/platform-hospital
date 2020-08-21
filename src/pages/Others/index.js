@@ -26,7 +26,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     marginTop: theme.spacing(6),
-    margin: 'auto'
+    margin: 'auto',
+    minHeight: 'calc(100vh - 105px)'
   },
   tabs: {
     color: '#000',

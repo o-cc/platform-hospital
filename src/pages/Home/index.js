@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     // padding: theme.spacing(0, 2),
     // margin: 'auto',
     marginTop: theme.spacing(6),
-    minHeight: 'calc(100vh - 108px)'
+    minHeight: 'calc(100vh - 105px)'
   }
 }));
 

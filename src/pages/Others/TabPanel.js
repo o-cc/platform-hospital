@@ -12,7 +12,7 @@ export default function TabPanel(props) {
       hidden={value !== index}
       id={`scrollable-auto-tabpanel-${index}`}
       aria-labelledby={`scrollable-auto-tab-${index}`}
-      style={{ minHeight: 'calc(83vh - 52px)' }}
+      style={{ minHeight: 'calc(83vh - 53px)' }}
       {...other}
     >
       {value === index && (
