@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
       fontWeight: 'bold'
     },
     '& .MuiTabs-indicator': {
-      backgroundColor: '#fff'
+      width: '85%'
     }
   }
 }));
@@ -37,6 +37,7 @@ function InPc(props) {
         value={value}
         onChange={handleChange}
         className={classes.tabs}
+        indicatorColor="primary"
         variant="scrollable"
         scrollButtons="auto"
         aria-label="scrollable auto tabs"

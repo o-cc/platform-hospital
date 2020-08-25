@@ -214,6 +214,9 @@ const api = {
       }
     });
   },
+  getGoodById({ id }) {
+    return this.instance.get('/goods/' + id + '/');
+  },
   getOrders({ page = 1 }) {
     return this.instance.get('/orders/', {
       params: {
@@ -291,7 +294,7 @@ api.instance.interceptors.request.use(
 
     config.headers = {
       ...config.headers,
-      Authorization: `JWT ${token}`
+      Authorization: token && `JWT ${token}`
     };
     if (config.cache) {
       let source = axios.CancelToken.source();
@@ -324,7 +327,9 @@ api.instance.interceptors.response.use(
     if (axios.isCancel(error)) {
       return Promise.resolve(error.message);
     }
-
+    if (/addresses/.test(error.response.config.url)) {
+      return Promise.reject(error);
+    }
     if (error.response && error.response.status === 401) {
       window.localStorage.setItem(storageKeys.token, '');
 

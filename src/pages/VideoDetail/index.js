@@ -11,7 +11,9 @@ import {
   Button,
   TextField,
   IconButton,
-  Typography
+  Typography,
+  Hidden,
+  Divider
 } from '@material-ui/core';
 import { vw, requestApi, getQueryKey } from '@/utils';
 import SwipeableViews from 'react-swipeable-views';
@@ -24,6 +26,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { defaultAvatar } from 'configs';
 import PCTemplate from '../components/PCTemplate';
 import useWidth from '@/hooks/useWidth';
+import Nav from '../components/Header/Nav';
 
 const useStyles = makeStyles(theme => ({
   wrap: {
@@ -88,6 +91,33 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  collected: {
+    float: 'right'
+  },
+  textareaWrap: {
+    marginBottom: 48,
+    flexGrow: 1,
+    boxSizing: 'border-box'
+  },
+  textarea: {
+    padding: theme.spacing(1.2, 2),
+    width: '90%',
+    height: '90px',
+    fontSize: '13px',
+    border: '1px solid #eee',
+    borderRadius: 4,
+    backgroundColor: '#fafafa',
+    resize: 'none',
+    display: 'inline-block',
+    verticalAlign: 'top',
+    outlineStyle: 'none',
+    overflow: 'auto',
+    marginLeft: theme.spacing(1)
+  },
+  btn: {
+    margin: theme.spacing(1),
+    float: 'right'
   }
 }));
 function TabPanel(props) {
@@ -209,7 +239,7 @@ export default function MediaControlCard() {
 
   const {
     video_url,
-    comment_count,
+    comments_count,
     title,
     video_desc,
     video_long,
@@ -222,19 +252,23 @@ export default function MediaControlCard() {
   const width = useWidth();
   return (
     <>
-      <BackHeader
-        title={title}
-        homeComponent={() => (
-          <IconButton
-            onClick={clickStar}
-            color={collected ? 'secondary' : 'default'}
-            aria-label="collect"
-            component="span"
-          >
-            <StarTwoTone />
-          </IconButton>
-        )}
-      />
+      {width === 'xs' ? (
+        <BackHeader
+          title={title}
+          homeComponent={() => (
+            <IconButton
+              onClick={clickStar}
+              color={collected ? 'secondary' : 'default'}
+              aria-label="collect"
+              component="span"
+            >
+              <StarTwoTone />
+            </IconButton>
+          )}
+        />
+      ) : (
+        <Nav />
+      )}
       <PCTemplate screen={width}>
         <div className={classes.wrap}>
           <Card className={classes.root}>
@@ -284,6 +318,15 @@ export default function MediaControlCard() {
                 }
               >
                 <Paper className={classes.model} elevation={0}>
+                  <Button
+                    variant="outlined"
+                    size="medium"
+                    className={classes.collected}
+                    onClick={clickStar}
+                    color={collected ? 'secondary' : 'primary'}
+                  >
+                    {collected ? '已收藏' : '+收藏'}
+                  </Button>
                   <Text size="large" text={title}></Text>
                   <Text text={video_desc}></Text>
                   <Text text={`视频时长：${video_long}`}></Text>
@@ -292,16 +335,31 @@ export default function MediaControlCard() {
                 <Paper className={classes.model} elevation={0}>
                   <Grid container justify="space-around">
                     {has_follow && (
-                      <Grid item xs={12}>
-                        <Typography
-                          color="secondary"
-                          variant="body2"
-                          align="right"
-                        >
-                          <span onClick={clickFollow}>
+                      <Grid
+                        item
+                        xs={12}
+                        style={{ textAlign: 'right', marginBottom: -36 }}
+                      >
+                        {width === 'xs' ? (
+                          <Typography
+                            color="secondary"
+                            variant="body2"
+                            align="right"
+                          >
+                            <span onClick={clickFollow}>
+                              {is_followed ? '取消关注' : '+关注'}
+                            </span>
+                          </Typography>
+                        ) : (
+                          <Button
+                            variant="outlined"
+                            size="medium"
+                            color="primary"
+                            onClick={clickFollow}
+                          >
                             {is_followed ? '取消关注' : '+关注'}
-                          </span>
-                        </Typography>
+                          </Button>
+                        )}
                       </Grid>
                     )}
                     <Grid item xs={3}>
@@ -325,12 +383,12 @@ export default function MediaControlCard() {
                           />
                         </Grid>
                         <Grid item>
-                          {user_info.intro && (
+                          {
                             <Text
                               style={{ margin: 0 }}
-                              text={user_info.intro}
+                              text={`${user_info.company} ${user_info.departments} ${user_info.job}`}
                             />
-                          )}
+                          }
                         </Grid>
                         <Grid item>
                           <Text
@@ -352,15 +410,39 @@ export default function MediaControlCard() {
                     marginBottom: 60
                   }}
                 >
+                  <div className={classes.textareaWrap}>
+                    <textarea
+                      className={classes.textarea}
+                      placeholder="写下你的评论吧...."
+                      value={commentVal}
+                      onChange={e => setCommentVal(e.target.value)}
+                    ></textarea>
+                    <Button
+                      size="small"
+                      className={classes.btn}
+                      variant="outlined"
+                      onClick={() => setCommentVal('')}
+                    >
+                      取消
+                    </Button>
+                    <Button
+                      size="small"
+                      className={classes.btn}
+                      color="primary"
+                      variant="contained"
+                      onClick={submitComment}
+                    >
+                      发布
+                    </Button>
+                  </div>
+                  <Divider />
                   <Grid container justify="space-between">
-                    <Text size="large" text="全部评论" />
-                    {comment_count ? (
-                      <Text
-                        size="small"
-                        text={`+${comment_count}`}
-                        style={{ color: '#f30' }}
-                      />
-                    ) : null}
+                    <Text
+                      size="large"
+                      text={`全部评论${
+                        comments_count > 0 && ` (${comments_count})`
+                      }`}
+                    />
                   </Grid>
 
                   {comments.results.map(item => (
@@ -404,30 +486,30 @@ export default function MediaControlCard() {
               </InfiniteScroll>
             </TabPanel>
           </SwipeableViews>
-          {/* <Hidden xsUp> */}
-          <Paper elevation={4} className={classes.inputWrap}>
-            <Grid container style={{ maxWidth: 1000, margin: 'auto' }}>
-              <Grid item xs={10}>
-                <TextField
-                  fullWidth
-                  className={classes.input}
-                  placeholder="说点什么吧"
-                  value={commentVal}
-                  size="small"
-                  variant="outlined"
-                  onChange={e => {
-                    setCommentVal(e.target.value);
-                  }}
-                />
+          <Hidden smUp>
+            <Paper elevation={4} className={classes.inputWrap}>
+              <Grid container style={{ maxWidth: 1000, margin: 'auto' }}>
+                <Grid item xs={10}>
+                  <TextField
+                    fullWidth
+                    className={classes.input}
+                    placeholder="说点什么吧"
+                    value={commentVal}
+                    size="small"
+                    variant="outlined"
+                    onChange={e => {
+                      setCommentVal(e.target.value);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={2} className={classes.flexCenter}>
+                  <Button variant="outlined" onClick={submitComment}>
+                    评论
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={2} className={classes.flexCenter}>
-                <Button variant="outlined" onClick={submitComment}>
-                  评论
-                </Button>
-              </Grid>
-            </Grid>
-          </Paper>
-          {/* </Hidden> */}
+            </Paper>
+          </Hidden>
         </div>
       </PCTemplate>
     </>

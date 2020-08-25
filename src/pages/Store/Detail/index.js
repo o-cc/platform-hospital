@@ -17,7 +17,9 @@ const MyDiv = styled(({ src, ...other }) => (
 const useStyles = makeStyles(theme => ({
   info: {
     padding: vw(30),
-    fontSize: vw(25),
+    fontSize: 15,
+    maxWidth: 1000,
+    margin: 'auto',
     '& p': {
       marginTop: vw(10)
     }
@@ -63,17 +65,19 @@ export default withRouter(props => {
     <Slider open={show}>
       <Grid container justify="center" alignItems="center">
         <BackHeader title={goodsItem.name} back={props.onClose} />
-        <Grid item xs={12} style={{ padding: 8 }}>
+        <Grid item xs={12} md={6} style={{ padding: 8 }}>
           <Swiper {...params}>
             {goodsItem.images &&
-              goodsItem.images.map(item => <MyDiv key={item} src={item} />)}
+              goodsItem.images.map((item, idx) => (
+                <MyDiv key={idx} src={item} />
+              ))}
           </Swiper>
         </Grid>
         <Grid item xs={12} className={classes.info}>
           <Divider />
           <h4>{goodsItem.name}</h4>
           <p className={classes.integration}>
-            <span style={{ fontSize: vw(40), fontWeight: 'bold' }}>
+            <span style={{ fontSize: 20, fontWeight: 'bold' }}>
               {goodsItem.integral}
             </span>{' '}
             积分

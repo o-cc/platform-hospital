@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import PlayCircleFilledWhiteRoundedIcon from '@material-ui/icons/PlayCircleFilledWhiteRounded';
+import useWidth from '@/hooks/useWidth';
 const useStyles = makeStyles(theme => ({
   imgItem: {
     display: 'flex',
@@ -18,8 +19,7 @@ const useStyles = makeStyles(theme => ({
   },
   gridWrap: {
     alignItems: 'center',
-    padding: theme.spacing(1, 1, 1.5, 1),
-    // marginTop: theme.spacing(0.8),
+    padding: theme.spacing(1, 2, 1.5, 2),
     background: '#fff'
   },
   gridItem: {
@@ -34,9 +34,13 @@ const useStyles = makeStyles(theme => ({
     }
   },
   textFlow: {
-    padding: theme.spacing(0.5, 0),
+    padding: theme.spacing(1, 0),
     color: '#000',
-    fontSize: '16px'
+    fontSize: '14px',
+    fontWeight: 600,
+    '&:hover': {
+      textDecoration: 'underline'
+    }
   },
   poster: {
     width: '100%',
@@ -72,7 +76,7 @@ const useStyles = makeStyles(theme => ({
 
 const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
   width: '100%',
-  maxWidth: '165px',
+  maxWidth: '125px',
   borderRadius: 5,
   height: 'auto',
   maxHeight: '100px'
@@ -80,7 +84,7 @@ const Img = styled(({ bg, ...other }) => <img alt="a" {...other} src={bg} />)({
 
 export default withRouter(function ListItem({ list = [], ...props }) {
   const classes = useStyles();
-
+  const screen = useWidth();
   if (list.length <= 0) {
     return (
       <Typography
@@ -101,16 +105,20 @@ export default withRouter(function ListItem({ list = [], ...props }) {
             container
             className={classes.gridWrap}
             justify="space-between"
-            style={{ marginTop: idx === 0 && 0 }}
             onClick={() => {
               if (props.onClick) return props.onClick(item.news_id);
 
+              let hash = '/';
               if (item.news_type === 'Video') {
-                props.history &&
-                  props.history.push('/video/detail/' + item.news_id);
+                hash = '/video/detail/' + item.news_id;
               } else {
-                props.history && props.history.push('/detail/' + item.news_id);
+                hash = '/detail/' + item.news_id;
               }
+              if (screen !== 'xs') {
+                const url = `${window.location.origin}${window.location.pathname}#${hash}`;
+                return window.open(url, '_blank');
+              }
+              props.history && props.history.push(hash);
             }}
           >
             <Grid item xs={12}>
@@ -166,7 +174,7 @@ export default withRouter(function ListItem({ list = [], ...props }) {
               )}
             </Grid>
           </Grid>
-          {list.length > idx + 1 && <Divider />}
+          {list.length > idx + 1 && <Divider variant="middle" />}
         </Fragment>
       ))}
     </>

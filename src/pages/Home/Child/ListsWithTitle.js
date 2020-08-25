@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    margin: theme.spacing(0.5, 0),
+    marginTop: theme.spacing(1),
     '& > *': {
       width: '100%',
       borderRadius: 0
@@ -20,16 +20,14 @@ const useStyles = makeStyles(theme => ({
   paper: {
     width: '100%',
     overflow: 'hidden',
-    background: 'none'
+    background: '#fff'
   },
   subTitle: {
     color: '#111',
-    fontSize: theme.spacing(2.2),
-    margin: theme.spacing(2, 1)
+    fontSize: theme.spacing(2.2)
   },
   more: {
     color: '#a6a6a6',
-    paddingRight: theme.spacing(1),
     fontSize: theme.spacing(2)
   }
 }));
@@ -39,12 +37,12 @@ function SimplePaper({ listItem, ...props }) {
 
   return (
     <div className={classes.root}>
-      <Paper variant="outlined" className={classes.paper}>
+      <Paper elevation={0} className={classes.paper}>
         <Grid
           container
           justify="space-between"
           alignItems="center"
-          style={{ background: '#fff' }}
+          style={{ background: '#fff', padding: `0 16px` }}
         >
           <h4 className={classes.subTitle}>{listItem.name}</h4>
           <Link
@@ -58,7 +56,7 @@ function SimplePaper({ listItem, ...props }) {
             查看更多
           </Link>
         </Grid>
-        {/* <Divider /> */}
+        {/* <Divider variant="middle" /> */}
         <ItemList list={listItem.news} />
       </Paper>
     </div>

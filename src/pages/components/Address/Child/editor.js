@@ -9,16 +9,16 @@ import {
 } from '@material-ui/core';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
-import BackHeader from '@/pages/components/BackHeader';
+// import BackHeader from '@/pages/components/BackHeader';
 import { vw, getObjKey, query, requestApi } from 'utils';
 import AppCont from 'container';
 import Area from 'pages/components/Area';
 const useStyles = makeStyles(theme => ({
   form: {
     width: '100%',
-    marginTop: vw(15),
+    marginTop: 4,
     '& input': {
-      paddingLeft: vw(30),
+      paddingLeft: 16,
       fontSize: 16
     },
     fontSize: 16
@@ -80,13 +80,6 @@ export default props => {
 
   return (
     <>
-      <BackHeader
-        title="新增地址"
-        back={() => {
-          props.back && props.back();
-        }}
-        withoutHome={true}
-      />
       <Grid
         container
         justify="center"
@@ -105,7 +98,7 @@ export default props => {
             {({ submitForm, isSubmitting, values }) => (
               <Form className={classes.form}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12}>
                     <Field
                       required
                       fullWidth
@@ -115,7 +108,7 @@ export default props => {
                       component={TextField}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12}>
                     <Field
                       component={TextField}
                       variant="standard"
@@ -126,13 +119,7 @@ export default props => {
                       label="手机号码"
                     />
                   </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    sm={6}
-                    md={3}
-                    onClick={() => setArea(true)}
-                  >
+                  <Grid item xs={12} onClick={() => setArea(true)}>
                     <TextFieldUi
                       variant="standard"
                       required
@@ -143,7 +130,7 @@ export default props => {
                       InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6} md={3}>
+                  <Grid item xs={12}>
                     <Field
                       component={TextField}
                       variant="standard"

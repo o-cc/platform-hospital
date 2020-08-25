@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => {
       lineHeight: 1.5,
       maxWidth: 1000,
       marginLeft: 'auto',
-      marginRight: 'auto'
+      marginRight: 'auto',
+      marginBottom: 75
     },
     avatar: {
       display: 'flex',

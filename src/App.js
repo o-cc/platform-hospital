@@ -13,6 +13,7 @@ const User = lazy(() => import('pages/User'));
 const VideoDetail = lazy(() => import('pages/VideoDetail'));
 const Other = lazy(() => import('pages/Others'));
 const Store = lazy(() => import('pages/Store'));
+const StorePC = lazy(() => import('pages/Store/Detail/PC'));
 const PageTemplate = lazy(() => import('pages/components/PageTemplate'));
 const Member = lazy(() => import('pages/Member'));
 const Search = lazy(() => import('pages/Search'));
@@ -39,6 +40,7 @@ const Root = withRouter(props => {
         <Route exact path={`/other/:id`} component={OtherWrap}></Route>
         <Route exact path={`/video/detail/:id`} component={VideoDetail}></Route>
         <Route exact path={`/store`} component={Store}></Route>
+        <Route exact path={`/store/PC/:id`} component={StorePC}></Route>
         <Route path={`/member/`} component={Member}></Route>
         <Route path={'/search'} component={Search}></Route>
         <Route path={'/collect/:id'} component={Collect}></Route>

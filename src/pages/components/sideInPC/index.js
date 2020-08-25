@@ -30,7 +30,8 @@ const useStyles = makeStyles({
   },
   card: {
     marginBottom: 8,
-    marginLeft: -8
+    marginLeft: -8,
+    boxShadow: '0 2px 12px 0 rgba(0,0,0,.1)'
   }
 });
 
@@ -64,9 +65,18 @@ export default function OutlinedCard(props) {
 
   return (
     <div className={classes.root}>
+      {props.children && (
+        <Card className={classes.card}>
+          <CardContent>{props.children}</CardContent>
+          <CardActions>
+            {/* <Button size="small">查看更多</Button> */}
+          </CardActions>
+        </Card>
+      )}
       {commendList.length > 0 && (
-        <Card variant="outlined" className={classes.card}>
+        <Card className={classes.card}>
           <CardContent>
+            <Typography variant="subtitle1">热门推荐</Typography>
             <Recommend list={commendList} />
           </CardContent>
           <CardActions>
@@ -74,6 +84,9 @@ export default function OutlinedCard(props) {
           </CardActions>
         </Card>
       )}
+      {/* <Card  className={classes.card}>
+        <CardContent></CardContent>
+      </Card> */}
       <Typography className={classes.title} color="textSecondary" gutterBottom>
         © 2020 会务平台{bull}All Rights Reserved
         <br />

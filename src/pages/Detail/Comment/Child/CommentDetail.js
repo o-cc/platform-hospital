@@ -40,7 +40,8 @@ const useStyles = makeStyles(theme => ({
   info: {
     width: '100%',
     height: '100%',
-    outline: 'none'
+    outline: 'none',
+    position: 'relative'
   },
   title: {
     padding: `${vw(15)} 0`,
@@ -242,11 +243,11 @@ export default function TransitionsModal({ list, ...props }) {
                   onClick={clickComment}
                 />
               </Grid>
-              <Divider />
               <Grid container justify="center" alignItems="center">
                 <Grid item xs={12} className={classes.allComment}>
                   全部评论
                 </Grid>
+                <Divider />
 
                 {detailComments.results.map(list => (
                   <ListItem

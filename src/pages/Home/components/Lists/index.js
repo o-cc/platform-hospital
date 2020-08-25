@@ -8,14 +8,17 @@ import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    padding: 0,
     '& .MuiListItem-root': {
       paddingTop: 0,
       paddingBottom: 0
     }
   },
   text: {
-    padding: `${theme.spacing(0.5)}px 0`
+    padding: `${theme.spacing(0.5)}px 0`,
+    '&:hover': {
+      color: '#175199'
+    }
   }
 }));
 
@@ -23,16 +26,12 @@ export default withRouter(function ListDividers(props) {
   const classes = useStyles();
   const { lists = [] } = props;
   return (
-    <List
-      component="nav"
-      className={classes.root}
-      style={{ paddingBottom: 0 }}
-      aria-label="mailbox folders"
-    >
+    <List component="nav" className={classes.root} aria-label="mailbox folders">
       {lists.map((item, idx) => (
         <Fragment key={idx}>
           <ListItem
             button
+            style={{ background: '#fff' }}
             onClick={() => {
               if (item.url) window.location.href = item.url;
             }}

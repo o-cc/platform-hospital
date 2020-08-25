@@ -109,11 +109,15 @@ export default function Address(props) {
         </Grid>
 
         <Slider open={addModal} bgColor="#f8f8f8">
-          <EditorAddress
-            isDefault={address.id === default_address_id}
+          <BackHeader
+            title="新增地址"
             back={() => {
               setAddModal(false);
             }}
+            withoutHome={true}
+          />
+          <EditorAddress
+            isDefault={address.id === default_address_id}
             initValue={address}
             onSubmit={async values => {
               if (address.id) {

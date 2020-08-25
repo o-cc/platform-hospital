@@ -36,6 +36,11 @@ const useStyles = makeStyles(theme => ({
   },
   nested: {
     paddingLeft: theme.spacing(4)
+  },
+  img: {
+    width: '100%',
+    height: 48,
+    background: `url(${require('assets/imgs/logo.png')}) no-repeat center/auto 100%`
   }
 }));
 
@@ -100,7 +105,8 @@ function SwipeableTemporaryDrawer({ menuData, ...props }) {
       <div className={classes.list} role="presentation">
         <List>
           <ListItem button>
-            <ListItemText primary={'logo'} />
+            {/* <ListItemText primary={'logo'} /> */}
+            <div className={classes.img}></div>
           </ListItem>
           {/* 首页 */}
           <ListItem button>

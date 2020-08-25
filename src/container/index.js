@@ -3,7 +3,8 @@ import { createContainer } from 'unstated-next';
 
 const INIT_STATE = {
   searchData: {},
-  homeData: null
+  homeData: null,
+  goods: {}
 };
 
 function useCounter() {
@@ -46,13 +47,21 @@ function useCounter() {
     }));
   }, []);
 
+  const setGoods = useCallback(data => {
+    return merge(state => ({
+      ...state,
+      goods: data
+    }));
+  }, []);
+
   return {
     state,
     setMenuLists,
     setError,
     error,
     setSearchData,
-    setHomeData
+    setHomeData,
+    setGoods
   };
 }
 

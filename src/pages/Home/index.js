@@ -69,7 +69,7 @@ export default props => {
         <Loading />
       ) : (
         <div className={width !== 'xs' ? '' : classes.root}>
-          <PCTemplate screen={width} commendList={commendList}>
+          <PCTemplate withoutBg={true} screen={width} commendList={commendList}>
             <SwiperWrap swiperList={swiperList} {...swiperProps(commendList)} />
             {/* 热门推荐 */}
 

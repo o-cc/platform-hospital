@@ -4,7 +4,8 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import { Hidden } from '@material-ui/core';
+import { Hidden, Grid } from '@material-ui/core';
+import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => ({
   footer: {
@@ -19,11 +20,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+function Child(props) {
+  const screen = useWidth();
+
+  return screen === 'xs' ? (
+    props.children
+  ) : (
+    <Grid container direction="column" justify="center">
+      {props.children}
+    </Grid>
+  );
+}
+
 export default props => {
   const classes = useStyles();
 
   return (
-    <>
+    <Child>
       <Nav {...props}></Nav>
       {props.children}
       {/* footer */}
@@ -34,7 +47,7 @@ export default props => {
             <Typography variant="body2" align="center">
               {'Copyright © '}
               <Link color="inherit" href="#">
-                Company Website
+                以岭药业
               </Link>{' '}
               {new Date().getFullYear()}
               {'.'}
@@ -42,6 +55,6 @@ export default props => {
           </Container>
         </footer>
       </Hidden>
-    </>
+    </Child>
   );
 };

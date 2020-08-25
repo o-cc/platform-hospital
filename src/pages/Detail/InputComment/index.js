@@ -9,7 +9,7 @@ import ClickOutside from '@/tools/ClickOutside';
 import useInput from '@/hooks/useInput';
 const useStyles = makeStyles(theme => ({
   root: {
-    position: 'fixed',
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
@@ -30,7 +30,8 @@ const useStyles = makeStyles(theme => ({
     borderRadius: theme.spacing(2),
     background: 'rgba(120, 120, 120, 0.1)',
     color: '#333',
-    paddingLeft: theme.spacing(3)
+    paddingLeft: theme.spacing(3),
+    overflow: 'hidden'
   },
   push: {
     borderRadius: '50%'

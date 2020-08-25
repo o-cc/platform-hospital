@@ -49,12 +49,9 @@ const useStyles = makeStyles(theme => ({
     margin: 4
   },
   logo: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 0,
-    margin: 0,
-    color: 'white'
+    width: 100,
+    height: 48,
+    background: `url(${require('assets/imgs/logo.png')}) no-repeat center/100%`
   }
 }));
 
@@ -95,9 +92,7 @@ export default withWidth()(
       <>
         <Hidden smUp>
           <Paper component="form" className={classes.root}>
-            {/* <Button aria-label="menu">
-              <div className={classes.logo}>logo</div>
-            </Button> */}
+            {/* <div className={classes.logo}></div> */}
 
             <InputBase
               className={classes.input}

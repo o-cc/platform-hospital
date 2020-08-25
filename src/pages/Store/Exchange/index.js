@@ -43,7 +43,11 @@ const useStyles = makeStyles(theme => ({
     position: 'fixed',
     bottom: 0,
     right: 0,
-    left: 0
+    left: 0,
+    '&>div': {
+      maxWidth: 1000,
+      margin: 'auto'
+    }
   },
   pay: {
     borderRadius: 20
@@ -82,8 +86,6 @@ export default withRouter(props => {
 
   const submitOrder = useRunning(async () => {
     const goods_id = props.goodsItem.id;
-    if (!currAddress.id) return setError('请先选择地址', 'warning');
-    if (!goods_id) return setError('该商品不存在,换个商品吧', 'warning');
     let { error } = await requestApi('postOrder', {
       goods_id,
       count,
@@ -100,9 +102,8 @@ export default withRouter(props => {
 
   return (
     <Slider bgColor="#f8f8f8" open={open}>
-      <Grid container>
-        <BackHeader title="商品兑换" back={props.onClose} />
-
+      <BackHeader title="商品兑换" back={props.onClose} />
+      <Grid container style={{ maxWidth: '1000px', margin: 'auto' }}>
         {currAddress.receiver ? (
           <AddressItem
             addressItem={currAddress}
@@ -200,7 +201,14 @@ export default withRouter(props => {
                   color="secondary"
                   variant="contained"
                   className={classes.pay}
-                  onClick={() => setConfirm(true)}
+                  onClick={() => {
+                    const goods_id = props.goodsItem.id;
+                    if (!currAddress.id)
+                      return setError('请先选择地址', 'warning');
+                    if (!goods_id)
+                      return setError('该商品不存在,换个商品吧', 'warning');
+                    setConfirm(true);
+                  }}
                   disabled={isSubmit || goods.integral * count > myCount}
                 >
                   确认支付

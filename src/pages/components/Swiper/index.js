@@ -4,6 +4,7 @@ import Swiper from 'react-id-swiper';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import { defaultSwiper } from 'configs';
 import Recommend from 'pages/Home/Child/Recommend';
+import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,10 +48,13 @@ let params = {
 
 export default ({ swiperList = [], commendList = [], ...props }) => {
   const classes = useStyles();
-
+  const width = useWidth();
   return (
     <>
-      <div className={classes.root}>
+      <div
+        className={classes.root}
+        style={{ marginBottom: width === 'xs' ? '0' : '10px' }}
+      >
         <Swiper {...params}>
           {swiperList.map(item => (
             <MyDiv

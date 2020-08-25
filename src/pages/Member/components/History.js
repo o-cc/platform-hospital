@@ -24,8 +24,16 @@ export default props => {
 
   return (
     <Slider open={props.open}>
-      <div style={{ width: '100%', height: '100%', overflowX: 'hidden' }}>
-        <BackHeader back={props.onClose} title="历史阅读" withoutHome={true} />
+      <BackHeader back={props.onClose} title="历史阅读" withoutHome={true} />
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          overflowX: 'hidden',
+          maxWidth: 1000,
+          margin: 'auto'
+        }}
+      >
         <ItemList list={news} />
         <Typography variant="body2" align="center" color="textSecondary">
           没有更多啦

@@ -1,13 +1,17 @@
-import React from 'react';
-import { Grid, Avatar } from '@material-ui/core';
+import React, { useState } from 'react';
+import { Grid, Avatar, Button, Divider } from '@material-ui/core';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { vw } from '@/utils';
 import { withRouter } from 'react-router-dom';
 import { defaultAvatar } from 'configs';
+import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => {
   return {
+    commentWrap: {
+      marginBottom: 10
+    },
     avatar: {
       display: 'flex',
       alignItems: 'center',
@@ -26,7 +30,7 @@ const useStyles = makeStyles(theme => {
       justifyContent: 'left',
       alignItems: 'center',
       fontSize: 14,
-      margin: `0 auto ${vw(30)}`
+      margin: `0 auto 16px`
     },
     colorRed: {
       color: 'red'
@@ -54,23 +58,48 @@ const useStyles = makeStyles(theme => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      padding: `${vw(2)} ${vw(15)}`,
+      padding: theme.spacing(0.2, 2),
       color: 'red',
       marginLeft: vw(7.5)
     },
     colorBlue: {
       color: '#3f51b5',
       cursor: 'pointer'
+    },
+    textarea: {
+      padding: theme.spacing(1.2, 2),
+      width: '90%',
+      height: '90px',
+      fontSize: '13px',
+      border: '1px solid #eee',
+      borderRadius: 4,
+      backgroundColor: '#fafafa',
+      resize: 'none',
+      display: 'inline-block',
+      verticalAlign: 'top',
+      outlineStyle: 'none',
+      overflow: 'auto',
+      marginLeft: theme.spacing(1)
+    },
+    btn: {
+      margin: theme.spacing(1),
+      float: 'right'
+    },
+    clearFloat: {
+      overflow: 'hidden'
     }
   };
 });
 
 function List({ list, idx = 0, ...props }) {
   const classes = useStyles();
+  const [showComment, setShowComment] = useState();
   const clickUser = e => {
     e.stopPropagation();
     props.history && props.history.push('/user/' + list.user_id);
   };
+  const screen = useWidth();
+  const [inputVal, setInputVal] = useState('');
   return (
     <Grid
       item
@@ -78,7 +107,8 @@ function List({ list, idx = 0, ...props }) {
       key={list.id}
       className={classes.commentWrap}
       onClick={e => {
-        //判断是否是有二级评论
+        //如果是pc， 不触发
+        // if (screen !== 'xs') return;
         props.reply && props.reply(idx);
         props.onClick && props.onClick(list);
       }}
@@ -112,12 +142,28 @@ function List({ list, idx = 0, ...props }) {
 
       <Grid item xs={11} className={classes.prompt}>
         {list.create_time && list.create_time}
-        {props.reply && list.sub_comment_count ? (
-          <div className={classes.reply}>{list.sub_comment_count}回复</div>
-        ) : null}
+        {screen ? (
+          <>
+            {props.reply && list.sub_comment_count ? (
+              <div className={classes.reply}>{list.sub_comment_count}回复</div>
+            ) : null}
+          </>
+        ) : (
+          <Button
+            size="small"
+            variant="text"
+            color="primary"
+            onClick={() => setShowComment(list.id)}
+          >
+            评论
+          </Button>
+        )}
         {list.has_delete && (
-          <div
-            className={classes.delete}
+          <Button
+            size="small"
+            variant="text"
+            color="secondary"
+            style={{ marginLeft: -8 }}
             onClick={e => {
               e.stopPropagation();
               e.preventDefault();
@@ -125,9 +171,43 @@ function List({ list, idx = 0, ...props }) {
             }}
           >
             删除
-          </div>
+          </Button>
         )}
       </Grid>
+      {list.id === showComment ? (
+        <Grid item xs={11} className={classes.clearFloat}>
+          <textarea
+            className={classes.textarea}
+            placeholder="写下你的评论吧...."
+            value={inputVal}
+            onChange={e => setInputVal(e.target.value)}
+          ></textarea>
+          <Button
+            size="small"
+            className={classes.btn}
+            variant="outlined"
+            onClick={() => {
+              setShowComment(null);
+              setInputVal('');
+            }}
+          >
+            取消
+          </Button>
+          <Button
+            size="small"
+            className={classes.btn}
+            color="primary"
+            variant="contained"
+            onClick={async () => {
+              // await onRelease(inputVal);
+              setInputVal('');
+            }}
+          >
+            发布
+          </Button>
+        </Grid>
+      ) : null}
+      <Divider />
     </Grid>
   );
 }
