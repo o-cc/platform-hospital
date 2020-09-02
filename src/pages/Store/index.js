@@ -124,7 +124,7 @@ export default withRouter(function SimpleCard(props) {
       <Hidden smUp>
         <BackHeader title="积分商城" />
       </Hidden>
-      <Hidden smDown>
+      <Hidden xsDown>
         <Nav />
       </Hidden>
 
