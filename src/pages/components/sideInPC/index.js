@@ -10,7 +10,9 @@ import Recommend from 'pages/Home/Child/Recommend';
 import AppCont from 'container';
 import { useState } from 'react';
 import { requestApi, formatArray2Obj } from '@/utils';
-
+import VideocamRoundedIcon from '@material-ui/icons/VideocamRounded';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
+import { withRouter } from 'react-router-dom';
 const useStyles = makeStyles({
   root: {
     flex: '1 1',
@@ -32,10 +34,35 @@ const useStyles = makeStyles({
     marginBottom: 8,
     marginLeft: -8,
     boxShadow: '0 2px 12px 0 rgba(0,0,0,.1)'
+  },
+  icons: {
+    padding: '0px 16px',
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    '& .item': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 14,
+      cursor: 'pointer',
+      '& .icon': {
+        fontSize: 16,
+        color: '#ff9900',
+        padding: 10,
+        marginBottom: 8,
+        background: 'rgba(255, 150, 7, 0.1)',
+        borderRadius: '50%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      }
+    }
   }
 });
 
-export default function OutlinedCard(props) {
+function OutlinedCard(props) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
   const preventDefault = event => event.preventDefault();
@@ -65,6 +92,39 @@ export default function OutlinedCard(props) {
 
   return (
     <div className={classes.root}>
+      <Card className={classes.card}>
+        <CardContent>
+          <div className={classes.icons}>
+            <div
+              className="item"
+              onClick={() => {
+                let url = `${window.location.origin}${window.location.pathname}#/upload-video`;
+                window.open(url, '_blank');
+              }}
+            >
+              <div className="icon">
+                <VideocamRoundedIcon style={{ fontSize: 28 }} />
+              </div>
+              发视频
+            </div>
+            <div
+              className="item"
+              onClick={() => {
+                let url = `${window.location.origin}${window.location.pathname}#/write`;
+                window.open(url, '_blank');
+              }}
+            >
+              <div className="icon" style={{ color: 'rgb(244, 200, 7)' }}>
+                <BorderColorIcon style={{ fontSize: 28 }} />
+              </div>
+              写文章
+            </div>
+          </div>
+        </CardContent>
+        <CardActions>
+          {/* <Button size="small">查看更多</Button> */}
+        </CardActions>
+      </Card>
       {props.children && (
         <Card className={classes.card}>
           <CardContent>{props.children}</CardContent>
@@ -76,7 +136,9 @@ export default function OutlinedCard(props) {
       {commendList.length > 0 && (
         <Card className={classes.card}>
           <CardContent>
-            <Typography variant="subtitle1">热门推荐</Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              热门推荐
+            </Typography>
             <Recommend list={commendList} />
           </CardContent>
           <CardActions>
@@ -111,3 +173,5 @@ export default function OutlinedCard(props) {
     </div>
   );
 }
+
+export default withRouter(OutlinedCard);
