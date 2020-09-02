@@ -125,14 +125,14 @@ function NavInPC({ menuData, ...props }) {
           </Button>
           <Grid container style={{ flex: 1 }}>
             <List className={classes.listRoot}>
-              <ListItem button key={'home'}>
-                <ListItemText
-                  align="center"
-                  primary={'首页'}
-                  onClick={() => {
-                    props.history && props.history.push('/');
-                  }}
-                />
+              <ListItem
+                button
+                key={'home'}
+                onClick={() => {
+                  props.history && props.history.push('/');
+                }}
+              >
+                <ListItemText align="center" primary={'首页'} />
               </ListItem>
               {menuData.map((item, idx) => (
                 <ListItem
@@ -189,14 +189,14 @@ function NavInPC({ menuData, ...props }) {
                   )}
                 </ListItem>
               ))}
-              <ListItem button key={'store'}>
-                <ListItemText
-                  align="center"
-                  primary={'积分商城'}
-                  onClick={() => {
-                    props.history && props.history.push('/store');
-                  }}
-                />
+              <ListItem
+                button
+                key={'store'}
+                onClick={() => {
+                  props.history && props.history.push('/store');
+                }}
+              >
+                <ListItemText align="center" primary={'积分商城'} />
               </ListItem>
             </List>
           </Grid>
