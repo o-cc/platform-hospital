@@ -23,7 +23,7 @@ const MyDiv = styled(({ ...other }) => <div {...other} />)({
     `url(${image || defaultSwiper}) no-repeat center/100% 100%`,
   border: 0,
   color: 'white',
-  width: '100vw',
+  width: '100%',
   height: ({ height }) => (height ? height + 'px' : vw(350)),
   maxHeight: '400px',
   display: 'flex',

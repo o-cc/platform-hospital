@@ -13,14 +13,17 @@ const useStyles = makeStyles(theme => ({
   info: {
     width: '100vw',
     height: '100vh',
-    overflowY: "auto",
-    outline: "none"
+    overflowY: 'auto',
+    outline: 'none'
   }
 }));
 
 export default function TransitionsModal(props) {
   const classes = useStyles();
-
+  const { pcPage } = props;
+  if (pcPage) {
+    return props.children;
+  }
   return (
     <div>
       <Modal
