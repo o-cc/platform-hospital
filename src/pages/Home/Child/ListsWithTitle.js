@@ -23,12 +23,12 @@ const useStyles = makeStyles(theme => ({
     background: '#fff'
   },
   subTitle: {
-    color: '#111',
-    fontSize: theme.spacing(2.2)
+    color: '#a6a6a6',
+    fontSize: 16
   },
   more: {
     color: '#a6a6a6',
-    fontSize: theme.spacing(2)
+    fontSize: 14
   }
 }));
 

@@ -71,7 +71,6 @@ export default props => {
         <div className={width !== 'xs' ? '' : classes.root}>
           <PCTemplate withoutBg={true} screen={width} commendList={commendList}>
             <SwiperWrap swiperList={swiperList} {...swiperProps(commendList)} />
-            {/* 热门推荐 */}
 
             {/* 信息面板 */}
             {news.map((item, idx) => (
