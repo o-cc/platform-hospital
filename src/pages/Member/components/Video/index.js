@@ -8,7 +8,8 @@ import {
   Card,
   CardMedia,
   styled,
-  Typography
+  Typography,
+  Hidden
 } from '@material-ui/core';
 import BackHeader from 'pages/components/BackHeader';
 import ImagePicker from '@/tools/ImagePicker';
@@ -21,6 +22,8 @@ import useRunning from '@/hooks/useRunning';
 import Se from '@material-ui/core/Select';
 import * as qiniu from 'qiniu-js';
 import { CloudUpload } from '@material-ui/icons';
+import useWidth from '@/hooks/useWidth';
+import Nav from '@/pages/components/Header/Nav';
 
 const useStyles = makeStyles(t => ({
   editor: {
@@ -31,8 +34,12 @@ const useStyles = makeStyles(t => ({
     color: '#666'
   },
   form: {
-    width: '95%',
-    margin: 'auto'
+    width: '100%',
+    maxWidth: '800px',
+    margin: 'auto',
+    padding: `30px 0`,
+    background: '#fff',
+    marginBottom: 60
   },
   inputs: {
     margin: t.spacing(0, 0, 3, 0),
@@ -60,6 +67,15 @@ const useStyles = makeStyles(t => ({
     lineHeight: '40px',
     fontSize: 15,
     color: '#888'
+  },
+  pcBtn: {
+    position: 'fixed',
+    bottom: '3%',
+    right: 0,
+    left: 0,
+    margin: 'auto',
+    textAlign: 'center',
+    height: 48
   }
 }));
 const ProgressUI = styled(({ progress, ...other }) => <div {...other} />)({
@@ -77,7 +93,7 @@ const ProgressUI = styled(({ progress, ...other }) => <div {...other} />)({
     margin: 'auto',
     width: p => p.progress + '%',
     height: '100%',
-    background: '#f1393a'
+    background: '#669966'
   }
 });
 
@@ -95,6 +111,7 @@ function Editor(props) {
   const [progress, setProgress] = useState(0);
   const [videoInfo, setVideoInfo] = useState({});
   const [isComplete, setIsComplete] = useState({});
+  const [imgState, setImgState] = useState('请先上传封面图片');
   useEffect(() => {
     async function getCategory() {
       let { result, error } = await requestApi('getCategories');
@@ -140,8 +157,10 @@ function Editor(props) {
   });
 
   const uploadPoster = async (canvas, data, file) => {
+    setImgState('封面上传中...');
     let result = await uploadImg(file);
-    if (!result) return;
+    if (!result) return setImgState('上传失败, 请重试!');
+    setImgState('封面上传成功');
     setPosterName(result.image_name);
     setImgUrl(result.image_url);
   };
@@ -186,9 +205,12 @@ function Editor(props) {
     var subscription = observable.subscribe(observer);
     console.log('subscription: ', subscription);
   };
-
+  const screen = useWidth();
   return (
-    <Slider open={props.open}>
+    <Slider open={screen !== 'xs' ? true : props.open} pcPage={screen !== 'xs'}>
+      <Hidden smDown>
+        <Nav />
+      </Hidden>
       <Grid container className={classes.inputs}>
         <Formik
           initialValues={{
@@ -206,15 +228,21 @@ function Editor(props) {
         >
           {({ submitForm, isSubmitting, values }) => (
             <>
-              <BackHeader
-                title="发布视频"
-                back={props.onClose}
-                homeComponent={() => (
-                  <IconButton className={classes.release} onClick={submitForm}>
-                    发布
-                  </IconButton>
-                )}
-              />
+              <Hidden smUp>
+                <BackHeader
+                  title="发布视频"
+                  back={props.onClose}
+                  homeComponent={() => (
+                    <IconButton
+                      className={classes.release}
+                      onClick={submitForm}
+                    >
+                      发布
+                    </IconButton>
+                  )}
+                />
+              </Hidden>
+
               <Form className={classes.form}>
                 <Grid
                   container
@@ -223,6 +251,13 @@ function Editor(props) {
                   spacing={1}
                   className={classes.inputWrap}
                 >
+                  <Hidden xsDown>
+                    <Grid item xs={11}>
+                      <Typography variant="body1" style={{ fontWeight: 700 }}>
+                        上传视频
+                      </Typography>
+                    </Grid>
+                  </Hidden>
                   <Grid item xs={11}>
                     <span
                       style={{
@@ -265,10 +300,10 @@ function Editor(props) {
                         className={classes.label}
                         style={{
                           paddingLeft: 15,
-                          color: '#4ebc7c'
+                          color: '#ccc'
                         }}
                       >
-                        {imgUrl && '上传成功'}
+                        {imgState}
                       </span>
                     </Grid>
                   </Grid>
@@ -278,7 +313,7 @@ function Editor(props) {
                     <Grid container>
                       <span className={classes.label}>视频分类：</span>
                       <Se
-                        style={{ width: '30%', marginRight: 8 }}
+                        style={{ width: '28%', marginRight: 8 }}
                         value={topCateIdx}
                         onChange={e => setTopCateIdx(e.target.value)}
                         id="grouped-select"
@@ -292,7 +327,7 @@ function Editor(props) {
                       {categoryData[topCateIdx] && (
                         <>
                           <Se
-                            style={{ width: '30%', marginRight: 8 }}
+                            style={{ width: '28%', marginRight: 8 }}
                             value={subCateIdx}
                             onChange={e => {
                               let idx = e.target.value;
@@ -312,7 +347,7 @@ function Editor(props) {
                             )}
                           </Se>
                           <Se
-                            style={{ width: '30%', marginRight: 8 }}
+                            style={{ width: '28%', marginRight: 8 }}
                             value={endCateIdx}
                             onChange={e => {
                               let idx = e.target.value;
@@ -414,6 +449,7 @@ function Editor(props) {
                             variant="body2"
                             align="center"
                             color="textSecondary"
+                            style={{ display: 'flex', alignItems: 'center' }}
                           >
                             {Number(progress) < 100
                               ? progress + '%'
@@ -445,6 +481,19 @@ function Editor(props) {
                     </Grid>
                   )}
                   {/* {isSubmitting && <LinearProgress />} */}
+
+                  <Hidden xsDown>
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={submitForm}
+                        style={{ height: 36, padding: '0 40px', marginTop: 30 }}
+                      >
+                        发布
+                      </Button>
+                    </Grid>
+                  </Hidden>
                 </Grid>
               </Form>
             </>

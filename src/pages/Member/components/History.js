@@ -4,7 +4,7 @@ import Slider from 'pages/components/Slider';
 import BackHeader from '@/pages/components/BackHeader';
 import { requestApi } from '@/utils';
 import AppCont from 'container';
-import { Typography } from '@material-ui/core';
+import { Typography, Hidden, Divider } from '@material-ui/core';
 
 export default props => {
   const { setError } = AppCont.useContainer();
@@ -23,8 +23,23 @@ export default props => {
   }, [setError, props.open]);
 
   return (
-    <Slider open={props.open}>
-      <BackHeader back={props.onClose} title="历史阅读" withoutHome={true} />
+    <Slider open={props.open} pcPage={props.pcPage}>
+      <Hidden smUp>
+        <BackHeader back={props.onClose} title="历史阅读" withoutHome={true} />
+      </Hidden>
+
+      <Hidden xsDown>
+        <Typography
+          variant="body1"
+          color="textSecondary"
+          align="left"
+          style={{ paddingLeft: 30 }}
+        >
+          历史阅读
+        </Typography>
+        <Divider />
+      </Hidden>
+
       <div
         style={{
           width: '100%',

@@ -19,6 +19,8 @@ const Member = lazy(() => import('pages/Member'));
 const Search = lazy(() => import('pages/Search'));
 const Collect = lazy(() => import('pages/Collect'));
 const Error = lazy(() => import('pages/Error'));
+const Article = lazy(() => import('pages/Member/components/MyArticle/Editor'));
+const Video = lazy(() => import('pages/Member/components/Video'));
 function OtherWrap() {
   return (
     <PageTemplate>
@@ -44,6 +46,8 @@ const Root = withRouter(props => {
         <Route path={`/member/`} component={Member}></Route>
         <Route path={'/search'} component={Search}></Route>
         <Route path={'/collect/:id'} component={Collect}></Route>
+        <Route path={'/upload-video'} component={Video}></Route>
+        <Route path={'/write'} component={Article}></Route>
       </Suspense>
     </>
   );
