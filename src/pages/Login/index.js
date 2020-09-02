@@ -18,6 +18,7 @@ import Register from './Child/register';
 import Forgot from './Child/forgot';
 import BackHeader from 'pages/components/BackHeader';
 import { withRouter } from 'react-router-dom';
+import useWidth from '@/hooks/useWidth';
 
 function Copyright() {
   return (
@@ -69,7 +70,7 @@ export default withRouter(function SignIn(props) {
   };
 
   const Comp = MAP[modal.type] || Copyright;
-
+  const screen = useWidth();
   return (
     <>
       <BackHeader
@@ -106,6 +107,7 @@ export default withRouter(function SignIn(props) {
 
         <Slider open={modal.show}>
           <Comp
+            inLogin={screen === 'xs' ? undefined : true}
             onClose={() => {
               setModal({ show: false });
             }}

@@ -1,5 +1,11 @@
 import React from 'react';
-import { Grid, makeStyles, LinearProgress, Button } from '@material-ui/core';
+import {
+  Grid,
+  makeStyles,
+  LinearProgress,
+  Button,
+  Hidden
+} from '@material-ui/core';
 import BackHeader from '@/pages/components/BackHeader';
 import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
@@ -9,6 +15,7 @@ import { requestApi, query } from '@/utils';
 import useRunning from 'hooks/useRunning';
 import { withRouter } from 'react-router-dom';
 import useGetCode from 'hooks/useGetCode';
+import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(theme => ({
   mr2: {
@@ -18,7 +25,9 @@ const useStyles = makeStyles(theme => ({
     width: '95%'
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
+    height: 48,
+    fontSize: 16
   }
 }));
 export default withRouter(({ isLogin = true, ...props }) => {
@@ -46,120 +55,131 @@ export default withRouter(({ isLogin = true, ...props }) => {
     error && setError(error[0], error[1]);
   });
 
+  const screen = useWidth();
   return (
-    <Grid container justify="center">
-      <BackHeader title="密码找回" withoutHome={true} back={props.onClose} />
-      <Formik
-        initialValues={{
-          phone: '',
-          code: '',
-          pwd: '',
-          re_pwd: ''
+    <>
+      <Hidden smUp>
+        <BackHeader title="密码找回" withoutHome={true} back={props.onClose} />
+      </Hidden>
+      {props.inLogin && (
+        <BackHeader title="密码找回" withoutHome={true} back={props.onClose} />
+      )}
+      <Grid
+        container
+        justify="center"
+        style={{
+          maxWidth: screen === 'xs' ? undefined : 660,
+          margin: 'auto'
         }}
-        validate={values => {
-          const errors = {};
-          if (query.debug) {
-            return errors;
-          }
-          if (!/^1\d{10}$/.test(values.phone)) {
-            errors.phone = 'Invalid phone number';
-          } else if (values.code.length <= 0) {
-            errors.code = 'Invalid code number';
-          } else if (values.pwd.length < 6) {
-            errors.pwd = '请输入正确密码';
-          } else if (values.pwd !== values.re_pwd) {
-            errors.re_pwd = '两次密码不一致';
-          }
-          return errors;
-        }}
-        onSubmit={onSubmit}
       >
-        {({ submitForm, isSubmitting, values }) => (
-          <Form className={classes.form}>
-            <Grid
-              container
-              justify='center'
-              spacing={1}
-            >
-              <Grid item xs={11} sm={6} md={3}>
-                <Field
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="手机号码"
-                  name="phone"
-                  component={TextField}
-                />
-              </Grid>
+        <Formik
+          initialValues={{
+            phone: '',
+            code: '',
+            pwd: '',
+            re_pwd: ''
+          }}
+          validate={values => {
+            const errors = {};
+            if (query.debug) {
+              return errors;
+            }
+            if (!/^1\d{10}$/.test(values.phone)) {
+              errors.phone = 'Invalid phone number';
+            } else if (values.code.length <= 0) {
+              errors.code = 'Invalid code number';
+            } else if (values.pwd.length < 6) {
+              errors.pwd = '请输入正确密码';
+            } else if (values.pwd !== values.re_pwd) {
+              errors.re_pwd = '两次密码不一致';
+            }
+            return errors;
+          }}
+          onSubmit={onSubmit}
+        >
+          {({ submitForm, isSubmitting, values }) => (
+            <Form className={classes.form}>
+              <Grid container justify="center" spacing={1}>
+                <Grid item xs={11}>
+                  <Field
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="手机号码"
+                    name="phone"
+                    component={TextField}
+                  />
+                </Grid>
 
-              <Grid item xs={11} sm={6} md={3}>
-                <Grid container justify="space-between">
-                  <Grid item xs={7}>
-                    <Field
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      label="验证码"
-                      name="code"
-                      component={TextField}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.submit}
-                      disabled={downCount < codeDownCount}
-                      onClick={() => clickGetCode(values)}
-                    >
-                      {downCount >= codeDownCount ? '验证码' : downCount}
-                    </Button>
+                <Grid item xs={11}>
+                  <Grid container justify="space-between">
+                    <Grid item xs={7}>
+                      <Field
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        label="验证码"
+                        name="code"
+                        component={TextField}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        disabled={downCount < codeDownCount}
+                        onClick={() => clickGetCode(values)}
+                      >
+                        {downCount >= codeDownCount ? '验证码' : downCount}
+                      </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-              <Grid item xs={11} sm={6} md={3}>
-                <Field
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="密码"
-                  name="pwd"
-                  type="password"
-                  component={TextField}
-                />
-              </Grid>
-              <Grid item xs={11} sm={6} md={3}>
-                <Field
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  label="确认密码"
-                  name="re_pwd"
-                  type="password"
-                  component={TextField}
-                />
-              </Grid>
+                <Grid item xs={11}>
+                  <Field
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="密码"
+                    name="pwd"
+                    type="password"
+                    component={TextField}
+                  />
+                </Grid>
+                <Grid item xs={11}>
+                  <Field
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    label="确认密码"
+                    name="re_pwd"
+                    type="password"
+                    component={TextField}
+                  />
+                </Grid>
 
-              <Grid item xs={11}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  className={classes.submit}
-                  onClick={submitForm}
-                >
-                  确定
-                </Button>
-              </Grid>
+                <Grid item xs={4}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    className={classes.submit}
+                    onClick={submitForm}
+                  >
+                    确定
+                  </Button>
+                </Grid>
 
-              {isSubmitting && <LinearProgress />}
-            </Grid>
-          </Form>
-        )}
-      </Formik>
-    </Grid>
+                {isSubmitting && <LinearProgress />}
+              </Grid>
+            </Form>
+          )}
+        </Formik>
+      </Grid>
+    </>
   );
 });
