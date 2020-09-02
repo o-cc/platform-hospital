@@ -181,7 +181,7 @@ const api = {
     });
   },
   deleteAddress({ address_id }) {
-    return this.instance.put(`/addresses/${address_id}/`);
+    return this.instance.delete(`/addresses/${address_id}/`);
   },
   putDefaultAddress({ address_id }) {
     return this.instance.put(`/addresses/${address_id}/status/`);
