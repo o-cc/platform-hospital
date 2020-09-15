@@ -170,7 +170,7 @@ function Other() {
                       key={idx}
                     >
                       <div
-                        style={{ overflow: 'auto', height: '80vh' }}
+                        style={{ overflow: 'auto', height: '79vh' }}
                         ref={scrollRef}
                       >
                         <InfiniteScroll
