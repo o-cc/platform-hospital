@@ -9,7 +9,7 @@ import { Link } from '@material-ui/core';
 import Recommend from 'pages/Home/Child/Recommend';
 import AppCont from 'container';
 import { useState } from 'react';
-import { requestApi, formatArray2Obj } from '@/utils';
+import { formatArray2Obj } from '@/utils';
 import VideocamRoundedIcon from '@material-ui/icons/VideocamRounded';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import { withRouter } from 'react-router-dom';
@@ -71,20 +71,10 @@ function OutlinedCard(props) {
 
   useEffect(() => {
     const list = state.homeData;
-    if (!list) {
-      getIndexData();
-    } else {
+    if (list) {
       setHomeData(list);
     }
 
-    async function getIndexData() {
-      let { result, error } = await requestApi('getHomeData');
-
-      if (error) {
-        return;
-      }
-      setHomeData(result);
-    }
   }, [state.homeData]);
 
   const { contents: commendList = [] } =
