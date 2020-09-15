@@ -148,10 +148,15 @@ function Editor(props) {
     },
     [setError]
   );
+
+  const [contentImgState, setContentImgState] = useState('');
   const imgPick = async (canvas, data, file) => {
+    setContentImgState('图片上传中...');
     let result = await uploadImg(file);
+    if (!result) return setContentImgState('上传失败, 请重试!');
     const range = quillRef.current.getSelection();
     quillRef.current.insertEmbed(range.index, 'image', result.image_url);
+    setContentImgState('');
   };
 
   const release = useRunning(async values => {
@@ -433,7 +438,17 @@ function Editor(props) {
                     style={{ padding: screen === 'xs' ? '8px' : undefined }}
                   >
                     <Typography variant="body2" color="textSecondary">
-                      文章内容：
+                      文章内容：{' '}
+                      <span
+                        style={{
+                          lineHeight: '40px',
+                          fontSize: 15,
+                          paddingLeft: 15,
+                          color: '#ccc'
+                        }}
+                      >
+                        {contentImgState}
+                      </span>
                     </Typography>
                     <div ref={textRef}></div>
                     <Grid item>
