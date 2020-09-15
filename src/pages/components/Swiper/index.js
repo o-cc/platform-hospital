@@ -55,20 +55,22 @@ export default ({ swiperList = [], commendList = [], ...props }) => {
         className={classes.root}
         style={{ marginBottom: width === 'xs' ? '0' : '10px' }}
       >
-        <Swiper {...params}>
-          {swiperList.map(item => (
-            <MyDiv
-              key={item.content_id}
-              image={item.image}
-              {...props}
-              onClick={() => {
-                if (item.url) window.location.href = item.url;
-              }}
-            >
-              {item.title}
-            </MyDiv>
-          ))}
-        </Swiper>
+        {swiperList.length > 0 && (
+          <Swiper {...params}>
+            {swiperList.map(item => (
+              <MyDiv
+                key={item.content_id}
+                image={item.image}
+                {...props}
+                onClick={() => {
+                  if (item.url) window.location.href = item.url;
+                }}
+              >
+                {item.title}
+              </MyDiv>
+            ))}
+          </Swiper>
+        )}
       </div>
       <Recommend list={commendList} />
     </>

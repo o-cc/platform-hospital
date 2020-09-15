@@ -59,7 +59,7 @@ function InPc(props) {
             swiperList={swiperList}
             commendList={commendList}
             height={280}
-          ></SwiperWrap>
+          />
           <ItemList list={sub.news} />
           {sub.next && (
             <Typography
