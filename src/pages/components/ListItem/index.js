@@ -136,11 +136,11 @@ export default withRouter(function ListItem({ list = [], ...props }) {
                   justify="flex-end"
                 >
                   <div className={classes.detail}>
-                    <Typography variant="body1" color="textSecondary">
+                    <Typography variant="body1">
                       {item.detail}
                     </Typography>
                   </div>
-                  <Typography variant="body1" color="textSecondary">
+                  <Typography variant="body2" color="textSecondary">
                     {item.create_time} {item.username}
                   </Typography>
                 </Grid>
