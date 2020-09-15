@@ -121,6 +121,18 @@ function SwipeableTemporaryDrawer({ menuData, ...props }) {
               }}
             />
           </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <HomeOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={'热门直播'}
+              onClick={() => {
+                props.history && props.history.push('/online');
+                toggleDrawer(anchor, false)();
+              }}
+            />
+          </ListItem>
           {/* 配置类 */}
           {menu.map((item, index) => (
             <Fragment key={index}>

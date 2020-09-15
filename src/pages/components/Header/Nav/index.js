@@ -79,7 +79,7 @@ export default withWidth()(
 
     useEffect(() => {
       async function getMenuData() {
-        let { result, error } = await requestApi('getMenu');
+        let { result, error } = await requestApi('getMenu', { cache: true });
         if (error) {
           return setError(error);
         }

@@ -198,6 +198,15 @@ function NavInPC({ menuData, ...props }) {
               >
                 <ListItemText align="center" primary={'积分商城'} />
               </ListItem>
+              <ListItem
+                button
+                key={'online'}
+                onClick={() => {
+                  props.history && props.history.push('/online');
+                }}
+              >
+                <ListItemText align="center" primary={'热门直播'} />
+              </ListItem>
             </List>
           </Grid>
           <InputBase
