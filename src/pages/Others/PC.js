@@ -28,52 +28,64 @@ function InPc(props) {
     commendList,
     value,
     handleChange,
-    loadMoreFun
+    loadMoreFun,
+    NotMore
   } = props;
 
   return (
     <PCTemplate>
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        className={classes.tabs}
-        indicatorColor="primary"
-        variant="scrollable"
-        scrollButtons="auto"
-        aria-label="scrollable auto tabs"
-      >
-        {lists.map((sub, idx) => (
-          <Tab size="small" key={sub.id} label={sub.name} {...a11yProps(idx)} />
-        ))}
-      </Tabs>
-      <Divider />
-      {lists.map((sub, idx) => (
-        <TabPanel
-          value={value}
-          index={idx}
-          next={sub.next}
-          key={idx}
-          style={{ padding: `0 20px` }}
-        >
-          <SwiperWrap
-            swiperList={swiperList}
-            commendList={commendList}
-            height={280}
-          />
-          <ItemList list={sub.news} />
-          {sub.next && (
-            <Typography
-              onClick={loadMoreFun}
-              variant="body1"
-              align="center"
-              color="textSecondary"
-              style={{ marginTop: 8, cursor: 'pointer' }}
+      {lists.length > 0 ? (
+        <>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            className={classes.tabs}
+            indicatorColor="primary"
+            variant="scrollable"
+            scrollButtons="auto"
+            aria-label="scrollable auto tabs"
+          >
+            {lists.map((sub, idx) => (
+              <Tab
+                size="small"
+                key={sub.id}
+                label={sub.name}
+                {...a11yProps(idx)}
+              />
+            ))}
+          </Tabs>
+          <Divider />
+          {lists.map((sub, idx) => (
+            <TabPanel
+              value={value}
+              index={idx}
+              next={sub.next}
+              key={idx}
+              style={{ padding: `0 20px` }}
             >
-              点击加载更多
-            </Typography>
-          )}
-        </TabPanel>
-      ))}
+              <SwiperWrap
+                swiperList={swiperList}
+                commendList={commendList}
+                height={280}
+              />
+              <ItemList list={sub.news} />
+              {sub.next && (
+                <Typography
+                  onClick={loadMoreFun}
+                  variant="body1"
+                  align="center"
+                  color="textSecondary"
+                  style={{ marginTop: 8, cursor: 'pointer' }}
+                >
+                  点击加载更多
+                </Typography>
+              )}
+            </TabPanel>
+          ))}
+        </>
+      ) : (
+        <NotMore />
+      )}
     </PCTemplate>
   );
 }

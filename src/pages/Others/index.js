@@ -49,6 +49,24 @@ function formatArray2Obj(contents) {
   }, {});
 }
 
+function NotMore() {
+  return (
+    <Typography
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: 0,
+        right: 0
+      }}
+      variant="body2"
+      align="center"
+      color="textSecondary"
+    >
+      没有更多了~
+    </Typography>
+  );
+}
+
 function Other() {
   let { id } = useParams();
   const [lists, setLists] = useState([]);
@@ -198,19 +216,7 @@ function Other() {
               </div>
             </>
           ) : (
-            <Typography
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: 0,
-                right: 0
-              }}
-              variant="body2"
-              align="center"
-              color="textSecondary"
-            >
-              没有更多了~
-            </Typography>
+            <NotMore />
           )}
         </Hidden>
 
@@ -223,6 +229,7 @@ function Other() {
             value={value}
             handleChange={handleChange}
             loadMoreFun={loadFunc}
+            NotMore={NotMore}
           />
         </Hidden>
       </div>
