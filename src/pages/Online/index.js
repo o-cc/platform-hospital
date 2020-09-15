@@ -20,9 +20,8 @@ import useWidth from '@/hooks/useWidth';
 
 const useStyles = makeStyles(t => ({
   root: {
-    marginTop: 46,
-    height: 'calc(100vh - 105px)',
-    padding: t.spacing(2, 1),
+    height: '100%',
+    padding: t.spacing(1),
     boxSizing: 'border-box',
     overflow: 'auto'
   },
@@ -44,7 +43,8 @@ const useStyles = makeStyles(t => ({
     'text-overflow': 'ellipsis',
     display: '-webkit-box',
     '-webkit-line-clamp': 2,
-    '-webkit-box-orient': 'vertical'
+    '-webkit-box-orient': 'vertical',
+    'min-height': '42px'
   }
 }));
 export default () => {
@@ -88,65 +88,67 @@ export default () => {
   const scrollRef = useRef();
   return (
     <PageTemplate>
-      <PCTemplate>
-        <div
-          className={classes.root}
-          ref={scrollRef}
-          style={{ marginTop: screen === 'xs' ? undefined : 0 }}
-        >
-          <Hidden smDown>
-            <Typography variant="subtitle1">热门直播</Typography>
-          </Hidden>
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={loadFunc}
-            hasMore={!!hasMore}
-            loader={
-              <div style={{ textAlign: 'center', marginTop: 10 }} key={0}>
-                正在加载...
-              </div>
-            }
-            useWindow={false}
-            getScrollParent={() => scrollRef.current}
+      <div style={{ marginTop: 48 }}>
+        <PCTemplate>
+          <div
+            className={classes.root}
+            style={{ marginTop: screen === 'xs' ? undefined : 0 }}
+            ref={scrollRef}
           >
-            <Grid container spacing={2}>
-              {liveList &&
-                liveList.map((item, idx) => (
-                  <Grid item xs={6} sm={4} key={idx}>
-                    <Card
-                      className={classes.card}
-                      onClick={() => toOnline(item.url)}
-                    >
-                      <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          alt="online poster"
-                          height="110"
-                          image={item.image}
-                        />
-                        <div className={classes.poster}>
-                          <PlayCircleFilledWhiteRoundedIcon
-                            style={{ fontSize: '4rem', color: '#fff' }}
+            <Hidden smDown>
+              <Typography variant="subtitle1">热门直播</Typography>
+            </Hidden>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={loadFunc}
+              hasMore={!!hasMore}
+              loader={
+                <div style={{ textAlign: 'center', marginTop: 10 }} key={0}>
+                  正在加载...
+                </div>
+              }
+              useWindow={false}
+              getScrollParent={() => scrollRef.current}
+            >
+              <Grid container spacing={2}>
+                {liveList &&
+                  liveList.map((item, idx) => (
+                    <Grid item xs={6} sm={4} key={idx}>
+                      <Card
+                        className={classes.card}
+                        onClick={() => toOnline(item.url)}
+                      >
+                        <CardActionArea>
+                          <CardMedia
+                            component="img"
+                            alt="online poster"
+                            height="110"
+                            image={item.image}
                           />
-                        </div>
-                        <CardContent>
-                          <Typography
-                            gutterBottom
-                            variant="subtitle2"
-                            component="h2"
-                            className={classes.title}
-                          >
-                            {item.title}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))}
-            </Grid>
-          </InfiniteScroll>
-        </div>
-      </PCTemplate>
+                          <div className={classes.poster}>
+                            <PlayCircleFilledWhiteRoundedIcon
+                              style={{ fontSize: '4rem', color: '#fff' }}
+                            />
+                          </div>
+                          <CardContent>
+                            <Typography
+                              gutterBottom
+                              variant="subtitle2"
+                              component="h2"
+                              className={classes.title}
+                            >
+                              {item.title}
+                            </Typography>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))}
+              </Grid>
+            </InfiniteScroll>
+          </div>
+        </PCTemplate>
+      </div>
     </PageTemplate>
   );
 };

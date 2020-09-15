@@ -29,7 +29,7 @@ function PCTemplate(props, ref) {
   return (
     <>
       {width === 'xs' ? (
-        <div ref={ref} style={{ height: '88%', overflow: 'auto' }}>
+        <div ref={ref} style={{ height: 'calc(100vh - 105px)', overflow: 'auto' }}>
           {props.children}
         </div>
       ) : (
