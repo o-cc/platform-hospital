@@ -63,8 +63,8 @@ const api = {
   getHomeData() {
     return this.instance.get('/index/');
   },
-  getMenu() {
-    return this.instance.get('/categories/');
+  getMenu({ cache = false }) {
+    return this.instance.get('/categories/', { cache });
   },
   getCategoriesById({ id }) {
     return this.instance.get(`/categories/${id}/`);
@@ -234,8 +234,8 @@ const api = {
       // }
     });
   },
-  getCategories() {
-    return this.instance.get('/news/categories/');
+  getCategories({ cache = false }) {
+    return this.instance.get('/news/categories/', { cache });
   },
   postNews({
     category,
@@ -282,6 +282,11 @@ const api = {
   },
   postTestAnswers(data) {
     return this.instance.post('/commit/questions/', data);
+  },
+  getLivesList(params) {
+    return this.instance.get('/lives/', {
+      params
+    });
   }
 };
 export default api;
@@ -300,7 +305,6 @@ api.instance.interceptors.request.use(
       let source = axios.CancelToken.source();
       config.cancelToken = source.token;
       let data = JSON.parse(sessionStorage.getItem(config.url));
-      console.log(data);
       if (data) {
         source.cancel(data);
       }

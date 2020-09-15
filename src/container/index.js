@@ -4,7 +4,8 @@ import { createContainer } from 'unstated-next';
 const INIT_STATE = {
   searchData: {},
   homeData: null,
-  goods: {}
+  goods: {},
+  menuLists: {} //第三级标题
 };
 
 function useCounter() {
