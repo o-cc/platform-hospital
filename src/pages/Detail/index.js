@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   Grid,
   Button,
@@ -169,7 +169,7 @@ function Detail(props) {
     //知道文章的id、next
     let next = comments.next;
     let page = getQueryKey('page', next);
-
+    console.log(page);
     let { result, error } = await requestApi('getDetailComments', {
       news_id: id,
       page
@@ -262,7 +262,7 @@ function Detail(props) {
     collected
   } = detailInfo;
   const hasMore = comments.next;
-
+  const scrollRef = useRef();
   return (
     <div className={classes.outer}>
       <Hidden smUp>
@@ -272,8 +272,12 @@ function Detail(props) {
         <Nav />
       </Hidden>
       <PCTemplate
+        ref={scrollRef}
         renderSide={() => (
-          <div className={classes.avatar}>
+          <div
+            className={classes.avatar}
+            onClick={() => props.history.push('/user/' + user_info.user_id)}
+          >
             <Avatar alt="avatar" src={user_info.avatar || defaultAvatar} />
             <Grid
               style={{ marginLeft: 8, lineHeight: 1.3 }}
@@ -288,153 +292,160 @@ function Detail(props) {
           </div>
         )}
       >
-        <Grid
-          container
-          className={classes.root}
-          justify="center"
-          direction="column"
-          alignItems="center"
-        >
-          <Grid item xs={11}>
-            <Typography
-              variant="subtitle1"
-              style={{ marginTop: 10, fontWeight: 'bold' }}
-            >
-              {title}
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            className={classes.date}
-            style={{ paddingTop: 0, paddingBottom: 0 }}
-          >
-            <div
-              className={classes.avatar}
-              onClick={() => props.history.push('/user/' + user_info.user_id)}
-            >
-              <Avatar alt="avatar" src={user_info.avatar || defaultAvatar} />
-              <Grid
-                style={{ marginLeft: 8, lineHeight: 1.3 }}
-                container
-                direction="column"
-              >
-                <span className="user">{user_info.username}</span>
-                <Grid item className="date">
-                  {create_time && create_time}
-                </Grid>
-              </Grid>
-            </div>
-            {has_follow && (
-              <Link
-                href="#"
-                onClick={e => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  attention();
-                }}
-              >
-                {is_followed ? '取消关注' : '+关注'}
-              </Link>
-            )}
-          </Grid>
-
-          <Grid item xs={11}>
-            <div
-              dangerouslySetInnerHTML={{ __html: content }}
-              className={classes.normalText}
-            ></div>
-          </Grid>
-          {is_like && (
-            <Grid item xs={11}>
-              <Button
-                variant="outlined"
-                size="large"
-                className={like ? classes.button : ''}
-                onClick={() => {
-                  setLike(true);
-                }}
-                startIcon={<FavoriteBorderOutlinedIcon />}
-              >
-                点赞
-              </Button>
-            </Grid>
-          )}
-        </Grid>
-        <Divider />
-
-        <Hidden xsDown>
-          <div>
-            <section className={classes.sectionComment}>
-              <Grid container>
-                <Avatar alt="avatar" src={user_info.avatar || defaultAvatar} />
-                <div className="textareaWrap">
-                  <textarea
-                    className="textarea"
-                    placeholder="写下你的评论吧...."
-                    value={inputVal}
-                    onChange={e => setInputVal(e.target.value)}
-                  ></textarea>
-                  <Button
-                    size="small"
-                    className={classes.btn}
-                    variant="outlined"
-                    onClick={() => setInputVal('')}
-                  >
-                    取消
-                  </Button>
-                  <Button
-                    size="small"
-                    className={classes.btn}
-                    color="primary"
-                    variant="contained"
-                    onClick={async () => {
-                      await onRelease(inputVal);
-                      setInputVal('');
-                    }}
-                  >
-                    发布
-                  </Button>
-                </div>
-              </Grid>
-              <Divider />
-            </section>
-            <Typography variant="subtitle1" style={{ paddingLeft: 16 }}>
-              全部评论
-            </Typography>
-          </div>
-        </Hidden>
         <InfiniteScroll
           pageStart={0}
           loadMore={loadFunc}
           hasMore={!!hasMore}
           loader={
-            <div style={{ textAlign: 'center' }} key={0}>
+            <div style={{ textAlign: 'center', marginBottom: 20 }} key={0}>
               正在加载...
             </div>
           }
+          useWindow={false}
+          getScrollParent={() => scrollRef.current}
         >
+          <Grid
+            container
+            className={classes.root}
+            justify="center"
+            direction="column"
+            alignItems="center"
+          >
+            <Grid item xs={11}>
+              <Typography
+                variant="subtitle1"
+                style={{ marginTop: 10, fontWeight: 'bold' }}
+              >
+                {title}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              className={classes.date}
+              style={{ paddingTop: 0, paddingBottom: 0 }}
+            >
+              <div
+                className={classes.avatar}
+                onClick={() => props.history.push('/user/' + user_info.user_id)}
+              >
+                <Avatar alt="avatar" src={user_info.avatar || defaultAvatar} />
+                <Grid
+                  style={{ marginLeft: 8, lineHeight: 1.3 }}
+                  container
+                  direction="column"
+                >
+                  <span className="user">{user_info.username}</span>
+                  <Grid item className="date">
+                    {create_time && create_time}
+                  </Grid>
+                </Grid>
+              </div>
+              {has_follow && (
+                <Link
+                  href="#"
+                  onClick={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    attention();
+                  }}
+                >
+                  {is_followed ? '取消关注' : '+关注'}
+                </Link>
+              )}
+            </Grid>
+
+            <Grid item xs={11}>
+              <div
+                dangerouslySetInnerHTML={{ __html: content }}
+                className={classes.normalText}
+              ></div>
+            </Grid>
+            {is_like && (
+              <Grid item xs={11}>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  className={like ? classes.button : ''}
+                  onClick={() => {
+                    setLike(true);
+                  }}
+                  startIcon={<FavoriteBorderOutlinedIcon />}
+                >
+                  点赞
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+          <Divider />
+
+          <Hidden xsDown>
+            <div>
+              <section className={classes.sectionComment}>
+                <Grid container>
+                  <Avatar
+                    alt="avatar"
+                    src={user_info.avatar || defaultAvatar}
+                  />
+                  <div className="textareaWrap">
+                    <textarea
+                      className="textarea"
+                      placeholder="写下你的评论吧...."
+                      value={inputVal}
+                      onChange={e => setInputVal(e.target.value)}
+                    ></textarea>
+                    <Button
+                      size="small"
+                      className={classes.btn}
+                      variant="outlined"
+                      onClick={() => setInputVal('')}
+                    >
+                      取消
+                    </Button>
+                    <Button
+                      size="small"
+                      className={classes.btn}
+                      color="primary"
+                      variant="contained"
+                      onClick={async () => {
+                        await onRelease(inputVal);
+                        setInputVal('');
+                      }}
+                    >
+                      发布
+                    </Button>
+                  </div>
+                </Grid>
+                <Divider />
+              </section>
+              <Typography variant="subtitle1" style={{ paddingLeft: 16 }}>
+                全部评论
+              </Typography>
+            </div>
+          </Hidden>
+
           <Comment
             comments={comments}
+            hasMore={!!hasMore}
             favorite={favorite}
             deleteComment={comment => setDialog({ show: true, info: comment })}
           />
-        </InfiniteScroll>
-        <Hidden smUp>
-          {/* 评论文章 */}
-          <InputComment
-            count={comments_count}
-            collected={collected}
-            onCollect={onCollect}
-            onRelease={onRelease}
-          />
-        </Hidden>
 
-        <Dialog
-          text="删除评论后无法恢复噢"
-          handleOk={deleteComment}
-          open={dialog.show}
-          onClose={() => setDialog(stat => ({ ...stat, show: false }))}
-        ></Dialog>
+          <Hidden smUp>
+            {/* 评论文章 */}
+            <InputComment
+              count={comments_count}
+              collected={collected}
+              onCollect={onCollect}
+              onRelease={onRelease}
+            />
+          </Hidden>
+          <Dialog
+            text="删除评论后无法恢复噢"
+            handleOk={deleteComment}
+            open={dialog.show}
+            onClose={() => setDialog(stat => ({ ...stat, show: false }))}
+          ></Dialog>
+        </InfiniteScroll>
       </PCTemplate>
     </div>
   );

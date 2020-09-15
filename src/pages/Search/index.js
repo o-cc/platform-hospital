@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import AppCont from 'container';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -50,10 +50,11 @@ function Other() {
   const { next, results = [] } = searchData;
   const hasMore = next;
   const width = useWidth();
+  const scrollRef = useRef();
   return (
     <PageTemplate>
       <div className={width !== 'xs' ? '' : classes.root}>
-        <PCTemplate screen={width}>
+        <PCTemplate screen={width} ref={scrollRef}>
           <InfiniteScroll
             pageStart={0}
             loadMore={loadFunc}
@@ -63,6 +64,8 @@ function Other() {
                 正在加载...
               </div>
             }
+            useWindow={false}
+            getScrollParent={() => scrollRef.current}
           >
             <Box
               style={{ padding: `${vw(15)} ${vw(30)} 0`, overflowY: 'hidden' }}

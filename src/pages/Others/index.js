@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import AppCont from 'container';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -15,6 +15,8 @@ import Hidden from '@material-ui/core/Hidden';
 import PC from './PC';
 import { Divider, Typography } from '@material-ui/core';
 import TabPanel from './TabPanel.js';
+import PageTemplate from 'pages/components/PageTemplate';
+
 function a11yProps(index) {
   return {
     id: `scrollable-auto-tab-${index}`,
@@ -62,7 +64,6 @@ function Other() {
       if (error) {
         return setError(error);
       }
-      console.log(result);
       setLists(result);
     }
 
@@ -117,7 +118,7 @@ function Other() {
           return {
             ...list,
             ...result,
-            news: list.news.concat(result.results)
+            news: list.news ? list.news.concat(result.results) : []
           };
         }
         return list;
@@ -129,87 +130,103 @@ function Other() {
   const { contents: swiperList = [] } = formatArray2Obj(adList)['banner'] || {};
   const { contents: commendList = [] } = formatArray2Obj(adList)['list'] || {};
   const width = useWidth();
-
+  const scrollRef = useRef();
   return (
-    <div className={width !== 'xs' ? '' : classes.root}>
-      <Hidden smUp>
-        {lists.length > 0 ? (
-          <>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              className={classes.tabs}
-              variant="scrollable"
-              scrollButtons="auto"
-              style={{ background: '#fff' }}
-              aria-label="scrollable auto tabs"
-            >
-              {lists.map((sub, idx) => (
-                <Tab
-                  size="small"
-                  key={sub.id}
-                  label={sub.name}
-                  {...a11yProps(idx)}
-                />
-              ))}
-            </Tabs>
-            <Divider />
-            <InfiniteScroll
-              pageStart={0}
-              loadMore={loadFunc}
-              hasMore={!!hasMore}
-              loader={
-                <div style={{ textAlign: 'center' }} key={0}>
-                  正在加载...
-                </div>
-              }
-            >
-              <SwipeableViews
-                axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                index={value}
-                onChangeIndex={idx => handleChange(undefined, idx)}
+    <PageTemplate>
+      <div className={width !== 'xs' ? '' : classes.root}>
+        <Hidden smUp>
+          {lists.length > 0 ? (
+            <>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                className={classes.tabs}
+                variant="scrollable"
+                scrollButtons="auto"
+                style={{ background: '#fff' }}
+                aria-label="scrollable auto tabs"
               >
                 {lists.map((sub, idx) => (
-                  <TabPanel value={value} index={idx} next={sub.next} key={idx}>
-                    <SwiperWrap
-                      swiperList={swiperList}
-                      commendList={commendList}
-                    ></SwiperWrap>
-                    <ItemList list={sub.news} />
-                  </TabPanel>
+                  <Tab
+                    size="small"
+                    key={sub.id}
+                    label={sub.name}
+                    {...a11yProps(idx)}
+                  />
                 ))}
-              </SwipeableViews>
-            </InfiniteScroll>
-          </>
-        ) : (
-          <Typography
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: 0,
-              right: 0
-            }}
-            variant="body2"
-            align="center"
-            color="textSecondary"
-          >
-            没有更多了~
-          </Typography>
-        )}
-      </Hidden>
+              </Tabs>
+              <Divider />
+              <div>
+                <SwipeableViews
+                  axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                  index={value}
+                  onChangeIndex={idx => handleChange(undefined, idx)}
+                >
+                  {lists.map((sub, idx) => (
+                    <TabPanel
+                      value={value}
+                      index={idx}
+                      next={sub.next}
+                      key={idx}
+                    >
+                      <div
+                        style={{ overflow: 'auto', height: '80vh' }}
+                        ref={scrollRef}
+                      >
+                        <InfiniteScroll
+                          pageStart={0}
+                          loadMore={loadFunc}
+                          hasMore={!!hasMore}
+                          loader={
+                            <div style={{ textAlign: 'center' }} key={0}>
+                              正在加载...
+                            </div>
+                          }
+                          useWindow={false}
+                          getScrollParent={() => scrollRef.current}
+                        >
+                          <SwiperWrap
+                            swiperList={swiperList}
+                            commendList={commendList}
+                          />
+                          <ItemList list={sub.news} />
+                        </InfiniteScroll>
+                      </div>
+                    </TabPanel>
+                  ))}
+                </SwipeableViews>
+              </div>
+            </>
+          ) : (
+            <Typography
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: 0,
+                right: 0
+              }}
+              variant="body2"
+              align="center"
+              color="textSecondary"
+            >
+              没有更多了~
+            </Typography>
+          )}
+        </Hidden>
 
-      <Hidden xsDown>
-        <PC
-          lists={lists}
-          a11yProps={a11yProps}
-          swiperList={swiperList}
-          commendList={commendList}
-          value={value}
-          handleChange={handleChange}
-          loadMoreFun={loadFunc}
-        />
-      </Hidden>
-    </div>
+        <Hidden xsDown>
+          <PC
+            lists={lists}
+            a11yProps={a11yProps}
+            swiperList={swiperList}
+            commendList={commendList}
+            value={value}
+            handleChange={handleChange}
+            loadMoreFun={loadFunc}
+          />
+        </Hidden>
+      </div>
+    </PageTemplate>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -41,7 +41,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     height: '100%',
     outline: 'none',
-    position: 'relative'
+    position: 'relative',
+    overflow: 'auto'
   },
   title: {
     padding: `${vw(15)} 0`,
@@ -179,6 +180,7 @@ export default function TransitionsModal({ list, ...props }) {
       };
     }
   }
+  const scrollRef = useRef();
   return (
     <div>
       <Modal
@@ -205,64 +207,72 @@ export default function TransitionsModal({ list, ...props }) {
             className={classes.info}
             style={{ ...paperProps() }}
           >
-            <InfiniteScroll
-              pageStart={0}
-              loadMore={loadFunc}
-              hasMore={!!hasMore}
-              style={{ height: '92%', overflowY: 'auto' }}
-              loader={
-                <div style={{ textAlign: 'center' }} key={0}>
-                  正在加载...
-                </div>
-              }
+            <div
+              style={{
+                height: '92%',
+                overflow: 'auto'
+              }}
+              ref={scrollRef}
             >
-              <Grid container justify="center" alignItems="center">
-                {/* 顶部导航 */}
+              <InfiniteScroll
+                pageStart={0}
+                loadMore={loadFunc}
+                hasMore={!!hasMore}
+                loader={
+                  <div style={{ textAlign: 'center' }} key={0}>
+                    正在加载...
+                  </div>
+                }
+                useWindow={false}
+                getScrollParent={() => scrollRef.current}
+              >
+                <Grid container justify="center" alignItems="center">
+                  {/* 顶部导航 */}
 
-                <Grid
-                  container
-                  justify="flex-start"
-                  alignItems="center"
-                  className={classes.title}
-                >
                   <Grid
-                    item
-                    xs={5}
-                    style={{ paddingLeft: '10px' }}
-                    onClick={props.onClose}
+                    container
+                    justify="flex-start"
+                    alignItems="center"
+                    className={classes.title}
                   >
-                    <CloseOutlinedIcon />
+                    <Grid
+                      item
+                      xs={5}
+                      style={{ paddingLeft: '10px' }}
+                      onClick={props.onClose}
+                    >
+                      <CloseOutlinedIcon />
+                    </Grid>
+                    <span>{list.sub_comment_count}条回复</span>
                   </Grid>
-                  <span>{list.sub_comment_count}条回复</span>
-                </Grid>
-                {/* 父评论 */}
-                <ListItem
-                  list={list}
-                  favorite={props.favorite}
-                  deleteComment={props.deleteComment}
-                  onClick={clickComment}
-                />
-              </Grid>
-              <Grid container justify="center" alignItems="center">
-                <Grid item xs={12} className={classes.allComment}>
-                  全部评论
-                </Grid>
-                <Divider />
-
-                {detailComments.results.map(list => (
+                  {/* 父评论 */}
                   <ListItem
-                    key={list.id}
                     list={list}
-                    favorite={subCommentsFavorite}
-                    deleteComment={async comment => {
-                      setDialog({ show: true, comment });
-                    }}
+                    favorite={props.favorite}
+                    deleteComment={props.deleteComment}
                     onClick={clickComment}
                   />
-                ))}
-              </Grid>
-            </InfiniteScroll>
+                </Grid>
+                <Grid container justify="center" alignItems="center">
+                  <Grid item xs={12} className={classes.allComment}>
+                    全部评论
+                  </Grid>
+                  <Divider />
 
+                  {detailComments.results.map(list => (
+                    <ListItem
+                      key={list.id}
+                      list={list}
+                      favorite={subCommentsFavorite}
+                      deleteComment={async comment => {
+                        setDialog({ show: true, comment });
+                      }}
+                      onClick={clickComment}
+                    />
+                  ))}
+                </Grid>
+              </InfiniteScroll>
+            </div>
             {/* 这个setKey的操作太骚了 */}
             <InputComment
               holder={`回复${currComment.username}的评论`}

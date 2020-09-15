@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { makeStyles, useTheme, styled } from '@material-ui/core/styles';
 import {
   CardMedia,
@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core';
 import { vw, requestApi, getQueryKey } from '@/utils';
 import SwipeableViews from 'react-swipeable-views';
-import { useParams } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
 import AppCont from 'container';
 import BackHeader from '../components/BackHeader';
 import { StarTwoTone } from '@material-ui/icons';
@@ -148,7 +148,7 @@ const Text = styled(({ text, ...other }) => <p {...other}>{text}</p>)({
   }
 });
 
-export default function MediaControlCard() {
+export default withRouter(function MediaControlCard(props) {
   const classes = useStyles();
   const [tabVal, setTabVal] = useState(0);
   const theme = useTheme();
@@ -250,6 +250,7 @@ export default function MediaControlCard() {
   } = videoInfo;
   const hasMore = comments.next;
   const width = useWidth();
+  const scrollRef = useRef();
   return (
     <>
       {width === 'xs' ? (
@@ -269,53 +270,55 @@ export default function MediaControlCard() {
       ) : (
         <Nav />
       )}
-      <PCTemplate screen={width}>
-        <div className={classes.wrap}>
-          <Card className={classes.root}>
-            <CardMedia
-              className={classes.video}
-              src={video_url}
-              title="Live from space album cover"
-              component="video"
-              controls="controls"
-              preload="true"
-              playsInline={true}
-              x5-video-player-type="h5-page"
-              webkit-playsinline="true"
-            />
-          </Card>
-          <Tabs
-            value={tabVal}
-            onChange={(e, val) => {
-              setTabVal(val);
-            }}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-          >
-            <Tab label="视频详情" />
-          </Tabs>
-
-          <SwipeableViews
-            axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-            index={tabVal}
-            onChangeIndex={idx => setTabVal(idx)}
-          >
-            <TabPanel
+      <PCTemplate screen={width} ref={scrollRef}>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={loadFunc}
+          hasMore={!!hasMore}
+          loader={
+            <div style={{ textAlign: 'center' }} key={'0dd'}>
+              正在加载...
+            </div>
+          }
+          useWindow={false}
+          getScrollParent={() => scrollRef.current}
+        >
+          <div className={classes.wrap}>
+            <Card className={classes.root}>
+              <CardMedia
+                className={classes.video}
+                src={video_url}
+                title="Live from space album cover"
+                component="video"
+                controls="controls"
+                preload="true"
+                playsInline={true}
+                x5-video-player-type="h5-page"
+                webkit-playsinline="true"
+              />
+            </Card>
+            <Tabs
               value={tabVal}
-              index={0}
-              dir={theme.direction}
-              style={{ background: '#f5f5f5' }}
+              onChange={(e, val) => {
+                setTabVal(val);
+              }}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
             >
-              <InfiniteScroll
-                pageStart={0}
-                loadMore={loadFunc}
-                hasMore={!!hasMore}
-                loader={
-                  <div style={{ textAlign: 'center' }} key={'0dd'}>
-                    正在加载...
-                  </div>
-                }
+              <Tab label="视频详情" />
+            </Tabs>
+
+            <SwipeableViews
+              axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+              index={tabVal}
+              onChangeIndex={idx => setTabVal(idx)}
+            >
+              <TabPanel
+                value={tabVal}
+                index={0}
+                dir={theme.direction}
+                style={{ background: '#f5f5f5' }}
               >
                 <Paper className={classes.model} elevation={0}>
                   <Button
@@ -332,6 +335,7 @@ export default function MediaControlCard() {
                   <Text text={`视频时长：${video_long}`}></Text>
                 </Paper>
 
+                {/* 用户信息 */}
                 <Paper className={classes.model} elevation={0}>
                   <Grid container justify="space-around">
                     {has_follow && (
@@ -377,8 +381,15 @@ export default function MediaControlCard() {
                       >
                         <Grid item>
                           <Text
-                            style={{ margin: 0, color: '#000' }}
+                            style={{
+                              margin: 0,
+                              color: '#000',
+                              textDecoration: 'underline'
+                            }}
                             size="large"
+                            onClick={() =>
+                              props.history.push('/user/' + user_info.user_id)
+                            }
                             text={user_info.username}
                           />
                         </Grid>
@@ -402,12 +413,13 @@ export default function MediaControlCard() {
                     </Grid>
                   </Grid>
                 </Paper>
+
                 {/* 全部评论 */}
                 <Paper
                   className={classes.model}
                   elevation={0}
                   style={{
-                    marginBottom: 60
+                    marginBottom: 15
                   }}
                 >
                   <div className={classes.textareaWrap}>
@@ -444,7 +456,10 @@ export default function MediaControlCard() {
                       }`}
                     />
                   </Grid>
-
+                  {/* <div
+                    ref={scrollRef}
+                    style={{ height: '50vh', overflow: 'auto' }}
+                  > */}
                   {comments.results.map(item => (
                     <Paper
                       elevation={0}
@@ -475,6 +490,7 @@ export default function MediaControlCard() {
                       </Grid>
                     </Paper>
                   ))}
+                  {/* </div> */}
                   <Typography
                     variant="body2"
                     color="textSecondary"
@@ -483,35 +499,35 @@ export default function MediaControlCard() {
                     没有更多啦
                   </Typography>
                 </Paper>
-              </InfiniteScroll>
-            </TabPanel>
-          </SwipeableViews>
-          <Hidden smUp>
-            <Paper elevation={4} className={classes.inputWrap}>
-              <Grid container style={{ maxWidth: 1000, margin: 'auto' }}>
-                <Grid item xs={10}>
-                  <TextField
-                    fullWidth
-                    className={classes.input}
-                    placeholder="说点什么吧"
-                    value={commentVal}
-                    size="small"
-                    variant="outlined"
-                    onChange={e => {
-                      setCommentVal(e.target.value);
-                    }}
-                  />
+              </TabPanel>
+            </SwipeableViews>
+            <Hidden smUp>
+              <Paper elevation={4} className={classes.inputWrap}>
+                <Grid container style={{ maxWidth: 1000, margin: 'auto' }}>
+                  <Grid item xs={10}>
+                    <TextField
+                      fullWidth
+                      className={classes.input}
+                      placeholder="说点什么吧"
+                      value={commentVal}
+                      size="small"
+                      variant="outlined"
+                      onChange={e => {
+                        setCommentVal(e.target.value);
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={2} className={classes.flexCenter}>
+                    <Button variant="outlined" onClick={submitComment}>
+                      评论
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={2} className={classes.flexCenter}>
-                  <Button variant="outlined" onClick={submitComment}>
-                    评论
-                  </Button>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Hidden>
-        </div>
+              </Paper>
+            </Hidden>
+          </div>
+        </InfiniteScroll>
       </PCTemplate>
     </>
   );
-}
+});

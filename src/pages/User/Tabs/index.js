@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -7,8 +7,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Divider, Box } from '@material-ui/core';
 import ItemList from 'pages/components/ListItem';
-import { vw, requestApi, getQueryKey } from '@/utils';
-import InfiniteScroll from 'react-infinite-scroller';
+import { vw } from '@/utils';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -52,75 +51,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function getTabType(type) {
-  let temp;
-  switch (type) {
-    case 1:
-      temp = 'GraphText';
-      break;
-    case 2:
-      temp = 'Video';
-      break;
-    default:
-      break;
-  }
-
-  return temp;
-}
-
-export default function FullWidthTabs({
-  listItem,
-  userId,
-  setError,
-  ...props
-}) {
+export default function FullWidthTabs({ listItem, tabIdx, setValue, news }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = useState(0);
-  const [news, setNews] = useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  useEffect(() => {
-    async function getNews() {
-      let { result: newsRes, error: newsErr } = await requestApi(
-        'getAuthorNews',
-        {
-          author_id: userId,
-          type: getTabType(value)
-        }
-      );
-      if (newsErr) return setError(newsErr);
-      setNews(newsRes);
-    }
-    getNews();
-  }, [userId, setError, value]);
-
-  const loadFunc = async () => {
-    const page = getQueryKey('page', news.next);
-    let { result, error } = await requestApi('getAuthorNews', {
-      author_id: userId,
-      type: getTabType(value),
-      page
-    });
-    if (error) return setError(error);
-    setNews(sta => {
-      return {
-        ...sta,
-        ...result,
-        results: sta.results.concat(result.results)
-      }
-    })
-  };
-
-  const hasMore = news.next;
   return (
     <div className={classes.root}>
       <AppBar position="static" color="inherit" className={classes.bar}>
         <Tabs
-          value={value}
+          value={tabIdx}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
@@ -136,32 +79,18 @@ export default function FullWidthTabs({
         </Tabs>
       </AppBar>
       <Divider />
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={loadFunc}
-        hasMore={!!hasMore}
-        loader={
-          <div style={{ textAlign: 'center' }} key={0}>
-            正在加载...
-          </div>
-        }
+
+      <SwipeableViews
+        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+        index={tabIdx}
+        onChangeIndex={index => handleChange(null, index)}
       >
-        <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-          index={value}
-          onChangeIndex={index => handleChange(null, index)}
-        >
-          <TabPanel value={value} index={0} dir={theme.direction}>
+        {new Array(3).fill('_').map((item, idx) => (
+          <TabPanel value={tabIdx} index={idx} dir={theme.direction} key={idx}>
             <ItemList list={news.results} />
           </TabPanel>
-          <TabPanel value={value} index={1} dir={theme.direction}>
-            <ItemList list={news.results} />
-          </TabPanel>
-          <TabPanel value={value} index={2} dir={theme.direction}>
-            <ItemList list={news.results} />
-          </TabPanel>
-        </SwipeableViews>
-      </InfiniteScroll>
+        ))}
+      </SwipeableViews>
     </div>
   );
 }
