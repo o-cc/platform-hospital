@@ -19,17 +19,22 @@ const useStyles = makeStyles(theme => ({
     boxShadow: '0 2px 12px 0 rgba(0,0,0,.1)',
     borderRadius: 2,
     overflow: 'auto',
-    height: '100%'
+    height: '90vh',
+    position: 'relative'
   }
 }));
 function PCTemplate(props, ref) {
   const classes = useStyles();
   const width = useWidth();
-  const { renderSide = () => null, withoutBg } = props;
+  const {
+    renderSide = () => null,
+    withoutBg,
+    height = 'calc(100vh - 105px)'
+  } = props;
   return (
     <>
       {width === 'xs' ? (
-        <div ref={ref} style={{ height: 'calc(100vh - 105px)', overflow: 'auto' }}>
+        <div ref={ref} style={{ height: height, overflow: 'auto' }}>
           {props.children}
         </div>
       ) : (

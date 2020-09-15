@@ -128,7 +128,7 @@ export default withRouter(function SimpleCard(props) {
         <Nav />
       </Hidden>
 
-      <PCTemplate screen={width}>
+      <PCTemplate screen={width} height="auto">
         <Grid
           style={{ maxWidth: 1000, margin: 'auto' }}
           container
@@ -155,11 +155,7 @@ export default withRouter(function SimpleCard(props) {
 
           <Divider />
 
-          <Grid
-            container
-            style={{ maxHeight: '85vh', overflow: 'auto' }}
-            ref={scrollRef}
-          >
+          <Grid container ref={scrollRef}>
             <InfiniteScroll
               pageStart={0}
               loadMore={loadFunc}
