@@ -452,7 +452,7 @@ export default withRouter(function MediaControlCard(props) {
                     <Text
                       size="large"
                       text={`全部评论${
-                        comments_count > 0 && ` (${comments_count})`
+                        comments_count > 0 ? ` (${comments_count})` : ''
                       }`}
                     />
                   </Grid>
