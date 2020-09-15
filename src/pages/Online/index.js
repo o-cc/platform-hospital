@@ -44,7 +44,7 @@ const useStyles = makeStyles(t => ({
     display: '-webkit-box',
     '-webkit-line-clamp': 2,
     '-webkit-box-orient': 'vertical',
-    'min-height': '42px'
+    height: '42px'
   }
 }));
 export default () => {
@@ -88,7 +88,7 @@ export default () => {
   const scrollRef = useRef();
   return (
     <PageTemplate>
-      <div style={{ marginTop: 48 }}>
+      <div style={{ marginTop: screen === 'xs' ? 48 : 0 }}>
         <PCTemplate>
           <div
             className={classes.root}
@@ -130,7 +130,7 @@ export default () => {
                               style={{ fontSize: '4rem', color: '#fff' }}
                             />
                           </div>
-                          <CardContent>
+                          <CardContent style={{ padding: 8 }}>
                             <Typography
                               gutterBottom
                               variant="subtitle2"

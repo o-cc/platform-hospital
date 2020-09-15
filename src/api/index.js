@@ -234,7 +234,7 @@ const api = {
       // }
     });
   },
-  getCategories({ cache = false }) {
+  getCategories({ cache = true }) {
     return this.instance.get('/news/categories/', { cache });
   },
   postNews({
