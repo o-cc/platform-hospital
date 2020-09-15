@@ -7,7 +7,8 @@ import {
   Typography,
   Link,
   CssBaseline,
-  Avatar
+  Avatar,
+  Hidden
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -73,12 +74,14 @@ export default withRouter(function SignIn(props) {
   const screen = useWidth();
   return (
     <>
-      <BackHeader
-        title=""
-        back={() => props.history.push('/')}
-        withoutHome={true}
-        bgColor={'none'}
-      />
+      <Hidden smUp>
+        <BackHeader
+          title=""
+          back={() => props.history.push('/')}
+          withoutHome={true}
+          bgColor={'none'}
+        />
+      </Hidden>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>

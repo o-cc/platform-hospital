@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     borderRadius: theme.spacing(2),
     background: 'rgba(120,120,120, 0.1)',
-    padding: `${vw(7)} ${vw(15)}`,
+    padding: theme.spacing(1, 2),
     fontSize: 15,
     alignItems: 'center',
     justifyConent: 'center'

@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => {
       maxWidth: 1000,
       marginLeft: 'auto',
       marginRight: 'auto',
-      marginBottom: 75
+      marginBottom: 15
     },
     avatar: {
       display: 'flex',
@@ -92,9 +92,11 @@ export default props => {
           />
         ))}
         <Grid item xs={12}>
-          <Typography align="center" variant="body2" color="textSecondary">
-            没有更多了
-          </Typography>
+          {!props.hasMore && (
+            <Typography align="center" variant="body2" color="textSecondary">
+              没有更多了
+            </Typography>
+          )}
         </Grid>
       </Grid>
       {/* 评论详情 */}
