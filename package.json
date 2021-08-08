@@ -27,7 +27,7 @@
     "react-swipeable-views": "^0.13.9",
     "regenerator-runtime": "^0.13.5",
     "styled-components": "^5.1.1",
-    "swiper": "^5.3.8",
+    "swiper": "^6.5.1",
     "unstated-next": "^1.1.0"
   },
   "scripts": {
