@@ -27,3 +27,5 @@ npm install
 # develop
 npm start
 ```
+# proxy
+`"proxy": "http://39.97.71.196:8000/api"`

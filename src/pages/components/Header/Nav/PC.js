@@ -91,7 +91,7 @@ const useStyles = makeStyles(theme => ({
   logo: {
     width: 100,
     height: 48,
-    background: `url(${require('assets/imgs/logo.png')}) no-repeat center/100%`
+    background: `url(${require('assets/imgs/logo.jpeg')}) no-repeat center/auto 100%`
   }
 }));
 

@@ -33,15 +33,15 @@ const MyDiv = styled(({ ...other }) => <div {...other} />)({
 });
 
 let params = {
-  pagination: {
-    el: '.swiper-pagination',
-    clickable: true,
-    dynamicBullets: true
-  },
+  // pagination: {
+  //   el: '.swiper-pagination',
+  //   clickable: true,
+  //   dynamicBullets: true
+  // },
   loop: true,
   centeredSlides: true,
   autoplay: {
-    delay: 3000,
+    delay: 5000,
     disableOnInteraction: false
   }
 };

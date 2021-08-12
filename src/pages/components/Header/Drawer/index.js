@@ -30,9 +30,8 @@ const useStyles = makeStyles(theme => ({
     width: 'auto'
   },
   iconButton: {
-    padding: 10,
-    fontSize: vw(18),
-    color: 'white'
+    padding: 12,
+    fontSize: vw(18)
   },
   nested: {
     paddingLeft: theme.spacing(4)
@@ -40,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   img: {
     width: '100%',
     height: 48,
-    background: `url(${require('assets/imgs/logo.png')}) no-repeat center/auto 100%`
+    background: `url(${require('assets/imgs/logo.jpeg')}) no-repeat center/auto 100%`
   }
 }));
 
